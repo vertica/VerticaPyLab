@@ -6,7 +6,9 @@ SCRIPT=$(readlink -f ${BASH_SOURCE[0]} 2>/dev/null) ||
     SCRIPT=${BASH_SOURCE[0]} # only works if full path is specified
 DOCKER_CONFIG=${SCRIPT%/*/*}/docker/docker-compose.yml  # take out /bin/<script>
 
-if [[ $MACHTYPE =~ ^aarch64 ]] ; then
+# The OSx version of bash calls the M1 chip "arm64", but if someone updates
+# /bin/bash, then it will could use "aarch64" in $MACHTYPE
+if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   # Arm based macs crash on a memory check unless this is added
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi

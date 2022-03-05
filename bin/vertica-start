@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+# find where the original script is located
+SCRIPT=$(readlink -f ${BASH_SOURCE[0]} 2>/dev/null) ||
+  SCRIPT=$(perl -MCwd -le 'print Cwd::abs_path shift' ${BASH_SOURCE[0]}) || # readlink -f not supported (i.e., OSX)
+    SCRIPT=${BASH_SOURCE[0]} # only works if full path is specified
+DOCKER_CONFIG=${SCRIPT%/*/*}/docker/docker-compose.yml  # take out /bin/<script>
+
+if [[ $MACHTYPE =~ ^aarch64 ]] ; then
+  # Arm based macs crash on a memory check unless this is added
+  VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
+fi
+
+docker-compose -f $DOCKER_CONFIG rm -f # clear out old container in case it had issues
+docker-compose -f $DOCKER_CONFIG up -d
+docker exec vertica-demo ${VERTICA_ENV[@]} $VERTICA_ENV opt/vertica/bin/admintools -t create_db --database=docker --password= --hosts=localhost
+docker exec vertica-demo sudo /usr/sbin/sshd -D

@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  vertica:
+    image: "vertica/vertica-k8s"
+    container_name: vertica-demo
+    entrypoint: ["/bin/bash", "-c", "/opt/vertica/bin/docker-entrypoint.sh"]
+    ports:
+      - "5433:5433"
+      - "2222:22"

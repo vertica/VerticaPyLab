@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+# find where the original script is located
+SCRIPT=$(readlink -f ${BASH_SOURCE[0]} 2>/dev/null) ||
+  SCRIPT=$(perl -MCwd -le 'print Cwd::abs_path shift' ${BASH_SOURCE[0]}) || # readlink -f not supported (i.e., OSX)
+    SCRIPT=${BASH_SOURCE[0]} # only works if full path is specified
+DOCKER_CONFIG=${SCRIPT%/*/*}/docker/docker-compose.yml  # take out /bin/<script>
+
+docker-compose -f $DOCKER_CONFIG down

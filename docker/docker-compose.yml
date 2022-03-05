@@ -6,4 +6,4 @@ services:
     entrypoint: ["/bin/bash", "-c", "/opt/vertica/bin/docker-entrypoint.sh"]
     ports:
       - "5433:5433"
-      - "2222:22"
+      - "5432:22"

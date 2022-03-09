@@ -3,4 +3,12 @@
 : ${CONTAINER_NAME:=vertica-demo}
 : ${EXECNAME:=${BASH_SOURCE[0]##*/}}
 
-docker exec -it $CONTAINER_NAME $EXECNAME "$@"
+# if we have a modern bash, pass VSQL_ variables into vsql in container
+for key in ${!VSQL_*}; do 
+  if ! declare -n val=$key 2>/dev/null; then
+    eval val=\$$key
+  fi
+  VERTICA_ENV+=(-e $key=$val)
+done
+
+docker exec -it "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"

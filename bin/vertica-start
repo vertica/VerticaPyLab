@@ -1,4 +1,10 @@
-#!/bin/bash -e
+#!/bin/bash
+
+# defaults
+: ${VERTICA_PORT:=5433}
+: ${SSHD_PORT:=5432}
+: ${CONTAINER_NAME:=vertica-demo}
+: ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
 
 # find where the original script is located
 SCRIPT=$(readlink -f ${BASH_SOURCE[0]} 2>/dev/null) ||
@@ -13,7 +19,6 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi
 
-docker-compose -f $DOCKER_CONFIG rm -f # clear out old container in case it had issues
-docker-compose -f $DOCKER_CONFIG up -d
-docker exec ${VERTICA_ENV[@]} vertica-demo opt/vertica/bin/admintools -t create_db --database=docker --password= --hosts=localhost
-docker exec vertica-demo sudo /usr/sbin/sshd -D
+docker container rm $CONTAINER_NAME # clear out old container in case it had issues
+docker run -d -p $VERTICA_PORT:5433 -p $SSHD_PORT:5432 --name $CONTAINER_NAME "$@" $DOCKER_IMAGE || exit $?
+docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=docker --password= --hosts=localhost || exit $?

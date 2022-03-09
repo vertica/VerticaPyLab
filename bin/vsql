@@ -1,3 +1,6 @@
 #!/bin/bash
 
-docker exec -it vertica-demo vsql "$@"
+: ${CONTAINER_NAME:=vertica-demo}
+: ${EXECNAME:=${BASH_SOURCE[0]##*/}}
+
+docker exec -it $CONTAINER_NAME $EXECNAME "$@"

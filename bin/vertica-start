@@ -6,11 +6,11 @@
 : ${CONTAINER_NAME:=vertica-demo}
 : ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
 
-# find where the original script is located
-SCRIPT=$(readlink -f ${BASH_SOURCE[0]} 2>/dev/null) ||
-  SCRIPT=$(perl -MCwd -le 'print Cwd::abs_path shift' ${BASH_SOURCE[0]}) || # readlink -f not supported (i.e., OSX)
-    SCRIPT=${BASH_SOURCE[0]} # only works if full path is specified
-DOCKER_CONFIG=${SCRIPT%/*/*}/docker/docker-compose.yml  # take out /bin/<script>
+for var in $VERTICA_ENV_FORWARD; do
+  if [[ ${!var+isset} ]]; then
+    VERTICA_ENV+=(-e "$var=${!var}")
+  fi
+done
 
 # The OSx version of bash calls the M1 chip "arm64", but if someone updates
 # /bin/bash, then it will could use "aarch64" in $MACHTYPE

@@ -4,13 +4,17 @@ single node vertica using the community license and thus has limitations, but
 it should be enough to demonstrate many features of Vertica
 
 ## Prerequisites
-* docker must be installed and running
+* install docker
+* download this vertica-demo project
+* open up a bash prompt in this directory
 
 ## Quick Start
-These commands will grab this repo, start vertica, and run a simple vsql query to test it.
+These commands will start vertica, and run a simple vsql query to test it.
 ```
-git clone https://github.com/vertica/vertica-demo.git
-cd vertica-demo
 bin/vertica-start
 bin/vsql -c "select version();"
+```
+When you're done, this command will stop vertica
+```
+bin/vertica-stop
 ```

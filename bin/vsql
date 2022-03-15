@@ -3,12 +3,19 @@
 : ${CONTAINER_NAME:=vertica-demo}
 : ${EXECNAME:=${BASH_SOURCE[0]##*/}}
 
-# if we have a modern bash, pass VSQL_ variables into vsql in container
-for key in ${!VSQL_*}; do 
-  if ! declare -n val=$key 2>/dev/null; then
-    eval val=\$$key
+# always forward VSQL_*, but allow for other enviornment variables to be
+# specified in VERTICA_ENV_FORWARDING
+for var in ${!VSQL_*} $VERTICA_ENV_FORWARD; do
+  if [[ ${!var+isset} ]]; then
+    VERTICA_ENV+=(-e "$var=${!var}")
   fi
-  VERTICA_ENV+=(-e $key=$val)
 done
+
+# The OSx version of bash calls the M1 chip "arm64", but if someone updates
+# /bin/bash, then it will could use "aarch64" in $MACHTYPE
+if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
+  # Arm based macs crash on a memory check unless this is added
+  VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
+fi
 
 docker exec -it "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"

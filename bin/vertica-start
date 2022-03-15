@@ -5,7 +5,10 @@
 : ${SSHD_PORT:=5432}
 : ${CONTAINER_NAME:=vertica-demo}
 : ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
+: ${DBNAME:=demo} # default database name
 
+# allow for enviornment variables to be
+# specified in VERTICA_ENV_FORWARDING
 for var in $VERTICA_ENV_FORWARD; do
   if [[ ${!var+isset} ]]; then
     VERTICA_ENV+=(-e "$var=${!var}")
@@ -20,5 +23,11 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 docker container rm $CONTAINER_NAME # clear out old container in case it had issues
-docker run -d -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAME "$@" $DOCKER_IMAGE || exit $?
-docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=docker --password= --hosts=localhost || exit $?
+docker run --detach -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAME $DOCKER_IMAGE || exit $?
+
+# a temporary fix to prevent this command from preventing restarts of the docker container
+docker exec -it "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)*/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
+
+# start the database
+docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=$DBNAME --password= --hosts=localhost || exit $?
+

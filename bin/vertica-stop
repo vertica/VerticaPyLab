@@ -1,5 +1,25 @@
 #!/bin/bash
 
 : ${CONTAINER_NAME:=vertica-demo}
+: ${DBNAME:=demo} # default database name
 
+# always forward VSQL_*, but allow for other enviornment variables to be
+# specified in VERTICA_ENV_FORWARDING
+for var in ${!VSQL_*} $VERTICA_ENV_FORWARD; do
+  if [[ ${!var+isset} ]]; then
+    VERTICA_ENV+=(-e "$var=${!var}")
+  fi
+done
+
+# The OSx version of bash calls the M1 chip "arm64", but if someone updates
+# /bin/bash, then it will could use "aarch64" in $MACHTYPE
+if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
+  # Arm based macs crash on a memory check unless this is added
+  VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
+fi
+
+# try to stop gracefully
+docker exec "${VERTICA_ENV[@]}" $CONTAINER_NAME /opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password=
+
+# a polite sledgehammer
 docker stop $CONTAINER_NAME

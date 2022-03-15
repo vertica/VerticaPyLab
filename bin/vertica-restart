@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# defaults
+: ${VERTICA_PORT:=${VSQL_PORT:-5433}}
+: ${SSHD_PORT:=5432}
+: ${CONTAINER_NAME:=vertica-demo}
+: ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
+: ${DBNAME:=demo} # default database name
+
+# allow for enviornment variables to be
+# specified in VERTICA_ENV_FORWARDING
+for var in $VERTICA_ENV_FORWARD; do
+  if [[ ${!var+isset} ]]; then
+    VERTICA_ENV+=(-e "$var=${!var}")
+  fi
+done
+
+# The OSx version of bash calls the M1 chip "arm64", but if someone updates
+# /bin/bash, then it will could use "aarch64" in $MACHTYPE
+if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
+  # Arm based macs crash on a memory check unless this is added
+  VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
+fi
+
+# try to stop gracefully if running
+if docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s $DBNAME | grep -q "^$DBNAME\$"; then
+  docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password= 2>/dev/null
+fi
+
+docker restart $CONTAINER_NAME || exit $?
+
+docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t start_db --database=$DBNAME --password= || exit $?

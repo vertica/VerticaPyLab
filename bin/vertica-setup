@@ -26,8 +26,7 @@ docker container rm $CONTAINER_NAME # clear out old container in case it had iss
 docker run --detach -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAME $DOCKER_IMAGE || exit $?
 
 # a temporary fix to prevent this command from preventing restarts of the docker container
-docker exec -it "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)*/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
+docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
 
 # start the database
 docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=$DBNAME --password= --hosts=localhost || exit $?
-

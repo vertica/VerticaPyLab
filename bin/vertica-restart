@@ -23,10 +23,10 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 # try to stop gracefully if running
-if docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s $DBNAME | grep -q "^$DBNAME\$"; then
-  docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password= 2>/dev/null
+if docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s $DBNAME | grep -q "^$DBNAME\$"; then
+  docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password= 2>/dev/null
 fi
 
 docker restart $CONTAINER_NAME || exit $?
 
-docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t start_db --database=$DBNAME --password= || exit $?
+docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t start_db --database=$DBNAME --password= || exit $?

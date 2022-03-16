@@ -11,6 +11,8 @@ for var in ${!VSQL_*} $VERTICA_ENV_FORWARD; do
   fi
 done
 
+test -t 0 && TTY_ARG="-t"
+
 # The OSx version of bash calls the M1 chip "arm64", but if someone updates
 # /bin/bash, then it will could use "aarch64" in $MACHTYPE
 if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
@@ -18,4 +20,4 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi
 
-docker exec -it "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"
+docker exec -i $TTY_ARG "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"

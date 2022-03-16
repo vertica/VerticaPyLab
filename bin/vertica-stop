@@ -19,7 +19,7 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 # try to stop gracefully
-docker exec "${VERTICA_ENV[@]}" $CONTAINER_NAME /opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password=
+docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME /opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password=
 
 # a polite sledgehammer
 docker stop $CONTAINER_NAME

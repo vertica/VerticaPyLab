@@ -29,4 +29,4 @@ docker run --detach -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAM
 docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
 
 # start the database
-docker exec ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=$DBNAME --password= --hosts=localhost || exit $?
+docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=$DBNAME --password= --hosts=localhost || exit $?

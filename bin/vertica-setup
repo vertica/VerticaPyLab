@@ -23,7 +23,7 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 docker container rm $CONTAINER_NAME # clear out old container in case it had issues
-docker run --detach -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAME $DOCKER_IMAGE || exit $?
+docker run --platform linux/amd64 --detach -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAME $DOCKER_IMAGE || exit $?
 
 # a temporary fix to prevent this command from preventing restarts of the docker container
 docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh

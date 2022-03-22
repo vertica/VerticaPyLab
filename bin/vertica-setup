@@ -1,11 +1,22 @@
 #!/bin/bash
 
-# defaults
+# this script runs the docker environment and sets up an identical user and
+# home directory so it behaves a lot like running vsql in your own directory
+
+# defaults that can be overridden with environment variables.
 : ${VERTICA_PORT:=${VSQL_PORT:-5433}}
 : ${SSHD_PORT:=5432}
 : ${CONTAINER_NAME:=vertica-demo}
+: ${HOST_NAME:=$CONTAINER_NAME}
+: ${DB_NAME:=demo}
 : ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
-: ${DBNAME:=demo} # default database name
+
+function abort {
+  local retval=$1
+  shift
+  echo "${BASH_SOURCE##*/}: $@" >&2
+  exit $retval
+}
 
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
@@ -20,13 +31,52 @@ done
 if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   # Arm based macs crash on a memory check unless this is added
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
+  DOCKER_RUNARGS+=(--platform linux/amd64)
 fi
 
-docker container rm $CONTAINER_NAME # clear out old container in case it had issues
-docker run --platform linux/amd64 --detach -p $VERTICA_PORT:5433 -p $SSHD_PORT:22 --name $CONTAINER_NAME $DOCKER_IMAGE || exit $?
+DOCKER_RUNARGS+=( -p "$VERTICA_PORT:5433" )
+DOCKER_RUNARGS+=( -p "$((VERTICA_PORT+11)):5444" )
+DOCKER_RUNARGS+=( -p "$SSHD_PORT:22" )
+DOCKER_RUNARGS+=( --name "$CONTAINER_NAME" )
+DOCKER_RUNARGS+=( --hostname "$HOST_NAME" )
 
-# a temporary fix to prevent this command from preventing restarts of the docker container
+# mount the home directory unless the user is dbadmin because this docker
+# requires files from /home/dbadmin
+if [[ $HOME != dbadmin ]] ; then
+  DOCKER_RUNARGS+=(--mount "type=bind,source=$HOME,target=$HOME")
+fi
+
+# clear out old container in case it had issues
+docker container rm $CONTAINER_NAME 2>/dev/null
+
+docker run --detach "${DOCKER_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$DOCKER_IMAGE" || abort $? "Could not create docker"
+
+# create a local user with the same home directory
+: ${LOGNAME:=$(stat -c "%U" "$HOME")} # if LOGNAME is not set, use the owner of the home directory
+HOME_UID=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u" "$HOME")
+HOME_GID=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%g" "$HOME")
+HOME_GROUP=$(id -gn 2>/dev/null) # the group name
+: ${HOME_GROUP:=$(getent group $(id -g) | cut -d: -f1)} # just in case id -gn is not supported
+
+# add user to sudoers
+docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo bash -c "echo '$LOGNAME ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" || abort $? "Could not give $LOGNAME sudo access"
+
+# does host's user exist in docker?  (i.e., dbadmin, ftp, root)
+if ! docker exec -i -u $LOGNAME "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo true >/dev/null 2>&1; then
+  # make a host user to match home directory ownership
+  docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo useradd --uid "$HOME_UID" --gid "$HOME_GID" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($HOME_UID:$HOME_GID)"
+  # add group if we need to and its safe
+  if [[ $HOME_GROUP != $(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%G" "$HOME") ]] && [[ $HOME_GID -ge 20 ]] ; then
+    # it's optional but nice to see group names correct on files, but don't
+    # touch group names in /etc/passwd that are <20.  However, 14 is
+    # available, so renumber whatever has $HOME_GID to 14 and then add the group
+    docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME bash -c 'sudo groupmod -g 14 $(getent group "'"$HOME_GID"'" | cut -d: -f1) 2>/dev/null' # change gid of group
+    docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo groupadd --gid "$HOME_GID" "$HOME_GROUP"
+  fi
+fi
+
+# a temporary fix to allow restarts of the docker container
 docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
 
-# start the database
-docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t create_db --database=$DBNAME --password= --hosts=localhost || exit $?
+# create the database
+docker exec -i "${VERTICA_ENV[@]}" "$CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?

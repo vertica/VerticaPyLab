@@ -1,7 +1,30 @@
 #!/bin/bash
 
+# this script tries to run the command you typed on the command line into the
+# docker environment seamlessly.  It works by checking the name it was
+# executed as, so a symbolic link "vsql" will run vsql.
+
+# You can override some options with environment variables if you like.  For
+# instance, if you create a vertica user "bob" and want to always run vsql as
+# bob, you could set VSQL_USER:
+# export VSQL_USER=bob
+
 : ${CONTAINER_NAME:=vertica-demo}
 : ${EXECNAME:=${BASH_SOURCE[0]##*/}}
+
+# Special cases for certain executables
+case "$EXECNAME" in
+  ( vsql ) : 
+      # run vsql as local user, but connect to Vertica as dbadmin
+      : ${VSQL_USER:=dbadmin}
+      export VSQL_USER
+    ;;
+  ( admintools ) :
+      # always run admintools as dbadmin
+      HOME_UID=5000
+      HOME_GID=5000
+    ;;
+esac
 
 # always forward VSQL_*, but allow for other enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
@@ -20,4 +43,6 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi
 
-docker exec -i $TTY_ARG "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"
+: ${HOME_UID:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u" "$HOME")}
+: ${HOME_GID:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%g" "$HOME")}
+docker exec -u "$HOME_UID:$HOME_GID" -i -w $PWD $TTY_ARG "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"

@@ -14,7 +14,7 @@ it should be enough to demonstrate many features of Vertica
 These commands will create a vertica database and start it
 ```
 make vertica-setup
-bin/vsql -c "select version();"
+make vsql
 ```
 Run a simple vsql query to test it.
 ```

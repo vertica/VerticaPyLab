@@ -34,8 +34,6 @@ for var in ${!VSQL_*} $VERTICA_ENV_FORWARD; do
   fi
 done
 
-test -t 0 && TTY_ARG="-t"
-
 # The OSx version of bash calls the M1 chip "arm64", but if someone updates
 # /bin/bash, then it will could use "aarch64" in $MACHTYPE
 if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
@@ -43,6 +41,18 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi
 
-: ${HOME_UID:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u" "$HOME")}
-: ${HOME_GID:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%g" "$HOME")}
-docker exec -u "$HOME_UID:$HOME_GID" -i -w $PWD $TTY_ARG "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"
+: ${USERIDS:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u:$g" "$HOME")}
+DOCKER_EXECARGS+=( -u "$USERIDS" )
+
+test -t 0 && DOCKER_EXECARGS+=( -t )
+
+# does this version of docker support starting in a particular directory?
+if docker exec --help | grep workdir >/dev/null ; then
+  DOCKER_EXECARGS+=( --workdir $PWD )
+else
+  # some hackery to chdir
+  set -- -c "cd $PWD; exec "'"$@"' "$EXECNAME" "$EXECNAME" "$@"
+  EXECNAME=bash
+fi
+
+docker exec -i "${DOCKER_EXECARGS[@]}" "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"

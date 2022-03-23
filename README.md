@@ -69,21 +69,21 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
     ```
     make vertica-notebook
     ```
-    This will create a container using the default 8888 port. Then just open the link in a browser.
-4. Once you are done open a new session and run the following command to stop the container.
+    This will create a container using the default 8889 port. Then just open the displayed link in a browser.
+4. Once you are done run the following command to stop the container.
     ```
     make docker-stop-notebook
     ```
 
-### Run with a random port
+### Run with your own settings
 
-If port 8888 is not available, you can use a random port just by setting RANDOM_PORT to true
-```
-export RANDOM_PORT=true
-make vertica-notebook
-```
-To see what port has been chosen, open another session and run
-```
-make get-port
-```
-You will get something like this 0.0.0.0:xxxx. Open the jupyterlab link and replace 8888 by that port.
+1. With the Makefile
+
+    A set of environment variables you can use to set the port, image, container... you want to use to run the demo.
+2. With the scripts
+
+    You can use to directly use the commands in bin/. In order to run them from anywhere on the system, you must:
+    - Open the .bash_profile(MacOs)/.bashrc(linux) file in your home directory (for example, /Users/your-user-name/.bash_profile or /home/your-user-name/.bashrc) in a text editor.
+    - Add export PATH="your-path:$PATH" to the last line of the file, where your-path is the path to the commands.
+    - Save the .bash_profile/.bashrc file.
+    - Restart your terminal

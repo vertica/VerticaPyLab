@@ -1,8 +1,7 @@
 
-DEMO_IMG?=vertica-notebook
-DEMO_CONTAINER_NAME?=demo
-PORT=-p 8888:8888
-RANDOM_PORT?=false
+DEMO_IMG?=verticapy-jupyterlab
+DEMO_CONTAINER_NAME?=verticapy-demo
+PORT=8889
 QUERY?="select version();"
 VERTICA_CONTAINER_NAME=vertica-demo
 
@@ -10,7 +9,8 @@ ifeq ($(RANDOM_PORT), true)
 PORT=-P
 endif
 
-
+help: ## Display this help.
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(firstword $(MAKEFILE_LIST))
 
 .PHONY: vertica-setup
 vertica-setup: ## Create a vertica container and start the database.
@@ -28,30 +28,22 @@ vertica-restart: ## Stop the vertica container.
 vsql:
 	bin/vsql -c $(QUERY)
 
-
 .PHONY: vertica-notebook
 vertica-notebook: ## Start a jupyterlab
-	docker run --rm -it $(PORT) --name $(DEMO_CONTAINER_NAME) $(DEMO_IMG)
+	bin/vertica-notebook -c $(DEMO_CONTAINER_NAME) -i $(DEMO_IMG) -p $(PORT) 
 
 .PHONY: docker-build-notebook
-docker-build-notebook:
+docker-build-notebook: ## Build the image to use for the demo
 	docker build -t $(DEMO_IMG) docker-verticapy/
 
 .PHONY: docker-push-notebook
-docker-push-notebook:
+docker-push-notebook: ## Push the verticapy-jupyterlab image to a repo
 	docker push $(DEMO_IMG)
 
 .PHONY: docker-stop-notebook
-docker-stop-notebook:
+docker-stop-notebook: ## Shut down the jupyterlab server and remove the container
 	docker stop $(DEMO_CONTAINER_NAME)
 
-.PHONY: get-port
-get-port:
-	docker port $(DEMO_CONTAINER_NAME) 8888
-
 .PHONY: get-ip
-get-ip:
+get-ip: ## Get the ip of the Vertica container
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(VERTICA_CONTAINER_NAME)
-
-
-

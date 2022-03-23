@@ -21,8 +21,7 @@ case "$EXECNAME" in
     ;;
   ( admintools ) :
       # always run admintools as dbadmin
-      HOME_UID=5000
-      HOME_GID=5000
+      USERID=dbadmin
     ;;
 esac
 
@@ -41,8 +40,8 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi
 
-: ${USERIDS:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u:$g" "$HOME")}
-DOCKER_EXECARGS+=( -u "$USERIDS" )
+: ${USERID:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u:%g" "$HOME")}
+DOCKER_EXECARGS+=( -u "$USERID" )
 
 test -t 0 && DOCKER_EXECARGS+=( -t )
 

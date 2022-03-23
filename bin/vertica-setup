@@ -63,16 +63,17 @@ docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo bash -c "echo '$LOGNAME 
 
 # does host's user exist in docker?  (i.e., dbadmin, ftp, root)
 if ! docker exec -i -u $LOGNAME "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo true >/dev/null 2>&1; then
-  # make a host user to match home directory ownership
-  docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo useradd --uid "$HOME_UID" --gid "$HOME_GID" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($HOME_UID:$HOME_GID)"
   # add group if we need to and its safe
   if [[ $HOME_GROUP != $(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%G" "$HOME") ]] && [[ $HOME_GID -ge 20 ]] ; then
     # it's optional but nice to see group names correct on files, but don't
     # touch group names in /etc/passwd that are <20.  However, 14 is
     # available, so renumber whatever has $HOME_GID to 14 and then add the group
     docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME bash -c 'sudo groupmod -g 14 $(getent group "'"$HOME_GID"'" | cut -d: -f1) 2>/dev/null' # change gid of group
-    docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo groupadd --gid "$HOME_GID" "$HOME_GROUP"
   fi
+  docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo groupadd --gid "$HOME_GID" "$HOME_GROUP"
+
+  # make a host user to match home directory ownership
+  docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo useradd --uid "$HOME_UID" --gid "$HOME_GID" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($HOME_UID:$HOME_GID)"
 fi
 
 # a temporary fix to allow restarts of the docker container

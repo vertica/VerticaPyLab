@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# defaults
+CONTAINER_NAME=verticapy-demo
+DEMO_IMG=verticapy-jupyterlab
+PORT=8889
+
+function usage {
+    echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
+    echo
+    echo "Options:"
+    echo "  -i <image> The name of the image to use for the demo"
+    echo "  -c <container> The name you want the container to have to use (Default: verticapy-demo)"
+    echo "  -p <port>  Port to use to run jupyterlab (Default: 8889)"
+    echo
+    exit 1
+}
+
+while getopts "p:c:i:h" opt; do
+    case ${opt} in
+        h)
+            usage
+            ;;
+        i)
+            DEMO_IMG=$OPTARG
+            ;;
+        p)
+            PORT=$OPTARG
+            ;;
+        c)
+            CONTAINER_NAME=$OPTARG
+            ;;
+        \?)
+            echo "Unknown option: -${opt}"
+            usage
+            ;;
+    esac
+done
+
+docker run -d -it --rm -p $PORT:8888 --name $CONTAINER_NAME $DEMO_IMG || exit $?
+
+# sleep some time to wait for jupyterlab logs
+echo "Waiting for the links..."
+sleep 10
+
+echo
+echo "copy and paste one of these URLs: "
+docker logs -n 5 $CONTAINER_NAME | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/8888/${PORT}/" || exit $?
+

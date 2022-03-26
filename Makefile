@@ -4,6 +4,9 @@ DEMO_CONTAINER_NAME?=verticapy-demo
 PORT=8889
 QUERY?="select version();"
 VERTICA_CONTAINER_NAME=vertica-demo
+PYTHON_VERSION?=3.8-slim-buster
+export OS_VERSION
+export DEMO_IMG
 
 ifeq ($(RANDOM_PORT), true)
 PORT=-P
@@ -34,7 +37,7 @@ vertica-notebook: ## Start a jupyterlab
 
 .PHONY: docker-build-notebook
 docker-build-notebook: ## Build the image to use for the demo
-	docker build -t $(DEMO_IMG) docker-verticapy/
+	scripts/docker-build.sh
 
 .PHONY: docker-push-notebook
 docker-push-notebook: ## Push the verticapy-jupyterlab image to a repo

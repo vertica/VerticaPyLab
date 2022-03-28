@@ -5,7 +5,7 @@ PORT=8889
 QUERY?="select version();"
 VERTICA_CONTAINER_NAME=vertica-demo
 PYTHON_VERSION?=3.8-slim-buster
-export OS_VERSION
+export PYTHON_VERSION
 export DEMO_IMG
 
 ifeq ($(RANDOM_PORT), true)

@@ -52,12 +52,12 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
 
     Put the notebooks/data you would like to import in your image respectively in notebooks/data folders.
     ```
-    make vertica-notebook-setup
+    make vertica-notebook-install
     ```
     If you do not want to use the default image name, set it on DEMO_IMG 
     ```
     export DEMO_IMG=<your-custom-name>
-    make vertica-notebook-setup
+    make vertica-notebook-install
     ```
 2. Push the image in a repo
 

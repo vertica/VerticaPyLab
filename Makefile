@@ -33,19 +33,19 @@ vertica-restart: ## Stop the vertica container.
 vsql:
 	bin/vsql -c $(QUERY)
 
-.PHONY: vertica-notebook
+.PHONY: vertica-notebook-start
 vertica-notebook-start: ## Start a jupyterlab
 	bin/vertica-notebook -c $(DEMO_CONTAINER_NAME) -i $(DEMO_IMG) -p $(PORT) 
 
-.PHONY: docker-build-notebook
-vertica-notebook-setup: ## Build the image to use for the demo
+.PHONY: vertica-notebook-install
+vertica-notebook-install: ## Build the image to use for the demo
 	scripts/docker-build.sh
 
-.PHONY: docker-push-notebook
+.PHONY: vertica-notebook-push
 vertica-notebook-push: ## Push the verticapy-jupyterlab image to a repo
 	docker push $(DEMO_IMG)
 
-.PHONY: docker-stop-notebook
+.PHONY: vertica-notebook-stop
 vertica-notebook-stop: ## Shut down the jupyterlab server and remove the container
 	docker stop $(DEMO_CONTAINER_NAME)
 

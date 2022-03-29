@@ -1,0 +1,7 @@
+#!/bin/bash
+
+: ${CONTAINER_NAME:=vertica-demo}
+: ${DBNAME:=demo} # default database name
+
+# a polite sledgehammer
+docker rm $CONTAINER_NAME

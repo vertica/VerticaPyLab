@@ -3,6 +3,9 @@ FROM python:${PYTHON_VERSION}
 
 WORKDIR /project
 
+RUN apt-get update
+RUN apt-get install -y software-properties-common gpg libgdal-dev g++
+
 COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip \
     pip install -r requirements.txt \

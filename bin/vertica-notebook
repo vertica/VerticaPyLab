@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# defaults that can be overridden with environment variables.
+: ${FROM_HOME:=false}
+
 # defaults
 CONTAINER_NAME=verticapy-demo
 DEMO_IMG=verticapy-jupyterlab
@@ -37,7 +40,11 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
-docker run -d -it --rm -p $PORT:8888 --name $CONTAINER_NAME $DEMO_IMG || exit $?
+if [[ $FROM_HOME = true ]] ; then
+    VOL_FLAG="-v $HOME:/project"
+fi
+
+docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name $CONTAINER_NAME $DEMO_IMG || exit $?
 
 # sleep some time to wait for jupyterlab logs
 echo "Waiting for the links..."

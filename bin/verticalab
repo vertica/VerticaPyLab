@@ -2,11 +2,10 @@
 
 # defaults that can be overridden with environment variables.
 : ${FROM_HOME:=false}
-
-# defaults
-CONTAINER_NAME=verticalab
-DEMO_IMG=verticapy-jupyterlab
-PORT=8889
+: ${VERTICA_CONTAINER_NAME:=verticalab}
+: ${VERTICAPY_CONTAINER_NAME:=verticapy-demo}
+: ${DEMO_IMG:=verticapy-jupyterlab}
+: ${PORT:=8889}
 
 function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
@@ -31,7 +30,7 @@ while getopts "p:c:i:h" opt; do
             PORT=$OPTARG
             ;;
         c)
-            CONTAINER_NAME=$OPTARG
+            VERTICAPY_CONTAINER_NAME=$OPTARG
             ;;
         \?)
             echo "Unknown option: -${opt}"
@@ -45,24 +44,26 @@ if [[ $FROM_HOME = true ]] ; then
 fi
 
 # make sure vertica-demo is running
-if ! docker exec -i vertica-demo true; then
-  echo "Cannot access vertica-demo.  Did you run vertica-install?" >&2
+if ! docker exec -i "$VERTICA_CONTAINER_NAME" true; then
+  echo "Cannot access $VERTICA_CONTAINER_NAME.  Did you run vertica-install?" >&2
   exit 1
 fi
 
-docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name $CONTAINER_NAME $DEMO_IMG || exit $?
+docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICAPY_CONTAINER_NAME" "$DEMO_IMG" || exit $?
 
 # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
-docker exec -i vertica-demo bash -c "cd; tar -zcf - .ssh" | docker exec -i $CONTAINER_NAME bash -c "cd; tar -zxf -"
+docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+# tweak some settings to disable the fingerprint warnings
+docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c 'printf "%s\n" "Host *" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" >> $HOME/.ssh/config; chmod 400 $HOME/.ssh/config'
 
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds
-while ! docker logs -n 5 $CONTAINER_NAME | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' >/dev/null && ((timeout--)); do
+while ! docker logs -n 5 "$VERTICAPY_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' >/dev/null && ((timeout--)); do
   sleep 1
   echo "Starting..."
 done
 
 echo
 echo "copy and paste one of these URLs: "
-docker logs -n 5 $CONTAINER_NAME | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?
+docker logs -n 5 "$VERTICAPY_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?
 

@@ -24,7 +24,7 @@ vertica-stop: ## Stop the vertica container.
 	bin/vertica-stop
 
 .PHONY: vertica-start
-vertica-start: ## Stop the vertica container.
+vertica-start: ## start/restart the vertica container.
 	bin/vertica-start
 
 .PHONY: vertica-uninstall

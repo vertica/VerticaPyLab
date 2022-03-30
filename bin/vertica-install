@@ -85,6 +85,9 @@ if [[ $USERID =~ ^[1-9][0-9]*: ]] ; then
   docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo bash -c "echo '$LOGNAME ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" || abort $? "Could not give $LOGNAME sudo access"
 fi
 
+# this allows ssh commands to succeed
+docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sudo bash -c 'echo "LANG=en_US.UTF-8" >> /etc/environment'
+
 # a temporary fix to allow restarts of the docker container
 docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
 

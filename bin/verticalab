@@ -2,10 +2,13 @@
 
 # defaults that can be overridden with environment variables.
 : ${FROM_HOME:=false}
-: ${VERTICA_CONTAINER_NAME:=verticalab}
-: ${VERTICAPY_CONTAINER_NAME:=verticapy-demo}
+: ${VERTICAPY_CONTAINER_NAME:=verticalab}
+: ${VERTICA_CONTAINER_NAME:=vertica-demo}
+: ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
 : ${DEMO_IMG:=verticapy-jupyterlab}
 : ${PORT:=8889}
+: ${DOCKER_HOSTNAME:=host.docker.internal} # for docker-machine use $(docker-machine ip)
+: ${VERTICA_SSH_PORT:=5432}
 
 function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
@@ -54,7 +57,7 @@ docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICAPY_CONTAINER_NAME
 # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
 docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c "cd; tar -zxf -"
 # tweak some settings to disable the fingerprint warnings
-docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c 'printf "%s\n" "Host *" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" >> $HOME/.ssh/config; chmod 400 $HOME/.ssh/config'
+docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c 'printf "%s\n" "Host '"$VERTICA_HOST_NAME"' '"$DOCKER_HOSTNAME"'" "    HostName '"$DOCKER_HOSTNAME"'" "    Port '"$VERTICA_SSH_PORT"'" "    User dbadmin" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" > $HOME/.ssh/config; chmod 400 $HOME/.ssh/config'
 
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds

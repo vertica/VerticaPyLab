@@ -15,17 +15,21 @@ endif
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(firstword $(MAKEFILE_LIST))
 
-.PHONY: vertica-setup
-vertica-setup: ## Create a vertica container and start the database.
-	bin/vertica-setup
+.PHONY: vertica-install
+vertica-install: ## Create a vertica container and start the database.
+	bin/vertica-install
 
 .PHONY: vertica-stop
 vertica-stop: ## Stop the vertica container.
 	bin/vertica-stop
 
-.PHONY: vertica-restart
-vertica-restart: ## Stop the vertica container.
-	bin/vertica-restart
+.PHONY: vertica-start
+vertica-start: ## start/restart the vertica container.
+	bin/vertica-start
+
+.PHONY: vertica-uninstall
+vertica-uninstall: ## Remove the vertica container.
+	bin/vertica-uninstall
 
 .PHONY: vsql
 vsql:

@@ -13,7 +13,7 @@ it should be enough to demonstrate many features of Vertica
 ### Quick Start
 These commands will create a vertica database and start it
 ```
-make vertica-setup
+make vertica-install
 make vsql
 ```
 Run a simple vsql query to test it.
@@ -24,13 +24,21 @@ or
 ```
 make vsql QUERY="'your-custom-query'"
 ```
+or
+```
+bin/vsql -c "your-custom-query"
+```
 When you're done, this command will stop vertica
 ```
 make vertica-stop
 ```
 And if you want to start it back up without erasing it
 ```
-make vertica-restart
+make vertica-start
+```
+Or if you want to remove it and recover the disk space
+```
+make vertica-uninstall
 ```
 admintools give you more control
 ```

@@ -41,7 +41,7 @@ get ip of the container to use it on your notebook for instance
 make get-ip
 ```
 
-## Vertica Notebook
+## VerticaLab
 Build locally a jupyterlab image with verticapy installed. You can then use that image to create a container with  your notebooks already imported which makes demo very easy.
 
 ### Prerequisites
@@ -52,32 +52,26 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
 
     Put the notebooks/data you would like to import in your image respectively in notebooks/data folders.
     ```
-    make vertica-notebook-install
+    make verticalab-install
     ```
     If you do not want to use the default image name, set it on DEMO_IMG 
     ```
     export DEMO_IMG=<your-custom-name>
-    make vertica-notebook-install
+    make verticalab-install
     ```
-2. Push the image in a repo
-
-    If you are not interested in pushing this image you can skip this step.
+2. Start jupyterlab in docker
     ```
-    make vertica-notebook-push
-    ```
-3. Start jupyterlab in docker
-    ```
-    make vertica-notebook-start
+    make verticalab-start
     ```
     This will create a container using the default 8889 port. Then just open the displayed link in a browser.
     
-    By default, vertica-notebook will be isolated from the host machine and the only present files/dirs are those loaded at build time. However we offer the possibility to start from the host $HOME directory. That way you will have access to all the resources and the changes you make will persist even after the container deletion. You just have to set FROM_HOME env var to true.
+    By default, verticalab notebooks will be isolated from the host machine and the only present files/dirs are those loaded at build time. However we offer the possibility to start from the host $HOME directory. That way you will have access to all the resources and the changes you make will persist even after the container deletion. You just have to set FROM_HOME env var to true.
     ```
-    make vertica-notebook-start FROM_HOME=true
+    make verticalab-start FROM_HOME=true
     ```
 4. Once you are done run the following command to stop the container.
     ```
-    make vertica-notebook-stop
+    make verticalab-stop
     ```
 
 ### Run with your own settings

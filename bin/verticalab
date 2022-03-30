@@ -4,7 +4,7 @@
 : ${FROM_HOME:=false}
 
 # defaults
-CONTAINER_NAME=verticapy-demo
+CONTAINER_NAME=verticalab
 DEMO_IMG=verticapy-jupyterlab
 PORT=8889
 

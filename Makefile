@@ -1,6 +1,6 @@
 
 DEMO_IMG?=verticapy-jupyterlab
-DEMO_CONTAINER_NAME?=verticapy-demo
+DEMO_CONTAINER_NAME?=verticalab
 PORT=8889
 QUERY?="select version();"
 VERTICA_CONTAINER_NAME=vertica-demo

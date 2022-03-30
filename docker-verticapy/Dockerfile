@@ -5,6 +5,7 @@ WORKDIR /project
 
 RUN apt-get update
 RUN apt-get install -y software-properties-common gpg libgdal-dev g++
+RUN apt-get install ssh
 
 COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip \
@@ -13,6 +14,7 @@ RUN pip install --upgrade pip \
 
 COPY ./data /project/data
 COPY ./notebooks /project/notebooks
+COPY ./bin /project/bin
 
 EXPOSE 8888
 

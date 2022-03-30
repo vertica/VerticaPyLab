@@ -2,7 +2,7 @@
 
 # defaults that can be overridden with environment variables.
 : ${FROM_HOME:=false}
-: ${VERTICAPY_CONTAINER_NAME:=verticalab}
+: ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
 : ${DEMO_IMG:=verticapy-jupyterlab}
@@ -33,7 +33,7 @@ while getopts "p:c:i:h" opt; do
             PORT=$OPTARG
             ;;
         c)
-            VERTICAPY_CONTAINER_NAME=$OPTARG
+            VERTICALAB_CONTAINER_NAME=$OPTARG
             ;;
         \?)
             echo "Unknown option: -${opt}"
@@ -52,21 +52,21 @@ if ! docker exec -i "$VERTICA_CONTAINER_NAME" true; then
   exit 1
 fi
 
-docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICAPY_CONTAINER_NAME" "$DEMO_IMG" || exit $?
+docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAME" "$DEMO_IMG" || exit $?
 
 # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
-docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
 # tweak some settings to disable the fingerprint warnings
-docker exec -i "$VERTICAPY_CONTAINER_NAME" bash -c 'printf "%s\n" "Host '"$VERTICA_HOST_NAME"' '"$DOCKER_HOSTNAME"'" "    HostName '"$DOCKER_HOSTNAME"'" "    Port '"$VERTICA_SSH_PORT"'" "    User dbadmin" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" > $HOME/.ssh/config; chmod 400 $HOME/.ssh/config'
+docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'printf "%s\n" "Host '"$VERTICA_HOST_NAME"' '"$DOCKER_HOSTNAME"'" "    HostName '"$DOCKER_HOSTNAME"'" "    Port '"$VERTICA_SSH_PORT"'" "    User dbadmin" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" > $HOME/.ssh/config; chmod 400 $HOME/.ssh/config'
 
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds
-while ! docker logs -n 5 "$VERTICAPY_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' >/dev/null && ((timeout--)); do
+while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' >/dev/null && ((timeout--)); do
   sleep 1
   echo "Starting..."
 done
 
 echo
 echo "copy and paste one of these URLs: "
-docker logs -n 5 "$VERTICAPY_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?
+docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?
 

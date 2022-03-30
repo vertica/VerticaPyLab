@@ -1,12 +1,14 @@
 
 DEMO_IMG?=verticapy-jupyterlab
-DEMO_CONTAINER_NAME?=verticapy-demo
+DEMO_CONTAINER_NAME?=verticalab
 PORT=8889
 QUERY?="select version();"
 VERTICA_CONTAINER_NAME=vertica-demo
 PYTHON_VERSION?=3.8-slim-buster
+FROM_HOME?=false
 export PYTHON_VERSION
 export DEMO_IMG
+export FROM_HOME
 
 ifeq ($(RANDOM_PORT), true)
 PORT=-P
@@ -35,20 +37,16 @@ vertica-uninstall: ## Remove the vertica container.
 vsql:
 	bin/vsql -c $(QUERY)
 
-.PHONY: vertica-notebook
-vertica-notebook: ## Start a jupyterlab
-	bin/vertica-notebook -c $(DEMO_CONTAINER_NAME) -i $(DEMO_IMG) -p $(PORT) 
+.PHONY: verticalab-start
+verticalab-start: ## Start a jupyterlab
+	bin/verticalab -c $(DEMO_CONTAINER_NAME) -i $(DEMO_IMG) -p $(PORT) 
 
-.PHONY: docker-build-notebook
-docker-build-notebook: ## Build the image to use for the demo
+.PHONY: verticalab-install
+verticalab-install: ## Build the image to use for the demo
 	scripts/docker-build.sh
 
-.PHONY: docker-push-notebook
-docker-push-notebook: ## Push the verticapy-jupyterlab image to a repo
-	docker push $(DEMO_IMG)
-
-.PHONY: docker-stop-notebook
-docker-stop-notebook: ## Shut down the jupyterlab server and remove the container
+.PHONY: verticalab-stop
+verticalab-stop: ## Shut down the jupyterlab server and remove the container
 	docker stop $(DEMO_CONTAINER_NAME)
 
 .PHONY: get-ip

@@ -69,4 +69,6 @@ done
 echo
 echo "copy and paste one of these URLs: "
 docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?
-
+VERTICALAB_URLS=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?);
+VERTICALAB_LAST_URL=$(echo $VERTICALAB_URLS | sed 's/.* //')
+open $VERTICALAB_LAST_URL

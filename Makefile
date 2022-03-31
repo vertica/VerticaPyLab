@@ -1,6 +1,6 @@
 
 DEMO_IMG?=verticapy-jupyterlab
-VERTICAPY_CONTAINER_NAME?=verticalab
+VERTICALAB_CONTAINER_NAME?=verticalab
 PORT=8889
 QUERY?=select version();
 VERTICA_CONTAINER_NAME=vertica-demo
@@ -39,7 +39,7 @@ vsql:
 
 .PHONY: verticalab-start
 verticalab-start: ## Start a jupyterlab
-	bin/verticalab -c "$(VERTICAPY_CONTAINER_NAME)" -i "$(DEMO_IMG)" -p "$(PORT)"
+	bin/verticalab -c "$(VERTICALAB_CONTAINER_NAME)" -i "$(DEMO_IMG)" -p "$(PORT)"
 
 .PHONY: verticalab-install
 verticalab-install: ## Build the image to use for the demo
@@ -47,7 +47,7 @@ verticalab-install: ## Build the image to use for the demo
 
 .PHONY: verticalab-stop
 verticalab-stop: ## Shut down the jupyterlab server and remove the container
-	docker stop "$(DEMO_CONTAINER_NAME)"
+	docker stop "$(VERTICALAB_CONTAINER_NAME)"
 
 .PHONY: get-ip
 get-ip: ## Get the ip of the Vertica container

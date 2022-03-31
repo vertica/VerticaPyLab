@@ -16,4 +16,6 @@ COPY ./notebooks /project/notebooks
 
 EXPOSE 8888
 
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"]

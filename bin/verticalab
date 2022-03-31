@@ -57,7 +57,7 @@ docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAM
 # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
 docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
 # tweak some settings to disable the fingerprint warnings
-docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'printf "%s\n" "Host '"$VERTICA_HOST_NAME"' '"$DOCKER_HOSTNAME"'" "    HostName '"$DOCKER_HOSTNAME"'" "    Port '"$VERTICA_SSH_PORT"'" "    User dbadmin" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" > $HOME/.ssh/config; chmod 400 $HOME/.ssh/config'
+docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'printf "%s\n" "Host '"$VERTICA_HOST_NAME"' '"$DOCKER_HOSTNAME"'" "    HostName '"$DOCKER_HOSTNAME"'" "    Port '"$VERTICA_SSH_PORT"'" "    User dbadmin" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" "    RequestTTY=yes" > $HOME/.ssh/config; chmod 600 $HOME/.ssh/config'
 
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds

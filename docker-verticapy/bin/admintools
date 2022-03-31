@@ -1,2 +1,2 @@
 #!/bin/bash
-ssh -t dbadmin@host.docker.internal admintools
+ssh dbadmin@host.docker.internal admintools $(printf '%q ' "$@")

@@ -1,2 +1,2 @@
 #!/bin/bash
-ssh -t dbadmin@host.docker.internal vsql
+ssh dbadmin@host.docker.internal vsql $(printf '%q ' "$@")

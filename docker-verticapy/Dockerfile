@@ -13,7 +13,10 @@ RUN pip install --upgrade pip \
 
 COPY ./data /project/data
 COPY ./notebooks /project/notebooks
-COPY ./bin /project/bin
+COPY ./bin /usr/bin/
+
+RUN chmod 755 /usr/bin/admintools
+RUN chmod 755 /usr/bin/vsql
 
 EXPOSE 8888
 

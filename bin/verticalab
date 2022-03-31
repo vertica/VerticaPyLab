@@ -10,6 +10,8 @@
 : ${DOCKER_HOSTNAME:=host.docker.internal} # for docker-machine use $(docker-machine ip)
 : ${VERTICA_SSH_PORT:=5432}
 
+OPEN_CMD=xdg-open
+
 function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
     echo
@@ -59,16 +61,30 @@ docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker 
 # tweak some settings to disable the fingerprint warnings
 docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'printf "%s\n" "Host '"$VERTICA_HOST_NAME"' '"$DOCKER_HOSTNAME"'" "    HostName '"$DOCKER_HOSTNAME"'" "    Port '"$VERTICA_SSH_PORT"'" "    User dbadmin" "    GlobalKnownHostsFile=/dev/nulls" "    UserKnownHostsFile=/dev/null" "    UpdateHostKeys=no" "    StrictHostKeyChecking=no" "    LogLevel=error" "    RequestTTY=yes" > $HOME/.ssh/config; chmod 600 $HOME/.ssh/config'
 
+echo "Starting..."
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds
 while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' >/dev/null && ((timeout--)); do
   sleep 1
-  echo "Starting..."
 done
 
 echo
-echo "copy and paste one of these URLs: "
-docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?
-VERTICALAB_URLS=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/" || exit $?);
-VERTICALAB_LAST_URL=$(echo $VERTICALAB_URLS | sed 's/.* //')
-open $VERTICALAB_LAST_URL
+echo "Waiting for url to open in browser..."
+# Create an array that will contain the urls. 
+declare -a VERTICALAB_URLS=($(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/"))
+KERNEL=$(uname -s)
+# This checks the kernel name to set the correct command to open the link in browser,
+# because Linux systems will use xdg-open while MacOs will use open
+if [ $KERNEL = Darwin ] ; then   
+    OPEN_CMD=open
+fi
+# Open the correct url in browser. We know that the correct url is the second one.
+# So even if in some cases a 3rd one is created this will not be affected
+$OPEN_CMD ${VERTICALAB_URLS[1]} 2> /dev/null
+echo
+echo "If the link does not open or does not work, copy and paste one of these URLs in browser:"
+# Print all urls
+for url in "${VERTICALAB_URLS[@]}"
+do
+    echo $url
+done

@@ -3,23 +3,33 @@ FROM python:${PYTHON_VERSION}
 
 WORKDIR /project
 
-RUN apt-get update
-RUN apt-get install -y software-properties-common gpg libgdal-dev g++ ssh
-
-COPY requirements.txt requirements.txt
-RUN pip install --upgrade pip \
-    pip install -r requirements.txt \
-    && rm requirements.txt
-
+COPY  requirements.txt requirements.txt
 COPY ./data /project/data
 COPY ./notebooks /project/notebooks
 COPY ./bin /usr/bin/
 
-RUN chmod 755 /usr/bin/admintools
-RUN chmod 755 /usr/bin/vsql
+# Install python dependencies
+RUN pip install --upgrade pip \
+    pip install -r requirements.txt \
+    && rm requirements.txt
+
+RUN apt-get update \
+    && apt-get install -y \
+    software-properties-common \
+    gpg \
+    libgdal-dev \
+    g++ \
+    ssh \
+    # Install nodejs
+    && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
+    && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt-get -y install nodejs \
+    && chmod 755 /usr/bin/admintools \
+    && chmod 755 /usr/bin/vsql \
+    && jupyter labextension install jupyterlab-chart-editor
 
 EXPOSE 8888
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
 
 ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"]

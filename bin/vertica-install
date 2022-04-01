@@ -6,6 +6,7 @@
 # defaults that can be overridden with environment variables.
 : ${VERTICA_PORT:=${VSQL_PORT:-5433}}
 : ${SSHD_PORT:=5432}
+: ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
 : ${DB_NAME:=demo}
@@ -90,6 +91,12 @@ docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c 'echo "L
 
 # a temporary fix to allow restarts of the docker container
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
+
+# if verticalab is running
+if docker exec -i "$VERTICALAB_CONTAINER_NAME" true 2>/dev/null; then
+  # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
+  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+fi
 
 # create the database
 docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?

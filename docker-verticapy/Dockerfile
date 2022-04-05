@@ -8,19 +8,18 @@ COPY ./data /project/data
 COPY ./notebooks /project/notebooks
 COPY ./bin /usr/bin/
 
-# Install python dependencies
-RUN pip install --upgrade pip \
-    pip install -r requirements.txt \
-    && rm requirements.txt
-
 RUN apt-get update \
     && apt-get install -y \
     software-properties-common \
     gpg \
     libgdal-dev \
     g++ \
-    ssh \
-    # Install nodejs
+    ssh 
+   
+# Install python dependencies
+RUN pip install --upgrade pip \
+    pip install -r requirements.txt \
+    && rm requirements.txt \
     && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get -y install nodejs \

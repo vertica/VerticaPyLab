@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # defaults that can be overridden with environment variables.
-: ${FROM_HOME:=false}
 : ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
@@ -9,6 +8,8 @@
 : ${PORT:=8889}
 : ${DOCKER_HOSTNAME:=host.docker.internal} # for docker-machine use $(docker-machine ip)
 : ${VERTICA_SSH_PORT:=5432}
+: ${VOL:=false}
+: ${VOL_PATH:=$HOME}
 
 OPEN_CMD=xdg-open
 
@@ -44,8 +45,8 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
-if [[ $FROM_HOME = true ]] ; then
-    VOL_FLAG="-v $HOME:/project"
+if [[ $VOL = true ]] ; then
+    VOL_FLAG="-v $VOL_PATH:/project"
 fi
 
 docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAME" "$DEMO_IMG" || exit $?

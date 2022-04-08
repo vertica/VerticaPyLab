@@ -1,0 +1,46 @@
+#!/bin/bash
+
+function menu {
+  echo
+  echo "Vertica tools Main Menu"
+  echo
+  echo "  1) admintools"
+  echo "  2) vsql"
+  echo "  3) quit"
+  echo
+} 
+
+echo "Vertica tools Main Menu"
+echo ""
+PS3="Select the vertica tool: "
+
+select opt in admintools vsql quit; do
+
+  case $opt in
+    admintools)
+      echo "Connecting to the Vertica server..."
+      admintools
+      menu
+      ;;
+    vsql)
+      echo "Connecting to the Vertica server..."
+      vsql
+      menu
+      ;;
+    quit)
+      echo "This session has been closed and cannot be used anymore"
+      echo "If you want to use admintools/vsql, open a new Verticatools window"
+      echo "The terminal will close in 5 secs"
+      sleep 5
+      break
+      ;;
+    *) 
+      echo "Invalid option $REPLY"
+      echo "The terminal will close in 5 secs"
+      sleep 5
+      exit 1
+      ;;
+  esac
+done 
+
+exit

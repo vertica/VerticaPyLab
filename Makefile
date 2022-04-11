@@ -43,7 +43,7 @@ vertica-uninstall: ## Remove the vertica container.
 	bin/vertica-uninstall
 
 .PHONY: vsql
-vsql:
+vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 	bin/vsql -c "$(QUERY)"
 
 .PHONY: verticalab-start
@@ -63,3 +63,8 @@ verticalab-stop: ## Shut down the jupyterlab server and remove the container
 get-ip: etc/vertica-demo.conf ## Get the ip of the Vertica container
 	@ source etc/vertica-demo.conf; \
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$${VERTICA_CONTAINER_NAME:-vertica-demo}"
+
+.PHONY: test
+test: ## suite of tests to make sure everything is working
+	@ source etc/vertica-demo.conf; \
+	docker exec -i "$${VERTICALAB_CONTAINER_NAME:-verticalab}" vsql -c "select version();"

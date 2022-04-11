@@ -21,7 +21,7 @@ function abort {
 
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
-for var in $VERTICA_ENV_FORWARD; do
+for var in LANG $VERTICA_ENV_FORWARD; do
   if [[ ${!var+isset} ]]; then
     VERTICA_ENV+=(-e "$var=${!var}")
   fi
@@ -51,6 +51,21 @@ fi
 docker container rm $VERTICA_CONTAINER_NAME 2>/dev/null
 
 docker run --detach "${DOCKER_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$DOCKER_IMAGE" || abort $? "Could not create docker"
+
+# SSH tweaks
+# don't use DNS in sshd because it slows down ssh
+# (this seems to execute before sshd starts, so the SIGHUP may not be needed)
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo sed -i "s/^#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config; sudo kill -1 $(/bin/pgrep -x sshd) 2>/dev/null'
+
+# this allows ssh commands to succeed with the default LANG in the image
+# (this locale.alias file is deprecated)
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c 'echo "C.UTF-8         en_US.UTF-8" >> /usr/share/locale/locale.alias'
+
+# if verticalab is running
+if docker exec -i "$VERTICALAB_CONTAINER_NAME" true 2>/dev/null; then
+  # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
+  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+fi
 
 # user in container should match the home directory
 if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat
@@ -86,17 +101,8 @@ if [[ $USERID =~ ^[1-9][0-9]*: ]] ; then
   docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c "echo '$LOGNAME ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" || abort $? "Could not give $LOGNAME sudo access"
 fi
 
-# this allows ssh commands to succeed
-docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c 'echo "LANG=en_US.UTF-8" >> /etc/environment'
-
 # a temporary fix to allow restarts of the docker container
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
-
-# if verticalab is running
-if docker exec -i "$VERTICALAB_CONTAINER_NAME" true 2>/dev/null; then
-  # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
-  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
-fi
 
 # create the database
 docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?

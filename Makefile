@@ -18,8 +18,23 @@ help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
 
 # Keep a copy of the default conf
+.PHONY: config
+config: etc/vertica-demo.conf ## Edit the configuration file
+	@echo "Editing configuration settings in $$PWD/etc/vertica-demo.conf"
+	@if [[ -x $$VISUAL ]] ; then \
+	  "$$VISUAL" "$$PWD/etc/vertica-demo.conf"; \
+	elif [[ -x $$EDITOR ]] ; then \
+	  "$$EDITOR" "$$PWD/etc/vertica-demo.conf"; \
+	else \
+	  echo "Could not find editor $$VISUAL"; \
+	fi
+
+.PHONY: env
+env: ## set up an environment by running "eval $(env)"
+	@echo 'PATH="'$$PWD'/bin:$$PATH"'
+
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	cp etc/vertica-demo.conf.default etc/vertica-demo.conf
+	@cp etc/vertica-demo.conf.default etc/vertica-demo.conf
 
 .PHONY: vertica-install
 vertica-install: etc/vertica-demo.conf ## Create a vertica container and start the database.
@@ -42,12 +57,12 @@ vsql:
 	bin/vsql -c "$(QUERY)"
 
 .PHONY: verticalab-start
-verticalab-start: ## Start a jupyterlab
+verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 	bin/verticalab -c "$(VERTICALAB_CONTAINER_NAME)" -i "$(VERTICALAB_IMG)" -p "$(VERTICALAB_PORT)"
 
 .PHONY: verticalab-install
-verticalab-install: ## Build the image to use for the demo
-	scripts/docker-build.sh
+verticalab-install: etc/vertica-demo.conf ## Build the image to use for the demo
+	bin/verticalab-install
 
 .PHONY: verticalab-stop
 verticalab-stop: ## Shut down the jupyterlab server and remove the container

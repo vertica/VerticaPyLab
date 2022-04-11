@@ -1,5 +1,6 @@
 #!/bin/bash
-# This is sourced by vertica-demo bash scripts
+
+# This is sourced by vertica-demo bash scripts and can override environment settings
 
 #
 # Verticalab (ML development environment)
@@ -11,7 +12,9 @@
 # VOL=false
 # VOL_PATH=$HOME
 
+#
 # Vertica demo server
+#
 # VERTICA_SSH_PORT=5432
 # VERTICA_PORT=${VSQL_PORT:-5433}
 # VERTICA_CONTAINER_NAME=vertica-demo
@@ -19,4 +22,3 @@
 # DB_NAME=demo
 # VERTICA_DOCKER_IMAGE=vertica/vertica-k8s:latest # see https://hub.docker.com/r/vertica/vertica-k8s
 # VSQL_USER=dbadmin
-# DBNAME=demo

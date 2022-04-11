@@ -1,7 +1,22 @@
 #!/bin/bash
 
+# this script builds the verticalab docker container
+
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+# Load the configuration
+source $CONFIG_FILE
+
 # defaults that can be overridden with environment variables.
-: ${DEMO_IMG:=verticapy-jupyterlab}
+: ${VERTICALAB_IMG:=verticapy-jupyterlab}
 : ${PYTHON_VERSION:=3.8-slim-buster}
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -16,6 +31,6 @@ fi
 # Specify the python base image version to use
 DOCKER_BUILDARGS+=( --build-arg PYTHON_VERSION=$PYTHON_VERSION )
 # The name of the image
-DOCKER_BUILDARGS+=( -t $DEMO_IMG )
+DOCKER_BUILDARGS+=( -t $VERTICALAB_IMG )
 
 docker build "${DOCKER_BUILDARGS[@]}" $REPO_DIR/docker-verticapy/

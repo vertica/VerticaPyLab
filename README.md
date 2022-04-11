@@ -62,9 +62,9 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
     ```
     make verticalab-install
     ```
-    If you do not want to use the default image name, set it on DEMO_IMG 
+    If you do not want to use the default image name, set it on VERTICALAB_IMG 
     ```
-    export DEMO_IMG=<your-custom-name>
+    export VERTICALAB_IMG=<your-custom-name>
     make verticalab-install
     ```
 2. Start jupyterlab in docker
@@ -93,13 +93,19 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
 
 ### Run with your own settings
 
-1. With the Makefile
-
-    A set of environment variables you can use to set the port, image, container... you want to use to run the demo.
-2. With the scripts
-
-    You can use to directly use the commands in bin/. In order to run them from anywhere on the system, you must:
-    - Open the .bash_profile(MacOs)/.bashrc(linux) file in your home directory (for example, /Users/your-user-name/.bash_profile or /home/your-user-name/.bashrc) in a text editor.
-    - Add export PATH="your-path:$PATH" to the last line of the file, where your-path is the path to the commands.
-    - Save the .bash_profile/.bashrc file.
-    - Restart your terminal
+1. Create a configuration file
+    ```
+    make config
+    ```
+2. Edit settings in the configuration file
+    ```
+    vi config
+    ```
+3.  You can directly use the commands in bin/ if you add it to your PATH with
+    ```
+    eval $(make env)
+    ```
+    Or, put it in your bash_profile for future logins
+    ```
+    make env >> ~/.bash_profile
+    ```

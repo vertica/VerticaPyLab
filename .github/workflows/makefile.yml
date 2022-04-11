@@ -1,0 +1,29 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@v3
+    - name: Create a Vertica Demo container
+      run: make vertica-install
+    - name: Create a VerticaLab container
+      run: make verticalab-install
+    - name: Run the Vertica Demo container
+      run: make vertica-start
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Vertica up and functional
+      run: make vsql
+    - name: Verticalab can connect to vertica
+      run: make vsql
+

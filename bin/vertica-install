@@ -1,16 +1,28 @@
 #!/bin/bash
 
-# this script runs the docker environment and sets up an identical user and
-# home directory so it behaves a lot like running vsql in your own directory
+# this script sets up a docker container running vertica
+
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+# Load the configuration
+source $CONFIG_FILE
 
 # defaults that can be overridden with environment variables.
 : ${VERTICA_PORT:=${VSQL_PORT:-5433}}
-: ${SSHD_PORT:=5432}
+: ${VERTICA_SSH_PORT:=5432}
 : ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
 : ${DB_NAME:=demo}
-: ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
+: ${VERTICA_DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
 
 function abort {
   local retval=$1
@@ -37,7 +49,7 @@ fi
 
 DOCKER_RUNARGS+=( -p "$VERTICA_PORT:5433" )
 DOCKER_RUNARGS+=( -p "$((VERTICA_PORT+11)):5444" )
-DOCKER_RUNARGS+=( -p "$SSHD_PORT:22" )
+DOCKER_RUNARGS+=( -p "$VERTICA_SSH_PORT:22" )
 DOCKER_RUNARGS+=( --name "$VERTICA_CONTAINER_NAME" )
 DOCKER_RUNARGS+=( --hostname "$VERTICA_HOST_NAME" )
 
@@ -50,7 +62,7 @@ fi
 # clear out old container in case it had issues
 docker container rm $VERTICA_CONTAINER_NAME 2>/dev/null
 
-docker run --detach "${DOCKER_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$DOCKER_IMAGE" || abort $? "Could not create docker"
+docker run --detach "${DOCKER_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER_IMAGE" || abort $? "Could not create docker"
 
 # SSH tweaks
 # don't use DNS in sshd because it slows down ssh

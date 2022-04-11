@@ -4,21 +4,25 @@
 # docker environment seamlessly.  It works by checking the name it was
 # executed as, so a symbolic link "vsql" will run vsql.
 
-# You can override some options with environment variables if you like.  For
-# instance, if you create a vertica user "bob" and want to always run vsql as
-# bob, you could set VSQL_USER:
-# export VSQL_USER=bob
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+# Load the configuration
+source $CONFIG_FILE
 
-: ${CONTAINER_NAME:=vertica-demo}
+: ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${EXECNAME:=${BASH_SOURCE[0]##*/}}
+: ${VSQL_USER:=dbadmin}
 
 # Special cases for certain executables
 case "$EXECNAME" in
-  ( vsql ) : 
-      # run vsql as local user, but connect to Vertica as dbadmin
-      : ${VSQL_USER:=dbadmin}
-      export VSQL_USER
-    ;;
   ( admintools ) :
       # always run admintools as dbadmin
       USERID=dbadmin
@@ -40,7 +44,7 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
 fi
 
-: ${USERID:=$(docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME stat -c "%u:%g" "$HOME")}
+: ${USERID:=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME stat -c "%u:%g" "$HOME")}
 DOCKER_EXECARGS+=( -u "$USERID" )
 
 test -t 0 && DOCKER_EXECARGS+=( -t )
@@ -54,4 +58,4 @@ else
   EXECNAME=bash
 fi
 
-docker exec -i "${DOCKER_EXECARGS[@]}" "${VERTICA_ENV[@]}" $CONTAINER_NAME $EXECNAME "$@"
+docker exec -i "${DOCKER_EXECARGS[@]}" "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME $EXECNAME "$@"

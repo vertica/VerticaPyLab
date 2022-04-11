@@ -1,0 +1,22 @@
+#!/bin/bash
+# This is sourced by vertica-demo bash scripts
+
+#
+# Verticalab (ML development environment)
+#
+# VERTICALAB_CONTAINER_NAME=verticalab
+# VERTICALAB_IMG=verticapy-jupyterlab
+# VERTICALAB_PORT=8889
+# DOCKER_HOSTNAME=host.docker.internal # for docker-machine use $(docker-machine ip)
+# VOL=false
+# VOL_PATH=$HOME
+
+# Vertica demo server
+# VERTICA_SSH_PORT=5432
+# VERTICA_PORT=${VSQL_PORT:-5433}
+# VERTICA_CONTAINER_NAME=vertica-demo
+# VERTICA_HOST_NAME=$VERTICA_CONTAINER_NAME
+# DB_NAME=demo
+# VERTICA_DOCKER_IMAGE=vertica/vertica-k8s:latest # see https://hub.docker.com/r/vertica/vertica-k8s
+# VSQL_USER=dbadmin
+# DBNAME=demo

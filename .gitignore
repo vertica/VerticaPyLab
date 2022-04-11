@@ -1,3 +1,6 @@
+# Configuration file
+/etc/vertica-demo.conf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

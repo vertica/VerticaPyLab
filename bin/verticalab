@@ -1,11 +1,26 @@
 #!/bin/bash
 
+# this script sets up a docker container with an ML development environment
+
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+# Load the configuration
+source $CONFIG_FILE
+
 # defaults that can be overridden with environment variables.
 : ${VERTICALAB_CONTAINER_NAME:=verticalab}
+: ${VERTICALAB_IMG:=verticapy-jupyterlab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
-: ${DEMO_IMG:=verticapy-jupyterlab}
-: ${PORT:=8889}
+: ${VERTICALAB_PORT:=8889}
 : ${DOCKER_HOSTNAME:=host.docker.internal} # for docker-machine use $(docker-machine ip)
 : ${VERTICA_SSH_PORT:=5432}
 : ${VOL:=false}
@@ -30,10 +45,10 @@ while getopts "p:c:i:h" opt; do
             usage
             ;;
         i)
-            DEMO_IMG=$OPTARG
+            VERTICALAB_IMG=$OPTARG
             ;;
         p)
-            PORT=$OPTARG
+            VERTICALAB_PORT=$OPTARG
             ;;
         c)
             VERTICALAB_CONTAINER_NAME=$OPTARG
@@ -49,7 +64,7 @@ if [[ $VOL = true ]] ; then
     VOL_FLAG="-v $VOL_PATH:/project"
 fi
 
-docker run -d -it --rm -p $PORT:8888 $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAME" "$DEMO_IMG" || exit $?
+docker run -d -it --rm -p $VERTICALAB_PORT:8888 $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAME" "$VERTICALAB_IMG" || exit $?
 
 # if vertica-demo is running
 if docker exec -i "$VERTICA_CONTAINER_NAME" true 2>/dev/null; then
@@ -70,7 +85,7 @@ done
 echo
 echo "Waiting for url to open in browser..."
 # Create an array that will contain the urls. 
-declare -a VERTICALAB_URLS=($(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${PORT}/"))
+declare -a VERTICALAB_URLS=($(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${VERTICALAB_PORT}/"))
 KERNEL=$(uname -s)
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open

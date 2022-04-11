@@ -84,12 +84,12 @@ done
 
 echo
 echo "Waiting for url to open in browser..."
-# Create an array that will contain the urls. 
+# Create an array that will contain the urls.
 declare -a VERTICALAB_URLS=($(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${VERTICALAB_PORT}/"))
 KERNEL=$(uname -s)
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open
-if [ $KERNEL = Darwin ] ; then   
+if [ $KERNEL = Darwin ] ; then
     OPEN_CMD=open
 fi
 # Open the correct url in browser. We know that the correct url is the second one.

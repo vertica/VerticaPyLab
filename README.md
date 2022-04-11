@@ -20,7 +20,7 @@ Run a simple vsql query to test it.
 ```
 make vsql
 ```
-or 
+or
 ```
 make vsql QUERY="'your-custom-query'"
 ```
@@ -62,7 +62,7 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
     ```
     make verticalab-install
     ```
-    If you do not want to use the default image name, set it on VERTICALAB_IMG 
+    If you do not want to use the default image name, set it on VERTICALAB_IMG
     ```
     export VERTICALAB_IMG=<your-custom-name>
     make verticalab-install
@@ -72,10 +72,10 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
     make verticalab-start
     ```
     This will create a container using the default 8889 port. Then just open the displayed link in a browser.
-    
-    By default, verticalab notebooks will be isolated from the host machine and the only present files/dirs are those loaded at build time. However we offer the possibility to start from any directory of your choice. That way you will have access to the resources in that local directory and the changes you make will persist even after the container deletion. You just have to set 2 env vars: 
 
-        - VOL: to enable a volume. the default value is false. 
+    By default, verticalab notebooks will be isolated from the host machine and the only present files/dirs are those loaded at build time. However we offer the possibility to start from any directory of your choice. That way you will have access to the resources in that local directory and the changes you make will persist even after the container deletion. You just have to set 2 env vars:
+
+        - VOL: to enable a volume. the default value is false.
         - VOL_PATH: the local path that will used as shared volume. the default value is $HOME.
 
     So if you want to enable a volume and use your home directory as shared volume:

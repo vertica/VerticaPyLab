@@ -64,7 +64,17 @@ if [[ $VOL = true ]] ; then
     VOL_FLAG="-v $VOL_PATH:/project"
 fi
 
-docker run -d -it --rm -p $VERTICALAB_PORT:8888 $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAME" "$VERTICALAB_IMG" || exit $?
+if [[ $VERTICALAB_PORT =~ ^[0-9]*$ ]] ; then
+  PORTMAP="-p $VERTICALAB_PORT:8888"
+else
+  # Not a numeric, so use a random port
+  PORTMAP="--expose 8888 -P"
+fi
+
+docker run -d -it --rm $PORTMAP $VOL_FLAG --name "$VERTICALAB_CONTAINER_NAME" "$VERTICALAB_IMG" || exit $?
+
+VERTICALAB_PORT=$(docker port "$VERTICALAB_CONTAINER_NAME" 8888/tcp)
+VERTICALAB_PORT=${VERTICALAB_PORT##*:}
 
 # if vertica-demo is running
 if docker exec -i "$VERTICA_CONTAINER_NAME" true 2>/dev/null; then

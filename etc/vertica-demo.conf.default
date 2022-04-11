@@ -7,10 +7,11 @@
 #
 # VERTICALAB_CONTAINER_NAME=verticalab
 # VERTICALAB_IMG=verticapy-jupyterlab
-# VERTICALAB_PORT=8889
+# VERTICALAB_PORT=8889 # Optionally set VERTICALAB_PORT=RANDOM 
 # DOCKER_HOSTNAME=host.docker.internal # for docker-machine use $(docker-machine ip)
 # VOL=false
 # VOL_PATH=$HOME
+# PYTHON_VERSION=3.8-slim-buster
 
 #
 # Vertica demo server

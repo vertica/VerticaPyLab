@@ -44,25 +44,25 @@ done
 if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   # Arm based macs crash on a memory check unless this is added
   VERTICA_ENV+=(-e VERTICA_MEMDEBUG=2)
-  DOCKER_RUNARGS+=(--platform linux/amd64)
+  VERTICA_RUNARGS+=( --platform linux/amd64 )
 fi
 
-DOCKER_RUNARGS+=( -p "$VERTICA_PORT:5433" )
-DOCKER_RUNARGS+=( -p "$((VERTICA_PORT+11)):5444" )
-DOCKER_RUNARGS+=( -p "$VERTICA_SSH_PORT:22" )
-DOCKER_RUNARGS+=( --name "$VERTICA_CONTAINER_NAME" )
-DOCKER_RUNARGS+=( --hostname "$VERTICA_HOST_NAME" )
+VERTICA_RUNARGS+=( -p "$VERTICA_PORT:5433" )
+VERTICA_RUNARGS+=( -p "$((VERTICA_PORT+11)):5444" )
+VERTICA_RUNARGS+=( -p "$VERTICA_SSH_PORT:22" )
+VERTICA_RUNARGS+=( --name "$VERTICA_CONTAINER_NAME" )
+VERTICA_RUNARGS+=( --hostname "$VERTICA_HOST_NAME" )
 
 # mount the home directory unless the user is dbadmin because this docker
 # requires files from /home/dbadmin
 if [[ $HOME != dbadmin ]] ; then
-  DOCKER_RUNARGS+=(--mount "type=bind,source=$HOME,target=$HOME")
+  VERTICA_RUNARGS+=( --mount "type=bind,source=$HOME,target=$HOME" )
 fi
 
 # clear out old container in case it had issues
 docker container rm $VERTICA_CONTAINER_NAME 2>/dev/null
 
-docker run --detach "${DOCKER_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER_IMAGE" || abort $? "Could not create docker"
+docker run --detach "${VERTICA_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER_IMAGE" || abort $? "Could not create docker"
 
 # SSH tweaks
 # don't use DNS in sshd because it slows down ssh

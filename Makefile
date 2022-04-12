@@ -22,7 +22,8 @@ env: ## set up an environment by running "eval $(env)"
 	@echo 'PATH="'$$PWD'/bin:$$PATH"'
 
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	@cp etc/vertica-demo.conf.default etc/vertica-demo.conf
+	# create new conf file or update timestamp if exists
+	@cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf || touch etc/vertica-demo.conf
 
 .PHONY: vertica-install
 vertica-install: etc/vertica-demo.conf ## Create a vertica container and start the database.

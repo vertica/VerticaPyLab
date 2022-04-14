@@ -1,11 +1,24 @@
 #!/bin/bash
 
+# this script starts or re-starts vertica in a docker container
+
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+# Load the configuration
+source $CONFIG_FILE
+
 # defaults
 : ${VERTICA_PORT:=${VSQL_PORT:-5433}}
-: ${SSHD_PORT:=5432}
-: ${CONTAINER_NAME:=vertica-demo}
-: ${DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
-: ${DBNAME:=demo} # default database name
+: ${VERTICA_CONTAINER_NAME:=vertica-demo}
+: ${DB_NAME:=demo} # default database name
 
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
@@ -23,10 +36,10 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 # try to stop gracefully if running
-if docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s $DBNAME | grep -q "^$DBNAME\$" 2>/dev/null; then
-  docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password= 2>/dev/null
+if docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s $DB_NAME | grep -q "^$DB_NAME\$" 2>/dev/null; then
+  docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DB_NAME --password= 2>/dev/null
 fi
 
-docker restart $CONTAINER_NAME || exit $?
+docker restart $VERTICA_CONTAINER_NAME || exit $?
 
-docker exec -i ${VERTICA_ENV[@]} $CONTAINER_NAME opt/vertica/bin/admintools -t start_db --database=$DBNAME --password= || exit $?
+docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t start_db --database=$DB_NAME --password= || exit $?

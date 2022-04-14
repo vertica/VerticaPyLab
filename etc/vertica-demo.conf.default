@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# This is sourced by vertica-demo bash scripts and can override environment settings
+
+#
+# Verticalab (ML development environment)
+#
+# VERTICALAB_CONTAINER_NAME=verticalab
+# VERTICALAB_IMG=verticapy-jupyterlab
+# VERTICALAB_PORT=8889 # Optionally set VERTICALAB_PORT=RANDOM 
+# VERTICALAB_PROJECT= # optionally set to something like $HOME
+# VERTICALAB_RUNARGS+=( -v $VERTICALAB_PROJECT:/project ) # default when VERTICALAB_PROJECT is set
+# DOCKER_HOSTNAME=host.docker.internal # for docker-machine use $(docker-machine ip)
+# PYTHON_VERSION=3.8-slim-buster
+
+#
+# Vertica demo server
+#
+# VERTICA_SSH_PORT=5432 # ssh localhost -l 5432
+# VERTICA_PORT=${VSQL_PORT:-5433}
+# VERTICA_CONTAINER_NAME=vertica-demo
+# VERTICA_HOST_NAME=$VERTICA_CONTAINER_NAME
+# DB_NAME=demo
+# VERTICA_DOCKER_IMAGE=vertica/vertica-k8s:latest # see https://hub.docker.com/r/vertica/vertica-k8s
+# VSQL_USER=dbadmin
+# VERTICA_RUNARGS+=( ) # add more args to the docker run command

@@ -17,13 +17,17 @@ jobs:
     - name: Create a VerticaLab container
       run: make verticalab-install
     - name: Run the Vertica Demo container
-      run: make vertica-start
+      run: make verticalab-start
   tests:
     runs-on: ubuntu-latest
     needs: build
     steps:
+    - name: Where am I?
+      run: pwd; ls -al
     - name: Vertica up and functional
       run: make vsql
     - name: Verticalab can connect to vertica
-      run: make vsql
+      run: docker exec -i verticalab ssh vertica-demo 'vsql -c "select version();"'
+    - name: Run tests
+      run: make test
 

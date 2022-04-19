@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Connecting to vertica server..."
+vsql
+echo
+echo "This session is closed"
+echo "If you want to use vsql again, go to launcher and open a new window"
+echo 
+read -n 1 -s -r -p "Press any key to Exit"

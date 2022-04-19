@@ -52,6 +52,26 @@ function activate(
   restorer: ILayoutRestorer | null
 ): ITerminalTracker{
   console.log('JupyterLab extension verticatools is activated!');
+
+  // Find the MainLogo widget in the shell and replace it with the Vertica Logo
+  const widgets = app.shell.widgets('top');
+  let widget = widgets.next();
+
+  while (widget !== undefined) {
+    if (widget.id === 'jp-MainLogo') {
+      verticaIcon.element({
+        container: widget.node,
+        justify: 'center',
+        margin: '2px 5px 2px 5px',
+        height: 'auto',
+        width: '20px'
+      });
+      break;
+    }
+
+    widget = widgets.next();
+  }
+
   const { serviceManager } = app;
   const namespace = 'bash';
   const tracker = new WidgetTracker<MainAreaWidget<ITerminal.ITerminal>>({

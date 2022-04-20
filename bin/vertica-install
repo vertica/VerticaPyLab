@@ -116,5 +116,15 @@ fi
 # a temporary fix to allow restarts of the docker container
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
 
+# is the EULA signed?
+if [[ -z $VERTICA_EULA ]]; then
+  docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" rm -f /opt/vertica/config/d5415f948449e9d4c421b568f2411140.dat
+fi
+
 # create the database
-docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?
+docker exec -it "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?
+
+# record the EULA sign date so we don't need to sign again
+if [[ -z $VERTICA_EULA ]] && docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" test -r /opt/vertica/config/d5415f948449e9d4c421b568f2411140.dat; then
+  echo "VERTICA_EULA=$(date +%s)" >> $CONFIG_FILE
+fi

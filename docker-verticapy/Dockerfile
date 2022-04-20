@@ -27,13 +27,14 @@ RUN pip install --upgrade pip \
     && pip install /project/verticatools \
     && rm -r /project/verticatools \
     && chmod 755 /usr/bin/admintools \
-    && chmod 755 /usr/bin/vsql 
+    && chmod 755 /usr/bin/vsql \
+    && chmod 755 /usr/bin/run-vsql \
+    && chmod 755 /usr/bin/run-admintools 
     # Uncomment the jupyter labextension line below to install jupyterlab-chart-editor
     # We are still having some problem to install it in some environments and we are still 
     # investigating.
     # && jupyter labextension install jupyterlab-chart-editor
     
-
 EXPOSE 8888
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH

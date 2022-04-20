@@ -1,2 +1,3 @@
 #!/bin/bash
-ssh dbadmin@host.docker.internal admintools $(printf '%q ' "$@")
+
+ssh vertica-demo "${BASH_SOURCE[0]##*/}" "${@@Q}"

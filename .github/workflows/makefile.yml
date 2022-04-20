@@ -13,17 +13,17 @@ jobs:
     steps:
     - name: Checkout the project
       uses: actions/checkout@v3
+    - name: Sign the EULA
+      run: make etc/vertica-demo.conf; echo "VERTICA_EULA=1" >> etc/vertica-demo.conf
     - name: Create a Vertica Demo container
       run: make vertica-install
     - name: Create a VerticaLab container
       run: make verticalab-install
     - name: Run the Vertica Demo container
       run: make verticalab-start
-    - name: Where am I?
-      run: pwd; ls -al
     - name: Vertica up and functional
       run: make vsql
     - name: Verticalab can connect to vertica
-      run: docker exec -i verticalab ssh vertica-demo 'vsql -c "select version();"'
+      run: docker exec -i verticalab vsql -c "select version();"
     - name: Run tests
       run: make test

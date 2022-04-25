@@ -49,6 +49,12 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_RUNARGS+=( --platform linux/amd64 )
 fi
 
+if [[ -n $DOCKER_HOST ]] && [[ $VERTICA_BIND_ADDRESS == 127.0.0.1 ]]; then
+  # Try to support docker-machine networking
+  VERTICA_BIND_ADDRESS=${DOCKER_HOST##tcp://}
+  VERTICA_BIND_ADDRESS=${VERTICA_BIND_ADDRESS%%:*}
+fi
+
 VERTICA_RUNARGS+=( -p "$VERTICA_BIND_ADDRESS:$VERTICA_PORT:5433" )
 VERTICA_RUNARGS+=( -p "$VERTICA_BIND_ADDRESS:$((VERTICA_PORT+11)):5444" )
 VERTICA_RUNARGS+=( -p "$VERTICA_BIND_ADDRESS:$VERTICA_SSH_PORT:22" )

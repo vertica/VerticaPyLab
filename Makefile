@@ -22,37 +22,37 @@ config: etc/vertica-demo.conf ## Edit the configuration file
 env: ## set up an environment by running "eval $(env)"
 	@echo 'PATH="'$$PWD'/bin:$$PATH"'
 
+# create new conf file or update timestamp if exists
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	# create new conf file or update timestamp if exists
 	@cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf || touch etc/vertica-demo.conf
 
 .PHONY: vertica-install
 vertica-install: etc/vertica-demo.conf ## Create a vertica container and start the database.
-	bin/vertica-install
+	@bin/vertica-install
 
 .PHONY: vertica-stop
 vertica-stop: ## Stop the vertica container.
-	bin/vertica-stop
+	@bin/vertica-stop
 
 .PHONY: vertica-start
 vertica-start: etc/vertica-demo.conf ## start/restart the vertica container.
-	bin/vertica-start
+	@bin/vertica-start
 
 .PHONY: vertica-uninstall
 vertica-uninstall: ## Remove the vertica container.
-	bin/vertica-uninstall
+	@bin/vertica-uninstall
 
 .PHONY: vsql
-vsql:
-	bin/vsql -c "$(QUERY)"
+vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
+	@bin/vsql -c "$(QUERY)"
 
 .PHONY: verticalab-start
 verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
-	bin/verticalab
+	@bin/verticalab
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Build the image to use for the demo
-	bin/verticalab-install
+	@bin/verticalab-install
 
 .PHONY: verticalab-stop
 verticalab-stop: ## Shut down the jupyterlab server and remove the container
@@ -63,3 +63,8 @@ verticalab-stop: ## Shut down the jupyterlab server and remove the container
 get-ip: etc/vertica-demo.conf ## Get the ip of the Vertica container
 	@ source etc/vertica-demo.conf; \
 	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$${VERTICA_CONTAINER_NAME:-vertica-demo}"
+
+.PHONY: test
+test: ## suite of tests to make sure everything is working
+	@ source etc/vertica-demo.conf; \
+	docker exec -i "$${VERTICALAB_CONTAINER_NAME:-verticalab}" vsql -c "select version();"

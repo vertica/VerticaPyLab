@@ -7,7 +7,7 @@ VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null 
 VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
 CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
 if ! [[ -r $CONFIG_FILE ]]; then
-  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
     exit 1
   fi
@@ -18,11 +18,13 @@ source $CONFIG_FILE
 # defaults that can be overridden with environment variables.
 : ${VERTICA_PORT:=${VSQL_PORT:-5433}}
 : ${VERTICA_SSH_PORT:=5432}
+: ${VERTICA_BIND_ADDRESS:=127.0.0.1}
 : ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
 : ${DB_NAME:=demo}
 : ${VERTICA_DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
+: ${DOCKER_NETWORK:=demo}
 
 function abort {
   local retval=$1
@@ -47,9 +49,10 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
   VERTICA_RUNARGS+=( --platform linux/amd64 )
 fi
 
-VERTICA_RUNARGS+=( -p "$VERTICA_PORT:5433" )
-VERTICA_RUNARGS+=( -p "$((VERTICA_PORT+11)):5444" )
-VERTICA_RUNARGS+=( -p "$VERTICA_SSH_PORT:22" )
+VERTICA_RUNARGS+=( -p "$VERTICA_BIND_ADDRESS:$VERTICA_PORT:5433" )
+VERTICA_RUNARGS+=( -p "$VERTICA_BIND_ADDRESS:$((VERTICA_PORT+11)):5444" )
+VERTICA_RUNARGS+=( -p "$VERTICA_BIND_ADDRESS:$VERTICA_SSH_PORT:22" )
+VERTICA_RUNARGS+=( --rm )
 VERTICA_RUNARGS+=( --name "$VERTICA_CONTAINER_NAME" )
 VERTICA_RUNARGS+=( --hostname "$VERTICA_HOST_NAME" )
 
@@ -59,12 +62,16 @@ if [[ $HOME != dbadmin ]] ; then
   VERTICA_RUNARGS+=( --mount "type=bind,source=$HOME,target=$HOME" )
 fi
 
+# Use a network just for this demo
+docker network create "$DOCKER_NETWORK" 2>/dev/null
+VERTICA_RUNARGS+=( --network "$DOCKER_NETWORK" )
+
 # clear out old container in case it had issues
 docker container rm $VERTICA_CONTAINER_NAME 2>/dev/null
 
 docker run --detach "${VERTICA_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER_IMAGE" || abort $? "Could not create docker"
 
-# SSH tweaks
+# SSHD tweaks
 # don't use DNS in sshd because it slows down ssh
 # (this seems to execute before sshd starts, so the SIGHUP may not be needed)
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo sed -i "s/^#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config; sudo kill -1 $(/bin/pgrep -x sshd) 2>/dev/null'
@@ -73,10 +80,23 @@ docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo sed -i 
 # (this locale.alias file is deprecated)
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c 'echo "C.UTF-8         en_US.UTF-8" >> /usr/share/locale/locale.alias'
 
-# if verticalab is running
+# regenerate the ssh key for security
+echo y | docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME ssh-keygen -t rsa -f /home/dbadmin/.ssh/id_rsa -N '' -C vertica-demo -q >/dev/null
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "cat /home/dbadmin/.ssh/id_rsa.pub > /home/dbadmin/.ssh/authorized_keys; rm /home/dbadmin/.ssh/authorized_keys2"
+
+# if verticalab is running, make sure it can connect to vertica-demo
 if docker exec -i "$VERTICALAB_CONTAINER_NAME" true 2>/dev/null; then
   # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
   docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+  # add the ip address of vertica-demo to /etc/hosts
+  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v vertica-demo /etc/hosts)
+  if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (eq .Name "'"$VERTICA_CONTAINER_NAME"'")}}{{index (split .IPv4Address "/") 0}}        {{.Name}}{{println}}{{end}}{{end}}' "$DOCKER_NETWORK"); then 
+    if [[ $VERTICA_CONTAINER_NAME != vertica-demo ]] ; then
+      # so vertica-demo works no matter what you call your demo container
+      HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME vertica-demo/")
+    fi
+    printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICALAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
+  fi
 fi
 
 # user in container should match the home directory
@@ -119,10 +139,13 @@ docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sed -i.bak 's/\(cp.*\
 # is the EULA signed?
 if [[ -z $VERTICA_EULA ]]; then
   docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" rm -f /opt/vertica/config/d5415f948449e9d4c421b568f2411140.dat
+  if tty >/dev/null; then
+    TTY=-t;
+  fi
 fi
 
 # create the database
-docker exec -it "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?
+docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bin/admintools -t create_db --database="$DB_NAME" --password= --hosts=localhost || exit $?
 
 # record the EULA sign date so we don't need to sign again
 if [[ -z $VERTICA_EULA ]] && docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" test -r /opt/vertica/config/d5415f948449e9d4c421b568f2411140.dat; then

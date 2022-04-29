@@ -8,6 +8,7 @@ COPY ./data /project/data
 COPY ./notebooks /project/notebooks
 COPY ./bin /usr/bin/
 COPY ./extensions/verticatools/ /project/verticatools
+COPY ./extensions/theme/ /project/theme
 
 RUN apt-get update \
     && apt-get install -y \
@@ -24,8 +25,10 @@ RUN pip install --upgrade pip \
     && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
     && apt-get -y install nodejs \
+    && pip install /project/theme \
     && pip install /project/verticatools \
     && rm -r /project/verticatools \
+    && rm -r /project/theme \
     && chmod 755 /usr/bin/admintools \
     && chmod 755 /usr/bin/vsql \
     && chmod 755 /usr/bin/run-vsql \

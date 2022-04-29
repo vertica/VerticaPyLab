@@ -16,8 +16,7 @@ import * as WidgetModuleType from '@jupyterlab/terminal/lib/widget';
 import { ITerminalTracker, 
          ITerminal 
 } from '@jupyterlab/terminal';
-import verticaIconSvg from '../style/icons/vertica.svg';
-import { LabIcon } from '@jupyterlab/ui-components';
+import { verticapyIcon, admintoolsIcon, vsqlIcon, verticalabIcon} from './icons';
 /**
  * The command IDs used by the terminal plugin.
  */
@@ -39,11 +38,6 @@ namespace CommandIDs {
   export const openHelp = 'vertica:open-help';
 }
 
-export const verticaIcon = new LabIcon({
-  name: 'vertica:import',
-  svgstr: verticaIconSvg
-});
-
 function activate(
   app: JupyterFrontEnd,
   settingRegistry: ISettingRegistry,
@@ -59,7 +53,7 @@ function activate(
 
   while (widget !== undefined) {
     if (widget.id === 'jp-MainLogo') {
-      verticaIcon.element({
+      verticalabIcon.element({
         container: widget.node,
         justify: 'center',
         margin: '2px 5px 2px 5px',
@@ -108,7 +102,7 @@ function activate(
     launcher.add({
       command: CommandIDs.createNew,
       category: 'Vertica',
-      rank: 1
+      rank: 0
     });
   }
 
@@ -116,7 +110,7 @@ function activate(
     launcher.add({
       command: CommandIDs.createNewAdmintools,
       category: 'Vertica',
-      rank: 2
+      rank: 1
     });
   }
 
@@ -124,7 +118,7 @@ function activate(
     launcher.add({
       command: CommandIDs.openHelp,
       category: 'Vertica',
-      rank: 0
+      rank: 2
     });
   }
 
@@ -175,7 +169,7 @@ export function addCommands(
   commands.addCommand(CommandIDs.createNew, {
     label: args => (args['isPalette'] ? 'Vsql' : 'Vsql'),
     caption: 'Open a vsql session',
-    icon: args => (args['isPalette'] ? undefined : verticaIcon),
+    icon: args => (args['isPalette'] ? undefined : vsqlIcon),
     execute: async args => {
       // wait for the widget to lazy load
       let Terminal: typeof WidgetModuleType.Terminal;
@@ -194,7 +188,7 @@ export function addCommands(
 
       const term = new Terminal(session, options[0]);
 
-      term.title.icon = verticaIcon;
+      term.title.icon = vsqlIcon;
       term.title.label = '...';
 
       const main = new MainAreaWidget({ content: term });
@@ -209,7 +203,7 @@ export function addCommands(
   commands.addCommand(CommandIDs.createNewAdmintools, {
     label: args => (args['isPalette'] ? 'Admintools' : 'Admintools'),
     caption: 'Open an admintools session',
-    icon: args => (args['isPalette'] ? undefined : verticaIcon),
+    icon: args => (args['isPalette'] ? undefined : admintoolsIcon),
     execute: async args => {
       // wait for the widget to lazy load
       let Terminal: typeof WidgetModuleType.Terminal;
@@ -228,7 +222,7 @@ export function addCommands(
 
       const term = new Terminal(session, options[1]);
 
-      term.title.icon = verticaIcon;
+      term.title.icon = admintoolsIcon;
       term.title.label = '...';
 
       const main = new MainAreaWidget({ content: term });
@@ -242,7 +236,7 @@ export function addCommands(
 
   commands.addCommand(CommandIDs.openHelp, {
     label: 'Documentation',
-    icon: verticaIcon,
+    icon: verticapyIcon,
     execute: (args: any) => {
       window.open('https://www.vertica.com/python/documentation_last/', '_blank');
     }

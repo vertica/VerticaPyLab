@@ -25,8 +25,6 @@ source $CONFIG_FILE
 : ${VERTICA_SSH_PORT:=5432}
 : ${DOCKER_NETWORK:=demo}
 
-OPEN_CMD=xdg-open
-
 function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
     echo
@@ -63,6 +61,12 @@ if [[ -n $VERTICALAB_PROJECT ]] ; then
   VERTICALAB_RUNARGS+=( -v $VERTICALAB_PROJECT:/project )
 fi
 
+if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then
+  # Try to support docker-machine networking
+  VERTICALAB_BIND_ADDRESS=${DOCKER_HOST##tcp://}
+  VERTICALAB_BIND_ADDRESS=${VERTICALAB_BIND_ADDRESS%%:*}
+fi
+
 if [[ $VERTICALAB_PORT =~ ^[0-9]*$ ]] ; then VERTICALAB_RUNARGS+=( -p $VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT:8888 )
 else
   echo "Warning: VERTICALAB_PORT must be numeric.  Using a random port." >&2
@@ -93,6 +97,7 @@ if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (ne .Name "'
   if [[ $VERTICA_CONTAINER_NAME != vertica-demo ]] ; then
     # so vertica-demo works no matter what you call your demo container
     HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME vertica-demo/")
+    SSH_CONFIG_EXTRA_HOSTNAME="vertica-demo"
   fi
   # add docker containers and host ip address to /etc/hosts
   printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICALAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
@@ -111,34 +116,33 @@ Host *
     LogLevel=error
     RequestTTY=yes
 
-Host $VERTICA_HOST_NAME
+Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
     User dbadmin
 " | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
 echo "Starting..."
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds
-while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' >/dev/null && ((timeout--)); do
+while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and paste one of these URLs:' >/dev/null && ((timeout--)); do
   sleep 1
 done
 
 echo
 echo "Waiting for url to open in browser..."
-# Create an array that will contain the urls.
-declare -a VERTICALAB_URLS=($(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+?.*' | sed "s/:8888/:${VERTICALAB_PORT}/"))
-KERNEL=$(uname -s)
+# Get the basic URL and remap the hostname and port
+URL=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT/")
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open
-if [ $KERNEL = Darwin ] ; then
-    OPEN_CMD=open
+if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat
+  OPEN_CMD=open
+elif [[ $(uname -r) =~ WSL ]]; then
+  OPEN_CMD="powershell.exe /c start"
+else
+  OPEN_CMD=xdg-open
 fi
 # Open the correct url in browser. We know that the correct url is the second one.
 # So even if in some cases a 3rd one is created this will not be affected
-$OPEN_CMD ${VERTICALAB_URLS[1]} 2> /dev/null
+$OPEN_CMD "$URL" 2> /dev/null
 echo
-echo "If the link does not open or does not work, copy and paste one of these URLs in browser:"
-# Print all urls
-for url in "${VERTICALAB_URLS[@]}"
-do
-    echo $url
-done
+echo "If the link does not open or does not work, copy and paste this URL in browser:"
+echo "    $URL"

@@ -16,7 +16,7 @@ import * as WidgetModuleType from '@jupyterlab/terminal/lib/widget';
 import { ITerminalTracker, 
          ITerminal 
 } from '@jupyterlab/terminal';
-import { verticapyIcon, admintoolsIcon, vsqlIcon, verticalabIcon} from './icons';
+import { verticapyIcon, admintoolsIcon, vsqlIcon } from './icons';
 /**
  * The command IDs used by the terminal plugin.
  */
@@ -46,25 +46,6 @@ function activate(
   restorer: ILayoutRestorer | null
 ): ITerminalTracker{
   console.log('JupyterLab extension verticatools is activated!');
-
-  // Find the MainLogo widget in the shell and replace it with the Vertica Logo
-  const widgets = app.shell.widgets('top');
-  let widget = widgets.next();
-
-  while (widget !== undefined) {
-    if (widget.id === 'jp-MainLogo') {
-      verticalabIcon.element({
-        container: widget.node,
-        justify: 'center',
-        margin: '2px 5px 2px 5px',
-        height: 'auto',
-        width: '20px'
-      });
-      break;
-    }
-
-    widget = widgets.next();
-  }
 
   const { serviceManager } = app;
   const namespace = 'bash';

@@ -8,7 +8,7 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import { each } from '@lumino/algorithm';
 
 import * as React from 'react';
-import verticaIconSvg from '../style/icons/vertica.svg';
+import verticaIconSvg from '../style/icons/vertica2.svg';
 
 export const verticaIcon = new LabIcon({
     name: 'vertica:vertica',

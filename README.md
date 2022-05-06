@@ -73,18 +73,17 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
     ```
     This will create a container using the default 8889 port. Then just open the displayed link in a browser.
 
-    By default, verticalab notebooks will be isolated from the host machine and the only present files/dirs are those loaded at build time. However we offer the possibility to start from any directory of your choice. That way you will have access to the resources in that local directory and the changes you make will persist even after the container deletion. You just have to set 2 env vars:
+    By default, verticalab notebooks will be isolated from the host machine and the only present files/dirs are those loaded at build time. However we offer the possibility to start from any directory of your choice. That way you will have access to the resources in that local directory and the changes you make will persist even after the container deletion. You just have to set VERTICALAB_PROJECT env var:
 
-        - VOL: to enable a volume. the default value is false.
-        - VOL_PATH: the local path that will used as shared volume. the default value is $HOME.
+        - VERTICALAB_PROJECT: the localhost path that will be used as shared volume with verticalab docker container.
 
-    So if you want to enable a volume and use your home directory as shared volume:
+    So if you want to use your home directory as shared volume:
     ```
-    make verticalab-start VOL=true
+    make verticalab-start VERTICALAB_PROJECT=$HOME
     ```
-    If you want to use another directory then set VOL_PATH too:
+    If you want to use another directory:
      ```
-    make verticalab-start VOL=true VOL_PATH=<your-dir>
+    make verticalab-start VERTICALAB_PROJECT=<your-dir>
     ```
 4. Once you are done run the following command to stop the container.
     ```

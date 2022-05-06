@@ -6,11 +6,40 @@ single node vertica using the community license and thus has limitations, but
 it should be enough to demonstrate many features of Vertica
 
 ### Prerequisites
-* install docker
-* download this vertica-demo project
-* open up a bash prompt in this directory
+
+ * install docker
+ * download this vertica-demo project
+ * open up a bash prompt in this directory
 
 ### Quick Start
+
+All the following commands must be executed in the 'vertica-demo' folder.
+
+Install Vertica on the local machine.
+```
+make vertica-install
+```
+Install the Vertica Lab.
+```
+make verticalab-install
+```
+
+When both Vertica and VerticaLab are installed, you just need to start them.
+
+Start Vertica.
+```
+make vertica-start
+```
+Start VerticaLab.
+```
+make verticalab-start
+```
+
+You're ready to play! More information are available in the following sections.
+
+
+### Vertica 1 Node CE - DEMO
+
 These commands will create a vertica database and start it
 ```
 make vertica-install
@@ -50,12 +79,15 @@ make get-ip
 ```
 
 ## VerticaLab
+
 Build locally a jupyterlab image with verticapy installed. You can then use that image to create a container with  your notebooks already imported which makes demo very easy.
 
 ### Prerequisites
+
 Set up Vertica nodes. If you do not have access to any, you can easily set up a single node vertica. See the section on [`Vertica`](#Vertica) for that.
 
 ### Quick Start
+
 1. Build the image
 
     Put the notebooks/data you would like to import in your image respectively in notebooks/data folders.
@@ -68,6 +100,7 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
     make verticalab-install
     ```
 2. Start jupyterlab in docker
+
     ```
     make verticalab-start
     ```
@@ -86,7 +119,8 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
      ```
     make verticalab-start VOL=true VOL_PATH=<your-dir>
     ```
-4. Once you are done run the following command to stop the container.
+
+3. Once you are done run the following command to stop the container.
     ```
     make verticalab-stop
     ```
@@ -94,14 +128,19 @@ Set up Vertica nodes. If you do not have access to any, you can easily set up a 
 ### Run with your own settings
 
 1. Create a configuration file
+
     ```
     make config
     ```
+
 2. Edit settings in the configuration file
+
     ```
     vi config
     ```
+
 3.  You can directly use the commands in bin/ if you add it to your PATH with
+
     ```
     eval $(make env)
     ```

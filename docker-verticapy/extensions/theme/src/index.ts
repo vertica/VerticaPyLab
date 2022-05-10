@@ -4,7 +4,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { ICommandPalette, MainAreaWidget } from '@jupyterlab/apputils';
-import { ILauncher, LauncherModel } from '@jupyterlab/launcher';
+import { ILauncher } from '@jupyterlab/launcher';
 import { IMainMenu } from '@jupyterlab/mainmenu';
 import { ITranslator } from '@jupyterlab/translation';
 import { launcherIcon } from '@jupyterlab/ui-components';
@@ -13,7 +13,7 @@ import { toArray } from '@lumino/algorithm';
 import { Widget } from '@lumino/widgets';
 
 
-import { Launcher, verticaIcon } from './launcher';
+import { Launcher, LauncherModel, verticaIcon } from './launcher';
 import '../style/index.css';
 
 const VERTICA_THEME_NAMESPACE = 'theme:plugin';

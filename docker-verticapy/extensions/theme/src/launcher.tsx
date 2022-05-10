@@ -1,11 +1,12 @@
 import {
     Launcher as JupyterlabLauncher,
+    LauncherModel as JupyterLauncherModel,
     ILauncher
 } from '@jupyterlab/launcher';
 import { TranslationBundle } from '@jupyterlab/translation';
-import { LabIcon } from '@jupyterlab/ui-components';
+import { LabIcon, terminalIcon } from '@jupyterlab/ui-components';
 
-import { each } from '@lumino/algorithm';
+import { ArrayIterator, each, IIterator } from '@lumino/algorithm';
 
 import * as React from 'react';
 import verticaIconSvg from '../style/icons/vertica2.svg';
@@ -14,11 +15,37 @@ export const verticaIcon = new LabIcon({
     name: 'vertica:vertica',
     svgstr: verticaIconSvg
   });
-
+const CommandIDs = {
+    open: 'inspector:open',
+    createNew: 'terminal:create-new'
+  };
 /**
  * The known categories of launcher items and their default ordering.
  */
 const VERTICA_CATEGORY = 'Vertica';
+const TERMINAL_CATEGORY = 'Terminal'
+
+export class LauncherModel extends JupyterLauncherModel {
+    /**
+     * Return an iterator of launcher items, but remove unnecessary items.
+     */
+    items(): IIterator<ILauncher.IItemOptions> {
+      const items: ILauncher.IItemOptions[] = [];
+  
+      // Change terminal category and don't add the inspector
+      this.itemsList.forEach(item => {
+        if(item.command === CommandIDs.createNew) {
+            item.category = TERMINAL_CATEGORY;
+            item.rank = 0;
+        }
+        if(item.command !== CommandIDs.open) {
+            items.push(item);
+        }
+      });
+  
+      return new ArrayIterator(items);
+    }
+  }
   
 export class Launcher extends JupyterlabLauncher {
     /**
@@ -73,9 +100,10 @@ export class Launcher extends JupyterlabLauncher {
         const categories: React.ReactElement<any>[] = [];
 
         const knownCategories = [
+        VERTICA_CATEGORY,
         this._translator.__('Notebook'),
         this._translator.__('Console'),
-        VERTICA_CATEGORY,
+        TERMINAL_CATEGORY,
         this._translator.__('Other')
         ];
 
@@ -86,6 +114,9 @@ export class Launcher extends JupyterlabLauncher {
             if (cat.key === category) {
             if (cat.key === VERTICA_CATEGORY) {
                 cat = this.replaceCategoryIcon(cat, verticaIcon);
+            }
+            if (cat.key === TERMINAL_CATEGORY) {
+                cat = this.replaceCategoryIcon(cat, terminalIcon);
             }
             categories.push(cat);
             }

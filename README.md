@@ -1,11 +1,14 @@
 # Vertica Demo
 
-## Vertica
 This Docker image lets you create and run a single-node Vertica database 
-on a local machine. It uses the Community Edition (CE) license, which has a limit 
-of 1TB of data.
+on a local machine. It uses the Community Edition (CE) license (limited to  
+of 1TB of data).
 
-### Quickstart - Vertica
+The Docker image also includes VerticaLab, a custom JupyterLab environment. 
+VerticaLab provides extensions for autocompletion, graphics, options to run
+vsql or admintools, etc. and uses the lastest VerticaPy version.
+
+## Quickstart
 
 1. Clone this repository.
 2. Open a terminal in the `vertica-demo` directory.
@@ -29,7 +32,7 @@ of 1TB of data.
     make verticalab-start
     ```
 
-### Basic Usage
+## Vertica CE Container
 
 To create and start a new Vertica database:
 ```
@@ -82,12 +85,12 @@ You can build a JupyterLab image with VerticaPy installed, and then use that ima
 
 ### Prerequisites
 
-A Vertica database. To get a simple single-node Vertica CE database, see the [`Vertica Quickstart guide`](#Quickstart - Vertica).
+A Vertica database. To get a simple single-node Vertica CE database, see the [Vertica quickstart guide](#Vertica-CE-Container).
 
 ### Quickstart - VerticaLab
 
 1. Move the notebooks you want to import into the `vertica-demo/docker-verticapy/notebooks` directory.
-2. Move the data you awnt to import into the `vertica-demo/docker-verticapy/data` directory.
+2. Move the data you want to import into the `vertica-demo/docker-verticapy/data` directory.
 3. (Optional) To use a different image name, set the `VERTICALAB_IMG` environment variable:
     ```
     export VERTICALAB_IMG=<your-custom-name>

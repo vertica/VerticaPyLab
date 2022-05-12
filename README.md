@@ -1,8 +1,7 @@
 # Vertica Demo
 
 This Docker image lets you create and run a single-node Vertica database 
-on a local machine. It uses the Community Edition (CE) license (limited to  
-of 1TB of data).
+on a local machine. It uses the Community Edition (CE) license (limited to  of 1TB of data).
 
 The Docker image also includes VerticaLab, a custom JupyterLab environment. 
 VerticaLab provides extensions for autocompletion, graphics, options to run

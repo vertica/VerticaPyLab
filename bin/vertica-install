@@ -12,8 +12,16 @@ if ! [[ -r $CONFIG_FILE ]]; then
     exit 1
   fi
 fi
+
+function abort {
+  local retval=$1
+  shift
+  echo "${BASH_SOURCE##*/}: $@" >&2
+  exit $retval
+}
+
 # Load the configuration
-source $CONFIG_FILE
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 # defaults that can be overridden with environment variables.
 : ${VERTICA_PORT:=${VSQL_PORT:-5433}}
@@ -25,13 +33,6 @@ source $CONFIG_FILE
 : ${DB_NAME:=demo}
 : ${VERTICA_DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
 : ${DOCKER_NETWORK:=demo}
-
-function abort {
-  local retval=$1
-  shift
-  echo "${BASH_SOURCE##*/}: $@" >&2
-  exit $retval
-}
 
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
@@ -63,7 +64,7 @@ VERTICA_RUNARGS+=( --hostname "$VERTICA_HOST_NAME" )
 
 # mount the home directory unless the user is dbadmin because this docker
 # requires files from /home/dbadmin
-if [[ $HOME != dbadmin ]] ; then
+if [[ $HOME != /home/dbadmin ]] ; then
   VERTICA_RUNARGS+=( --mount "type=bind,source=$HOME,target=$HOME" )
 fi
 
@@ -113,29 +114,33 @@ else
   : ${LOGGROUP:=$(stat -c "%G" "$HOME")}
 fi
 
-# determine uid/gid of mounted home directory (in case docker maps to a different id)
-: ${USERID:=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME stat -c "%u:%g" "$HOME")}
+# determine if docker decided to mount this volume as some unknown user
+: ${USER:=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME stat -c "%U" "$HOME")}
+if [[ $USER == UNKNOWN ]] ; then
+  # determine uid/gid of mounted home directory (in case docker maps to a different id)
+  : ${USERID:=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME stat -c "%u:%g" "$HOME")}
 
-# If the home directory mount is owned by non-root, make it look like it's
-# owned by the actual owner by creating an account within the container.
-if [[ $USERID =~ ^[1-9][0-9]*: ]] ; then
-  # does host's user exist in docker?  (i.e., dbadmin, ftp, root)
-  if ! docker exec -i -u $LOGNAME "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo true >/dev/null 2>&1; then
-    # add group if we need to and its safe
-    if [[ $LOGGROUP != $(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME stat -c "%G" "$HOME") ]] && [[ ${USERID#*:} -ge 20 ]] ; then
-      # it's optional but nice to see group names correct on files, but don't
-      # touch group names in /etc/passwd that are <20.  However, 14 is
-      # available, so renumber whatever has ${USERID#*:} to 14 and then add the group
-      docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo groupmod -g 14 $(getent group "'"${USERID#*:}"'" | cut -d: -f1) 2>/dev/null' # change gid of group
+  # If the home directory mount is owned by non-root, make it look like it's
+  # owned by the actual owner by creating an account within the container.
+  if [[ $USERID =~ ^[1-9][0-9]*: ]] ; then
+    # does host's user exist in docker?  (i.e., dbadmin, ftp, root)
+    if ! docker exec -i -u $LOGNAME "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo true >/dev/null 2>&1; then
+      # add group if we need to and its safe
+      if [[ $LOGGROUP != $(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME stat -c "%G" "$HOME") ]] && [[ ${USERID#*:} -ge 20 ]] ; then
+        # it's optional but nice to see group names correct on files, but don't
+        # touch group names in /etc/passwd that are <20.  However, 14 is
+        # available, so renumber whatever has ${USERID#*:} to 14 and then add the group
+        docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo groupmod -g 14 $(getent group "'"${USERID#*:}"'" | cut -d: -f1) 2>/dev/null' # change gid of group
+      fi
+      docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo groupadd --gid "${USERID#*:}" "$LOGGROUP"
+
+      # make a host user to match home directory ownership
+      docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo useradd --uid "${USERID%%:*}" --gid "${USERID#*:}" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($USERID)"
     fi
-    docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo groupadd --gid "${USERID#*:}" "$LOGGROUP"
 
-    # make a host user to match home directory ownership
-    docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo useradd --uid "${USERID%%:*}" --gid "${USERID#*:}" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($USERID)"
+    # add user to sudoers
+    docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c "echo '$LOGNAME ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" || abort $? "Could not give $LOGNAME sudo access"
   fi
-
-  # add user to sudoers
-  docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c "echo '$LOGNAME ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" || abort $? "Could not give $LOGNAME sudo access"
 fi
 
 # a temporary fix to allow restarts of the docker container
@@ -147,6 +152,14 @@ if [[ -z $VERTICA_EULA ]]; then
   if tty >/dev/null; then
     TTY=-t;
   fi
+fi
+
+# is the account registered with Vertica?
+if [[ -z ${VERTICA_USER_NAME} ]]; then
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" cp $VERTICA_DEMO_PREFIX/etc/vertica-demo.dat /opt/vertica/config/ || abort $? "Cannot save demo license"
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key -i -l /opt/vertica/config/vertica-demo.dat || abort $? "Cannot install demo license"
+  echo "100 GB license installed."
+  echo "To increase the license to 1TB, register on vertica.com for a community edition license, and run vertica-register"
 fi
 
 # create the database

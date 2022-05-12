@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# this script increases the license from 100GB to 1TB for registered users
+
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+
+function abort {
+  local retval=$1
+  shift
+  echo "${BASH_SOURCE##*/}: $@" >&2
+  exit $retval
+}
+
+# Load the configuration
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
+
+# defaults that can be overridden with environment variables.
+: ${DB_NAME:=demo}
+: ${VERTICA_CONTAINER_NAME:=vertica-demo}
+
+if [[ -n ${VERTICA_USER_NAME} ]]; then
+  abort 1 "Already registered.  To change registration, edit $CONFIG_FILE"
+fi
+
+# can't easily verify the username, so trust the user is entering a registered username
+echo "Please enter your registered username on vertica.com"
+read -r -p "Username: " VERTICA_USER_NAME
+
+# is the account registered with Vertica?
+if [[ -n ${VERTICA_USER_NAME} ]]; then
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key --database=$DB_NAME --password= -l /opt/vertica/config/licensing/vertica_community_edition.license.key || abort $? "Cannot install community edition license"
+  (echo
+  echo "# This is a registered community edition"
+  echo "VERTICA_USER_NAME=$VERTICA_USER_NAME") >> $CONFIG_FILE
+  echo "1 TB license installed."
+fi

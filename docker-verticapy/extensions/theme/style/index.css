@@ -5,3 +5,19 @@
 div[data-category="Notebook"] .jp-LauncherCard-icon img {
   content: url(icons/jupyter.png)
 }
+
+div[data-category="Console"] .jp-LauncherCard-icon div {
+  content: url(icons/terminal.svg)
+}
+
+div[data-category="Notebook"] .jp-LauncherCard-label p {
+  visibility:hidden;
+} 
+
+div[data-category="Notebook"] .jp-LauncherCard-label:before {
+  content: "Jupyter Notebook";
+}
+
+div[data-category="Notebook"] .jp-LauncherCard-label {
+  text-align: center;
+}

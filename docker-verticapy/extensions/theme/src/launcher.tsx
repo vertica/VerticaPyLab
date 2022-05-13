@@ -4,7 +4,7 @@ import {
     ILauncher
 } from '@jupyterlab/launcher';
 import { TranslationBundle } from '@jupyterlab/translation';
-import { LabIcon, terminalIcon } from '@jupyterlab/ui-components';
+import { LabIcon } from '@jupyterlab/ui-components';
 
 import { ArrayIterator, each, IIterator } from '@lumino/algorithm';
 
@@ -23,7 +23,6 @@ const CommandIDs = {
  * The known categories of launcher items and their default ordering.
  */
 const VERTICA_CATEGORY = 'Vertica';
-const TERMINAL_CATEGORY = 'Terminal'
 
 export class LauncherModel extends JupyterLauncherModel {
     /**
@@ -35,8 +34,8 @@ export class LauncherModel extends JupyterLauncherModel {
       // Change terminal category and don't add the inspector
       this.itemsList.forEach(item => {
         if(item.command === CommandIDs.createNew) {
-            item.category = TERMINAL_CATEGORY;
-            item.rank = 0;
+            item.category = 'Console';
+            item.rank = 1;
         }
         if(item.command !== CommandIDs.open) {
             items.push(item);
@@ -103,7 +102,6 @@ export class Launcher extends JupyterlabLauncher {
         VERTICA_CATEGORY,
         this._translator.__('Notebook'),
         this._translator.__('Console'),
-        TERMINAL_CATEGORY,
         this._translator.__('Other')
         ];
 
@@ -114,9 +112,6 @@ export class Launcher extends JupyterlabLauncher {
             if (cat.key === category) {
             if (cat.key === VERTICA_CATEGORY) {
                 cat = this.replaceCategoryIcon(cat, verticaIcon);
-            }
-            if (cat.key === TERMINAL_CATEGORY) {
-                cat = this.replaceCategoryIcon(cat, terminalIcon);
             }
             categories.push(cat);
             }

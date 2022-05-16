@@ -27,19 +27,32 @@ source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 : ${DB_NAME:=demo}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 
-if [[ -n ${VERTICA_USER_NAME} ]]; then
+if [[ -n ${VERTICA_CE_SERIAL_NUMBER} ]]; then
   abort 1 "Already registered.  To change registration, edit $CONFIG_FILE"
 fi
 
+function validate_sn {
+  local ts=${1:0:8}
+  [[ $ts =~ ^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$ ]] || abort 1 "$1 is not a serial number"
+
+  # date is different on OSX, so use the date program in docker.
+  local datediff=$( docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" bash -c "echo \$(( \$(date -d '$ts + 90 days' +%s) - \$(date -d now +%s) ))" 2>/dev/null )|| abort $? "Vertica-demo must be running to register."
+  ((datediff > 0))
+}
+
 # can't easily verify the username, so trust the user is entering a registered username
-echo "Please enter your registered username on vertica.com"
-read -r -p "Username: " VERTICA_USER_NAME
+echo "Please request a community edition license from https://www.vertica.com/trial-request/"
+echo "Then enter the serial number of Vertica Community Edition from https://sld.microfocus.com/mysoftware/entitlement?eon=TO-"
+echo "You may need to click the link again after logging in."
+read -r -p "Serial Number: " VERTICA_CE_SERIAL_NUMBER || exit 1
 
 # is the account registered with Vertica?
-if [[ -n ${VERTICA_USER_NAME} ]]; then
+if validate_sn "$VERTICA_CE_SERIAL_NUMBER"; then
   docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key --database=$DB_NAME --password= -l /opt/vertica/config/licensing/vertica_community_edition.license.key || abort $? "Cannot install community edition license"
   (echo
   echo "# This is a registered community edition"
-  echo "VERTICA_USER_NAME=$VERTICA_USER_NAME") >> $CONFIG_FILE
+  echo "VERTICA_CE_SERIAL_NUMBER=$VERTICA_CE_SERIAL_NUMBER") >> $CONFIG_FILE
   echo "1 TB license installed."
+else
+  abort 1 "The serial number is not valid." >&2
 fi

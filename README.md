@@ -113,21 +113,20 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
 
 ### Shared Volumes
 
-By default, VerticaLab notebooks are isolated from the host machine and the only contain files and directories that were loaded at build time. However, you can start the container from any directory, which lets you access resources in that local directory as a shared volume, and changes you make will persist even if you delete the container. To do this, set the following environment variables:
-
-- `VOL`: Whether to enable a shared volume. The default value is "false."
-- `VOL_PATH`: The local path of the directory to use as a shared volume. The default value is $HOME.
-
-For example, to enable shared volumes and to use your home directory (default), set `VOL`.
+By default, verticalab notebooks are isolated from the host machine and can only access files/dirs loaded at build time. However we offer the possibility to start from any directory of your choice. That way you will have access to the resources in that local directory and the changes you make will persist even after the container deletion. You just have to set VERTICALAB_PROJECT env var:
 
 ```
-make verticalab-start VOL=true
+- VERTICALAB_PROJECT: the localhost path that will be used as shared volume with verticalab docker container
 ```
     
-To use a diferent directory, set `VOL_PATH`:
+So if you want to use your home directory as shared volume:
 
 ```
-make verticalab-start VOL=true VOL_PATH=<your-dir>
+make verticalab-start VERTICALAB_PROJECT=$HOME
+```
+If you want to use another directory:
+```
+make verticalab-start VERTICALAB_PROJECT=<your-dir>
 ```
 
 ### Additional Configuration

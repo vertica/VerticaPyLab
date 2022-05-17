@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# this script increases the license from 100GB to 1TB for registered users
+
+# Find the config file
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
+CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+if ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
+    echo "Cannot find config file ($CONFIG_FILE)" >&2
+    exit 1
+  fi
+fi
+
+function abort {
+  local retval=$1
+  shift
+  echo "${BASH_SOURCE##*/}: $@" >&2
+  exit $retval
+}
+
+# Load the configuration
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
+
+# defaults that can be overridden with environment variables.
+: ${DB_NAME:=demo}
+: ${VERTICA_CONTAINER_NAME:=vertica-demo}
+
+if [[ -n ${VERTICA_CE_SERIAL_NUMBER} ]]; then
+  abort 1 "Already registered.  To change registration, edit $CONFIG_FILE"
+fi
+
+function validate_sn {
+  local ts=${1:0:8}
+  [[ $ts =~ ^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$ ]] || abort 1 "$1 is not a serial number"
+
+  # date is different on OSX, so use the date program in docker.
+  local datediff=$( docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" bash -c "echo \$(( \$(date -d '$ts + 90 days' +%s) - \$(date -d now +%s) ))" 2>/dev/null )|| abort $? "Vertica-demo must be running to register."
+  ((datediff > 0))
+}
+
+# can't easily verify the username, so trust the user is entering a registered username
+echo "Please request a community edition license from https://www.vertica.com/trial-request/"
+echo "Then enter the serial number of Vertica Community Edition from https://sld.microfocus.com/mysoftware/entitlement?eon=TO-"
+echo "You may need to click the link again after logging in."
+read -r -p "Serial Number: " VERTICA_CE_SERIAL_NUMBER || exit 1
+
+# is the account registered with Vertica?
+if validate_sn "$VERTICA_CE_SERIAL_NUMBER"; then
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key --database=$DB_NAME --password= -l /opt/vertica/config/licensing/vertica_community_edition.license.key || abort $? "Cannot install community edition license"
+  (echo
+  echo "# This is a registered community edition"
+  echo "VERTICA_CE_SERIAL_NUMBER=$VERTICA_CE_SERIAL_NUMBER") >> $CONFIG_FILE
+  echo "1 TB license installed."
+else
+  abort 1 "The serial number is not valid." >&2
+fi

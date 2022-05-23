@@ -7,6 +7,10 @@ The Docker image also includes VerticaLab, a custom JupyterLab environment.
 VerticaLab provides extensions for autocompletion, graphics, options to run
 vsql or admintools, etc. and uses the lastest VerticaPy version.
 
+<div align="center">
+    <img src="VerticaLabDiagram.png" alt="VerticaLab" height="40%" width="40%" />
+</div>
+
 ## Quickstart
 
 1. Clone this repository.
@@ -81,10 +85,6 @@ make get-ip
 ## VerticaLab
 
 You can build a JupyterLab image with VerticaPy installed, and then use that image to create a container that imports your existing notebooks.
-
-<div align="center">
-    <img src="VerticaLabDiagram.png" alt="VerticaLab" height="40%" width="40%" />
-</div>
 
 ### Prerequisites
 

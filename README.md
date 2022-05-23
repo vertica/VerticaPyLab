@@ -83,7 +83,7 @@ make get-ip
 You can build a JupyterLab image with VerticaPy installed, and then use that image to create a container that imports your existing notebooks.
 
 <div align="center">
-    <img src="https://user-images.githubusercontent.com/102061016/169916145-f857032f-debc-4ecc-b642-b45ff9a78467.png" alt="VerticaLab" height="40%" width="40%" />
+    <img src="VerticaLabDiagram.png" alt="VerticaLab" height="40%" width="40%" />
 </div>
 
 ### Prerequisites

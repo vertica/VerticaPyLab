@@ -1,3 +1,35 @@
 #!/bin/bash
 
-ssh vertica-demo "${BASH_SOURCE[0]##*/}" "${@@Q}"
+: ${VERTICA_HOST_NAME:=vertica-demo}
+: ${DB:=demo}
+
+echo "Checking ssh connection..."
+ssh -q $VERTICA_HOST_NAME exit
+if [ $? -eq 255 ]; then
+    echo "ssh connection to $VERTICA_HOST_NAME failed"
+    exit $?
+fi
+
+echo "Successfully connected to vertica host"
+echo
+
+echo "Checking if database is active..."
+echo
+active_db=$(ssh $VERTICA_HOST_NAME admintools -t show_active_db 2> /dev/null | grep $DB )
+
+if [[  -z $active_db ]]
+then
+    echo "Database is not active"
+    echo "Restarting database..."
+    ssh $VERTICA_HOST_NAME admintools -t start_db --database=$DB --password= &> /dev/null
+    if [ $? -gt 0 ]; then
+        echo
+        echo "Temptative failed. Could not restart the database"
+        exit $?
+    fi
+fi
+
+echo "Database is active"
+echo
+
+ssh $VERTICA_HOST_NAME "${BASH_SOURCE[0]##*/}" "${@@Q}"

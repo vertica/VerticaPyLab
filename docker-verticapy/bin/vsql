@@ -24,7 +24,7 @@ then
     ssh $VERTICA_HOST_NAME admintools -t start_db --database=$DB --password= &> /dev/null
     if [ $? -gt 0 ]; then
         echo
-        echo "Temptative failed. Could not restart the database"
+        echo "Attempt failed. Could not restart the database"
         exit $?
     fi
 fi

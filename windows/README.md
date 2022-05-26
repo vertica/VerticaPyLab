@@ -36,14 +36,32 @@ the wsl cli has a lot of subcommands but exploring them is beyond the scope of t
 
 ## Docker Desktop
 
-### Prerequisite
+### Prerequisites
 
-You should complete the wsl section first.
+1. You should complete the wsl section first.
+2. You need some free disk space to install and run Docker Desktop.
 
 ### Install Docker Desktop on Windows
 
 1. Download Docker Desktop at [Docker Desktop Install](https://docs.docker.com/desktop/windows/install/).  It typically downloads to your Downloads folder.
 2. Double-click Docker Desktop Installer.exe to run the installer.
-3. 
+3. Follow the instructions on the installation wizard to authorize the installer and proceed with the installation. You may be asked to sign out once the installation is done.
+4. Start Docker Desktop from the Windows Start menu. From the Docker menu, select <b>Settings</b> > <b>General</b> and verify that the <b>Use WSL 2 based engine</b> is checked. If it is not the case, check it and click <b>Apply & Restart.</b>
+5. That’s it! Now docker commands will work. You can use it form you ubuntu distribution.
 
 ## Import vertica-demo
+
+Now you have everything you need to run vertica-demo. To try it:
+1. Run the following comand to install <b>make</b>:
+    ```
+    sudo apt install make
+    ```
+2. Clone the vertica-demo repository:
+    ```
+    git clone https://github.com/vertica/vertica-demo.git
+    ```
+    go to the source directory with:
+    ```
+    cd vertica-demo
+    ```
+3. Now you can test vertica-demo by following the instruction at [README](https://github.com/vertica/vertica-demo#readme)

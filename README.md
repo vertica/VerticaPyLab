@@ -159,3 +159,8 @@ Or, to put it in your bash_profile for future logins:
 ```
 make env >> ~/.bash_profile
 ```
+
+
+## Getting startted on Windows
+
+See the [Windows guide](https://github.com/vertica/vertica-demo/windows#readme).

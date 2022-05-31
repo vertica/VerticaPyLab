@@ -20,11 +20,9 @@ You must be running Windows 10 version 2004 and higher (Build 19041 and higher) 
     
 > **_NOTE:_** The above command only works if WSL is not installed. If you run wsl --install and see the WSL help text, try running wsl --list --online to see a list of available Linux distributions and run wsl --install -d \<DistroName\> to install one. To uninstall WSL, see [unregister or uninstall a Linux distribution](https://docs.microsoft.com/en-us/windows/wsl/basic-commands#unregister-or-uninstall-a-linux-distribution).
 
-    The first time you launch a Linux distribution, a console window will open asking you to wait for files to decompress and be stored on your machine. All future launches should take less than a second.
-
 2. Reboot your machine.
 
-3. If it does not start by itself, start Ubuntu from the Start menu.
+3. If it does not start by itself, start Ubuntu from the Start menu. The first time you start it, a console window will open asking you to wait for files to decompress and be stored on your machine. All future launches should take less than a second.
 
 4. Set your username and password.
 

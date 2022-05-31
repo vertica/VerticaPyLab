@@ -159,4 +159,4 @@ make env >> ~/.bash_profile
 
 ## Getting startted on Windows
 
-If you are running Windows, You can find all the instructions to set up an environment that will allow you to use vertica-demo at [Windows guide](https://github.com/vertica/vertica-demo/windows#readme)
+See the [Windows guide](https://github.com/vertica/vertica-demo/windows#readme).

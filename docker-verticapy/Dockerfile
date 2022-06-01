@@ -7,8 +7,7 @@ COPY  requirements.txt requirements.txt
 COPY ./data /project/data
 COPY ./notebooks /project/notebooks
 COPY ./bin /usr/bin/
-COPY ./extensions/verticatools/ /project/verticatools
-COPY ./extensions/theme/ /project/theme
+COPY ./extensions/ /project/
 
 RUN apt-get update \
     && apt-get install -y \
@@ -27,8 +26,10 @@ RUN pip install --upgrade pip \
     && apt-get -y install nodejs \
     && pip install /project/theme \
     && pip install /project/verticatools \
+    && pip install /project/sql-editor \
     && rm -r /project/verticatools \
     && rm -r /project/theme \
+    && rm -r /project/sql-editor \
     && chmod 755 /usr/bin/admintools \
     && chmod 755 /usr/bin/vsql \
     && chmod 755 /usr/bin/run-vsql \

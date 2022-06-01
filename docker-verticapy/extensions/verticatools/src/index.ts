@@ -99,7 +99,7 @@ function activate(
     launcher.add({
       command: CommandIDs.openHelp,
       category: 'Vertica',
-      rank: 2
+      rank: 3
     });
   }
 

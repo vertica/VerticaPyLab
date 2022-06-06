@@ -36,7 +36,7 @@ source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
-for var in LANG $VERTICA_ENV_FORWARD; do
+for var in $VERTICA_ENV_FORWARD; do
   if [[ ${!var+isset} ]]; then
     VERTICA_ENV+=(-e "$var=${!var}")
   fi
@@ -81,10 +81,6 @@ docker run --detach "${VERTICA_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER
 # don't use DNS in sshd because it slows down ssh
 # (this seems to execute before sshd starts, so the SIGHUP may not be needed)
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo sed -i "s/^#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config; sudo kill -1 $(/bin/pgrep -x sshd) 2>/dev/null'
-
-# this allows ssh commands to succeed with the default LANG in the image
-# (this locale.alias file is deprecated)
-docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c 'echo "C.UTF-8         en_US.UTF-8" >> /usr/share/locale/locale.alias'
 
 # regenerate the ssh key for security
 echo y | docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME ssh-keygen -t rsa -f /home/dbadmin/.ssh/id_rsa -N '' -C vertica-demo -q >/dev/null

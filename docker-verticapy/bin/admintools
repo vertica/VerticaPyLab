@@ -1,3 +1,4 @@
 #!/bin/bash
 
+unset LANG
 ssh vertica-demo "${BASH_SOURCE[0]##*/}" "${@@Q}"

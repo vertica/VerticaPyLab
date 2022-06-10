@@ -152,6 +152,6 @@ make env >> ~/.bash_profile
 ```
 
 
-## Getting startted on Windows
+## Getting started on Windows
 
 See the [Windows guide](https://github.com/vertica/vertica-demo/windows#readme).

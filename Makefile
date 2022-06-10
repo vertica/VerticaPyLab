@@ -80,6 +80,13 @@ verticalab-uninstall: ## Remove the verticalab container and associated images.
 	docker image rm "$${VERTICALAB_IMG:=verticapy-jupyterlab}"; \
 	docker image rm "python:$${PYTHON_VERSION:-3.8-slim-buster}"
 
+# aliases for convenience
+start: all
+
+stop: verticalab-stop vertica-stop
+
+uninstall: verticalab-uninstall vertica-uninstall
+
 .PHONY: reguster
 register: etc/vertica-demo.conf ## Register vertica to increase data limit to 1TB
 	@bin/vertica-register

@@ -15,72 +15,63 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
 
 1. Clone this repository.
 2. Open a terminal in the `vertica-demo` directory.
-3. Build Vertica:
+3. Build and start vertica and verticalab
     ```
-    make vertica-install
+    make all
+    ```
+4. Open the displayed link in a browser.
+
+## Vertica CE Container
+
+1. To create and start a new Vertica database:
+    ```
+    make vertica-start
+    make vsql
     ```
 
-4. Build VerticaLab:
+2.  To start vsql:
     ```
-    make verticalab-install
+    make vsql
     ```
 
-5. Start Vertica:
+3.  To start vsql and run a query:
+    ```
+    make vsql QUERY="'your-custom-query'"
+    ```
+    or
+    ```
+    bin/vsql -c "your-custom-query"
+    ```
+
+4.  To register Vertica and upgrade the license limit to 1TB:
+    ```
+    make register
+    ```
+
+4.  To stop Vertica:
+    ```
+    make vertica-stop
+    ```
+
+5.  To restart Vertica without erasing the database:
     ```
     make vertica-start
     ```
 
-6. Start VerticaLab:
+6.  To delete the existing database:
     ```
-    make verticalab-start
+    make vertica-uninstall
     ```
 
-## Vertica CE Container
+7.  To run admintools:
+    ```
+    bin/admintools --help
+    ```
 
-To create and start a new Vertica database:
-```
-make vertica-install
-make vsql
-```
-
-To start vsql:
-```
-make vsql
-```
-
-To start vsql and run a query:
-```
-make vsql QUERY="'your-custom-query'"
-```
-or
-```
-bin/vsql -c "your-custom-query"
-```
-
-To stop Vertica:
-```
-make vertica-stop
-```
-
-To start Vertica with the previous database, if any:
-```
-make vertica-start
-```
-
-To delete the existing database:
-```
-make vertica-uninstall
-```
-
-To run admintools:
-```
-bin/admintools --help
-```
-
-To get the IP address of the container for use with external tools (e.g. a Jupyter notebook):
-```
-make get-ip
-```
+8.  To get the IP address of the container for use with external tools (e.g. a Jupyter notebook):
+    ```
+    make get-ip
+    ```
 
 ## VerticaLab
 
@@ -99,20 +90,20 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
     export VERTICALAB_IMG=<your-custom-name>
     ```
 
-4. Build VerticaLab:
-    ```
-    make verticalab-install
-    ```
-
-5. Start JupyterLab in docker. This creates a container on port 8889 (default):
+4. Build and start JupyterLab in docker. This creates a container on port 8889 (default):
     ```
     make verticalab-start
     ```
 
-6. Open the displayed link in a browser.
-7. To stop the container:
+5. Open the displayed link in a browser.
+6. To stop the container:
     ```
     make verticalab-stop
+    ```
+
+6. To uninstall the container:
+    ```
+    make verticalab-uninstall
     ```
 
 ### Shared Volumes

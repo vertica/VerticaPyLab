@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "verticatools": "./docker-verticapy/extensions/verticatools"
+  }
+}

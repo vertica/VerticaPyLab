@@ -1,3 +1,0 @@
-# @jupyterlab/translation
-
-Translation utilities.

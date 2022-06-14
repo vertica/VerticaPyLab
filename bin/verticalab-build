@@ -31,6 +31,10 @@ fi
 # Specify the python base image version to use
 DOCKER_BUILDARGS+=( --build-arg PYTHON_VERSION=$PYTHON_VERSION )
 # The name of the image
-DOCKER_BUILDARGS+=( -t $VERTICALAB_IMG )
+DOCKER_BUILDARGS+=( -t "$VERTICALAB_IMG" )
 
 docker build "${DOCKER_BUILDARGS[@]}" $REPO_DIR/docker-verticapy/
+
+echo "To push to dockerhub:"
+printf "docker tag %q %q\n" "$VERTICALAB_IMG" "vertica/verticapy-jupyterlab:latest"
+printf "docker push %q\n" "vertica/verticapy-jupyterlab:latest"

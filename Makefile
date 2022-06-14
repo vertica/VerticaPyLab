@@ -50,9 +50,17 @@ vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 	@bin/verticalab
 
+# this builds the image from the python base image for the purposes of
+# updating it on dockerhub.  Not necessary for running the demo.
+.PHONY: verticalab-build
+verticalab-build:
+	@bin/verticalab-build
+
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Build the image to use for the demo
-	@bin/verticalab-install
+	@ source etc/vertica-demo.conf; \
+	docker pull "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest"; \
+	docker tag "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest" "$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest"
 
 .PHONY: verticalab-stop
 verticalab-stop: ## Shut down the jupyterlab server and remove the container

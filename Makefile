@@ -35,7 +35,7 @@ vertica-install: etc/vertica-demo.conf ## Create a vertica container and start t
 	@bin/vertica-install
 
 .PHONY: vertica-stop
-vertica-stop: ## Stop the vertica container.
+vertica-stop: ## Stop and delete the vertica container.
 	@bin/vertica-stop
 
 .PHONY: vertica-start

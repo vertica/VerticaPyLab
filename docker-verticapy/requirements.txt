@@ -3,4 +3,4 @@ jupyterlab-lsp
 python-lsp-server[all]
 plotly
 verticapy[all]
-ipywidgets
+ipywidgets==8.0.0rc0

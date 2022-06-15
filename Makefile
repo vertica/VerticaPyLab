@@ -51,13 +51,23 @@ verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 	@bin/verticalab
 
 # this builds the image from the python base image for the purposes of
-# updating it on dockerhub.  Not necessary for running the demo.
+# testing it locally before pushing it to dockerhub
 .PHONY: verticalab-build
 verticalab-build:
 	@bin/verticalab-build
 
+# this builds images for multiple platforms and pushes them to dockerhub
+# run "docker login" first to supply credentials
+.PHONY: verticalab-push
+verticalab-push:
+	@ source etc/vertica-demo.conf; \
+	docker context create mycontext; \
+	docker buildx create mycontext -name mybuilder; \
+	docker buildx inspect --bootstrap; \
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$${PYTHON_VERSION:-3.8-slim-buster} -t "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+
 .PHONY: verticalab-install
-verticalab-install: etc/vertica-demo.conf ## Build the image to use for the demo
+verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo
 	@ source etc/vertica-demo.conf; \
 	docker pull "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest"; \
 	docker tag "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest" "$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest"

@@ -33,4 +33,4 @@ DOCKER_BUILDARGS+=( --build-arg PYTHON_VERSION=$PYTHON_VERSION )
 # The name of the image
 DOCKER_BUILDARGS+=( -t $VERTICALAB_IMG )
 
-docker build --no-cache "${DOCKER_BUILDARGS[@]}" $REPO_DIR/docker-verticapy/
+docker build "${DOCKER_BUILDARGS[@]}" $REPO_DIR/docker-verticapy/

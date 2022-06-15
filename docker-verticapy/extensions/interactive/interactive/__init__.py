@@ -43,9 +43,19 @@
 # Python Modules
 import ipywidgets as widgets
 from ipywidgets import Layout, Box
-from IPython.display import display
+from IPython.display import display, display_html, update_display
+from IPython.core.display import HTML
 # VerticaPy 
 from verticapy import vDataFrame
+
+
+
+
+# # Jupyter Widgets + vDataFrame
+
+# ## vDataFrame.iloc
+
+
 
 class interface_iloc:
     def __init__(self, vdf: vDataFrame, limit: int = 5):
@@ -80,6 +90,7 @@ class interface_iloc:
         with self.output:
             self.display_iloc(limit=self.limit)
         # Layout&Styling
+        items_layout = Layout(width='auto')
         box_layout = Layout(display='flex',
                             flex_flow='row',
                             align_items='center',
@@ -107,7 +118,8 @@ class interface_iloc:
 
     def display_iloc(self, limit: int = 5,
                      offset: int = 0, columns: list = []):
-        display(self.vdf.iloc(limit, offset, columns))
+        with self.output:
+            display(self.vdf.iloc(limit, offset, columns))
 
     # Handling what happens when the "NEXT" button is clicked
     def on_btn_next(self, value):
@@ -133,6 +145,7 @@ class interface_iloc:
         self.output.clear_output(wait=True)
         with self.output:
             self.display_iloc(limit=self.limit, offset=int(self.cursor))
+
 
 
 

@@ -215,7 +215,7 @@ class stats_interactive:
         # Storing the virtual dataframe
         self.vdf = vdf
         # VerticaPy Logo
-        file_ = open("../data/index.png", "rb")
+        file_ = open("./assets/index.png", "rb")
         image = file_.read()
         img = widgets.Image(
                                 value=image,
@@ -399,7 +399,7 @@ class visualizer:
         self.visualize_btn.on_click(self.on_visualize_btn)
         barWidth_slider.observe(self.onWidthChange, names="value")
         # VerticaPy Logo
-        file = open("../data/index.png", "rb")
+        file = open("./assets/index.png", "rb")
         image = file.read()
         img = widgets.Image(
                                 value=image,
@@ -543,7 +543,7 @@ class eval_sessionize:
         with self.output:
             display(self.vdf.head())
         # VerticaPy Logo
-        file = open("../data/index.png", "rb")
+        file = open("./assets/index.png", "rb")
         image = file.read()
         img = widgets.Image(
                                 value=image,

@@ -16,6 +16,9 @@ RUN apt-get update \
     libgdal-dev \
     g++ \
     ssh 
+
+RUN apt-get upgrade -y
+RUN apt-get clean
    
 # Install python dependencies
 RUN pip install --upgrade pip \

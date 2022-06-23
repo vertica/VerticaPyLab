@@ -17,6 +17,7 @@ source $CONFIG_FILE
 
 # defaults that can be overridden with environment variables.
 : ${VERTICALAB_IMG:=verticapy-jupyterlab}
+: ${VERTICALAB_IMG_VERSION:=latest}
 : ${PYTHON_VERSION:=3.8-slim-buster}
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"

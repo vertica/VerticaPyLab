@@ -154,4 +154,4 @@ make env >> ~/.bash_profile
 
 ## Getting started on Windows
 
-See the [Windows guide](https://github.com/roypaulin/vertica-demo/blob/main/windows/README.md).
+See the [Windows guide](windows/README.md).

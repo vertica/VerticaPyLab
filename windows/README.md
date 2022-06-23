@@ -54,4 +54,4 @@ Install WSL 2.
     ```
     cd vertica-demo
     ```
-5. Run vertica-demo. For instructions, see the [README](README.md).
+5. Run vertica-demo. For instructions, see the [README](../README.md).

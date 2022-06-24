@@ -10,24 +10,27 @@ COPY ./bin /usr/bin/
 COPY ./extensions/ /project/
 
 RUN apt-get update \
-      && apt-get install -y \
-      software-properties-common \
-      gpg \
-      libgdal-dev \
-      g++ \
-      ssh 
+    && apt-get install -y \
+    software-properties-common \
+    gpg \
+    libgdal-dev \
+    g++ \
+    ssh 
+
+RUN apt-get upgrade -y
+RUN apt-get clean
    
 # Install python dependencies
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt \
+    pip install -r requirements.txt \
     && rm requirements.txt \
     && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
-    && apt-get -y install nodejs \ 
-    && pip install /project/verticatools \
+    && apt-get -y install nodejs \
     && pip install /project/theme \
-    && pip install /project/interactive \
+    && pip install /project/verticatools \
     && pip install /project/sql-editor \
+    && pip install /project/interactive \
     && rm -r /project/verticatools \
     && rm -r /project/theme \
     && rm -r /project/sql-editor \

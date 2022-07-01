@@ -1,4 +1,24 @@
 # Makefile for vertica-demo
+# Run "make help" for instructions on installing and starting the demo
+
+# Release Engineering:
+# This is the version of the dockerhub image for the Jupyter Notebook that
+# is built/cached from this code base.  
+# Demo Users :
+#   1) check out a stable released version.  
+#   2) "make verticalab-install"
+# Developers of Vertica-Demo : 
+#   1) create a git branch and checkout
+#   2) change verticalab demos
+#   3) "make verticalab-build"
+#   4) test, git commit, git push, create PR, get approval, merge to main, checkout main
+#   5) "make verticalab-push"
+# Release process :
+#   1) create a release branch in github
+#   2) tag the release
+#   3) create/merge a PR to main that updates this version to the next release
+#   4) move the "latest" tag on dockerhub for the release
+VERTICALAB_IMG_VERSION=v0.1
 
 QUERY?=select version();
 SHELL:=/bin/bash
@@ -70,21 +90,22 @@ verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 verticalab-build:
 	@bin/verticalab-build
 
-# this builds images for multiple platforms and pushes them to dockerhub
-# run "docker login" first to supply credentials
+# this builds images for multiple platforms and pushes them to docker hub
+# run "docker login" first to supply credentials that are authorized to update
+# the vertica docker hub images.
 .PHONY: verticalab-push
 verticalab-push:
 	@ source etc/vertica-demo.conf; \
 	docker context create mycontext; \
 	docker buildx create mycontext -name mybuilder; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$${PYTHON_VERSION:-3.8-slim-buster} -t "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$${PYTHON_VERSION:-3.8-slim-buster} -t "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo
 	@ source etc/vertica-demo.conf; \
-	docker pull "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest"; \
-	docker tag "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest" "$${VERTICALAB_IMG:-verticapy-jupyterlab}:latest"
+	docker pull "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)"; \
+	docker tag "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)" "$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)"
 
 .PHONY: verticalab-stop
 verticalab-stop: ## Shut down the jupyterlab server and remove the container

@@ -18,7 +18,7 @@ jobs:
     - name: Create a Vertica Demo container
       run: make vertica-install
     - name: Create a VerticaLab container
-      run: make verticalab-install
+      run: make verticalab-build
     - name: Run the Vertica Demo container
       run: make verticalab-start
     - name: Vertica up and functional

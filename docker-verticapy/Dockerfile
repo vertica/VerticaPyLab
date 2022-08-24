@@ -1,6 +1,10 @@
 ARG PYTHON_VERSION="3.8-slim-buster"
 FROM python:${PYTHON_VERSION}
 
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 WORKDIR /project
 
 COPY  requirements.txt requirements.txt

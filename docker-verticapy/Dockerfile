@@ -29,7 +29,7 @@ RUN pip install --upgrade pip \
     pip install -r requirements.txt \
     && rm requirements.txt \
     && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
-    && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get -y install nodejs \
     && pip install /project/theme \
     && pip install /project/verticatools \

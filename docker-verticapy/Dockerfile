@@ -1,6 +1,10 @@
 ARG PYTHON_VERSION="3.8-slim-buster"
 FROM python:${PYTHON_VERSION}
 
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 WORKDIR /project
 
 COPY  requirements.txt requirements.txt
@@ -25,7 +29,7 @@ RUN pip install --upgrade pip \
     pip install -r requirements.txt \
     && rm requirements.txt \
     && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
-    && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get -y install nodejs \
     && pip install /project/theme \
     && pip install /project/verticatools \

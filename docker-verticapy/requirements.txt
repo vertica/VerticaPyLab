@@ -1,5 +1,8 @@
 jupyterlab
 jupyterlab-lsp
 python-lsp-server[all]
+ipython
+ipywidgets==7.6.5
+voila
 plotly
 verticapy[all]

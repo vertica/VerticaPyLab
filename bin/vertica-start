@@ -16,7 +16,6 @@ fi
 source $CONFIG_FILE
 
 # defaults
-: ${VERTICA_PORT:=${VSQL_PORT:-5433}}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${DB_NAME:=demo} # default database name
 

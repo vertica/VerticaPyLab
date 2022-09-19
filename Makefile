@@ -88,7 +88,7 @@ verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 # testing it locally before pushing it to dockerhub
 .PHONY: verticalab-build
 verticalab-build:
-	@bin/verticalab-build
+	VERTICALAB_IMG_VERSION=$(VERTICALAB_IMG_VERSION) bin/verticalab-build
 
 # this builds images for multiple platforms and pushes them to docker hub
 # run "docker login" first to supply credentials that are authorized to update

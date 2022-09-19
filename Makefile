@@ -82,13 +82,13 @@ verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 	@if (($$(docker ps -a --no-trunc -q -f NAME="$${VERTICALAB_CONTAINER_NAME:-verticalab}" | wc -l)==0)); then \
 	    $(MAKE) verticalab-install; \
 	fi
-	@bin/verticalab;
+	@VERTICALAB_IMG_VERSION=$(VERTICALAB_IMG_VERSION) bin/verticalab
 
 # this builds the image from the python base image for the purposes of
 # testing it locally before pushing it to dockerhub
 .PHONY: verticalab-build
 verticalab-build:
-	@bin/verticalab-build
+	@VERTICALAB_IMG_VERSION=$(VERTICALAB_IMG_VERSION) bin/verticalab-build
 
 # this builds images for multiple platforms and pushes them to docker hub
 # run "docker login" first to supply credentials that are authorized to update

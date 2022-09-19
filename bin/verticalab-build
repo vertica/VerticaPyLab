@@ -32,6 +32,6 @@ fi
 # Specify the python base image version to use
 DOCKER_BUILDARGS+=( --build-arg PYTHON_VERSION=$PYTHON_VERSION )
 # The name of the image
-DOCKER_BUILDARGS+=( -t $VERTICALAB_IMG )
+DOCKER_BUILDARGS+=( -t $VERTICALAB_IMG:$VERTICALAB_IMG_VERSION )
 
 docker build "${DOCKER_BUILDARGS[@]}" $REPO_DIR/docker-verticapy/

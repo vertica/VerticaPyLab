@@ -18,11 +18,13 @@ source $CONFIG_FILE
 # defaults that can be overridden with environment variables.
 : ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICALAB_IMG:=verticapy-jupyterlab}
+: ${VERTICALAB_IMG_VERSION:=latest}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
 : ${VERTICALAB_PORT:=8889}
 : ${VERTICALAB_BIND_ADDRESS:=127.0.0.1}
-: ${VERTICA_SSH_PORT:=5432}
+: ${VERTICA_PORT:=5433}
+: ${VERTICA_SSH_PORT:=$((VERTICA_PORT-1))}
 : ${DOCKER_NETWORK:=demo}
 
 function usage {
@@ -43,6 +45,9 @@ while getopts "p:c:i:h" opt; do
             ;;
         i)
             VERTICALAB_IMG=$OPTARG
+            ;;
+        v)
+            VERTICALAB_IMG_VERSION=$OPTARG
             ;;
         p)
             VERTICALAB_PORT=$OPTARG
@@ -80,7 +85,7 @@ VERTICALAB_RUNARGS+=( --rm )
 docker network create "$DOCKER_NETWORK" 2>/dev/null
 VERTICALAB_RUNARGS+=( --network "$DOCKER_NETWORK" )
 
-docker run --detach "${VERTICALAB_RUNARGS[@]}" "$VERTICALAB_IMG" || exit $?
+docker run --detach "${VERTICALAB_RUNARGS[@]}" "$VERTICALAB_IMG:$VERTICALAB_IMG_VERSION" || exit $?
 
 VERTICALAB_PORT=$(docker port "$VERTICALAB_CONTAINER_NAME" 8888/tcp)
 VERTICALAB_PORT=${VERTICALAB_PORT##*:}

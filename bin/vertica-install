@@ -24,8 +24,8 @@ function abort {
 source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 # defaults that can be overridden with environment variables.
-: ${VERTICA_PORT:=${VSQL_PORT:-5433}}
-: ${VERTICA_SSH_PORT:=5432}
+: ${VERTICA_PORT:=5433}
+: ${VERTICA_SSH_PORT:=$((VERTICA_PORT-1))}
 : ${VERTICA_BIND_ADDRESS:=127.0.0.1}
 : ${VERTICALAB_CONTAINER_NAME:=verticalab}
 : ${VERTICA_CONTAINER_NAME:=vertica-demo}
@@ -131,16 +131,13 @@ if [[ $V_USER == UNKNOWN ]] ; then
       fi
 
       # make a host user to match home directory ownership
-      docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo useradd --uid "${V_USERID%%:*}" --gid "${V_USERID#*:}" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($V_USERID)"
+      docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo useradd --shell $SHELL --uid "${V_USERID%%:*}" --gid "${V_USERID#*:}" --home-dir "$HOME" --no-create-home "$LOGNAME" || abort $? "Could not create user $LOGNAME ($V_USERID)"
     fi
 
     # add user to sudoers
     docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sudo bash -c "echo '$LOGNAME ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers" || abort $? "Could not give $LOGNAME sudo access"
   fi
 fi
-
-# a temporary fix to allow restarts of the docker container
-docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME sed -i.bak 's/\(cp.*\)/\1 || true/' /opt/vertica/bin/docker-entrypoint.sh
 
 # is the EULA signed?
 if [[ -z $VERTICA_EULA ]]; then

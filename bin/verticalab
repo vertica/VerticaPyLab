@@ -13,19 +13,7 @@ if ! [[ -r $CONFIG_FILE ]]; then
   fi
 fi
 # Load the configuration
-source $CONFIG_FILE
-
-# defaults that can be overridden with environment variables.
-: ${VERTICALAB_CONTAINER_NAME:=verticalab}
-: ${VERTICALAB_IMG:=verticapy-jupyterlab}
-: ${VERTICALAB_IMG_VERSION:=latest}
-: ${VERTICA_CONTAINER_NAME:=vertica-demo}
-: ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
-: ${VERTICALAB_PORT:=8889}
-: ${VERTICALAB_BIND_ADDRESS:=127.0.0.1}
-: ${VERTICA_PORT:=5433}
-: ${VERTICA_SSH_PORT:=$((VERTICA_PORT-1))}
-: ${DOCKER_NETWORK:=demo}
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
@@ -72,7 +60,8 @@ if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then
   VERTICALAB_BIND_ADDRESS=${VERTICALAB_BIND_ADDRESS%%:*}
 fi
 
-if [[ $VERTICALAB_PORT =~ ^[0-9]*$ ]] ; then VERTICALAB_RUNARGS+=( -p $VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT:8888 )
+if [[ $VERTICALAB_PORT =~ ^[0-9]*$ ]] ; then
+  VERTICALAB_RUNARGS+=( -p $VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT:8888 )
 else
   echo "Warning: VERTICALAB_PORT must be numeric.  Using a random port." >&2
   VERTICALAB_RUNARGS+=( --expose 8888 -P )
@@ -85,7 +74,7 @@ VERTICALAB_RUNARGS+=( --rm )
 docker network create "$DOCKER_NETWORK" 2>/dev/null
 VERTICALAB_RUNARGS+=( --network "$DOCKER_NETWORK" )
 
-docker run --detach "${VERTICALAB_RUNARGS[@]}" "$VERTICALAB_IMG:$VERTICALAB_IMG_VERSION" || exit $?
+docker run --detach "${VERTICALAB_RUNARGS[@]}" "vertica/$VERTICALAB_IMG:$VERTICALAB_IMG_VERSION" || exit $?
 
 VERTICALAB_PORT=$(docker port "$VERTICALAB_CONTAINER_NAME" 8888/tcp)
 VERTICALAB_PORT=${VERTICALAB_PORT##*:}
@@ -132,8 +121,6 @@ while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and p
   sleep 1
 done
 
-echo
-echo "Waiting for url to open in browser..."
 # Get the basic URL and remap the hostname and port
 URL=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT/")
 # This checks the kernel name to set the correct command to open the link in browser,
@@ -147,7 +134,14 @@ else
 fi
 # Open the correct url in browser. We know that the correct url is the second one.
 # So even if in some cases a 3rd one is created this will not be affected
-$OPEN_CMD "$URL" 2> /dev/null
-echo
-echo "If the link does not open or does not work, copy and paste this URL in browser:"
+if [[ -x ${OPEN_CMD%% *} ]]; then
+  echo
+  echo "Waiting for url to open in browser..."
+  $OPEN_CMD "$URL" 2> /dev/null
+  echo
+  echo "If the link does not open or does not work, copy and paste this URL in browser:"
+else
+  echo
+  echo "Copy and paste this URL in browser:"
+fi
 echo "    $URL"

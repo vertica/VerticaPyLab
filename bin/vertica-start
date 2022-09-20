@@ -13,11 +13,7 @@ if ! [[ -r $CONFIG_FILE ]]; then
   fi
 fi
 # Load the configuration
-source $CONFIG_FILE
-
-# defaults
-: ${VERTICA_CONTAINER_NAME:=vertica-demo}
-: ${DB_NAME:=demo} # default database name
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
@@ -35,8 +31,8 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 # try to stop gracefully if running
-if docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s $DB_NAME | grep -q "^$DB_NAME\$" 2>/dev/null; then
-  docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DB_NAME --password= 2>/dev/null
+if docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t db_status -s UP 2>/dev/null | grep -q "^$DB_NAME\$" ; then
+  docker exec -i ${VERTICA_ENV[@]} $VERTICA_CONTAINER_NAME opt/vertica/bin/admintools -t stop_db --database=$DB_NAME --password=
 fi
 
 docker restart $VERTICA_CONTAINER_NAME || exit $?

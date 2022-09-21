@@ -48,14 +48,14 @@ all: ## quickstart: install and run all containers
 
 # create new conf file or update timestamp if exists
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	@if [[ -r etc/vertica-demo.conf ]]; then \
+	if [[ -r etc/vertica-demo.conf ]]; then \
 	  echo DEFAULTS HAVE CHANGED.  Please update etc/vertica-demo.conf.; \
 	  diff etc/vertica-demo.conf etc/vertica-demo.conf.default; \
 	  exit 1; \
 	fi
-	@cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf
-	@source etc/vertica-demo.conf; \
-	docker container rm "$$VERTICA_CONTAINER_NAME" >/dev/null 2>&1
+	cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf
+	source etc/vertica-demo.conf; \
+	docker container rm "$$VERTICA_CONTAINER_NAME" >/dev/null 2>&1 || true
 
 .PHONY: vertica-install
 vertica-install: etc/vertica-demo.conf ## Create a vertica container and start the database.

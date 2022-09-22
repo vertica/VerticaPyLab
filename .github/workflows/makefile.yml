@@ -18,7 +18,7 @@ jobs:
     - name: Create a Vertica Demo container
       run: make vertica-install
     - name: Make sure errors happen when building "latest"
-      run: ! make verticalab-build
+      run: -c "! make verticalab-build"
     - name: Create a VerticaLab container
       run: sed -i s/VERSION=latest/VERSION=v0.0/ etc/vertica-demo.conf && make verticalab-build
     - name: Run the Vertica Demo container

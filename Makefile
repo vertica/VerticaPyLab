@@ -8,17 +8,17 @@
 #   1) check out a stable released version.  
 #   2) "make verticalab-install"
 # Developers of Vertica-Demo : 
-#   1) create a git branch and checkout
-#   2) change verticalab demos
-#   3) set the version number in etc/vertica-demo.conf (VERTICALAB_IMG_VERSION=v0.1)
-#   3) "make verticalab-build"
-#   4) test, git commit, git push, create PR, get approval, merge to main, checkout main
-#   5) "make verticalab-push"
+#   1) "git checkout -b <branch name>" to create a git branch and checkout
+#   2) set the version number in etc/vertica-demo.conf (VERTICALAB_IMG_VERSION=v0.1)
+#   3) make the desired changes verticalab demos
+#   4) build with "make verticalab-build"
+#   5) start with "make verticalab-start" and open the URL provided
+#   6) test changes and cycle back to step 3 if needed
+#   7) submit changes with git commit, git push, create PR, get approval, merge to main
 # Release process :
-#   1) create a release branch in github
-#   2) tag the release
-#   3) create/merge a PR to main that updates this version to the next release
-#   4) move the "latest" tag on dockerhub for the release
+#   1) Use the above developer steps to set the desired version
+#   2) create a release in github with the tag set to the version (i.e., v0.1)
+#   3) create a release in docker hub with "VERTICALAB_LATEST=1 make verticalab-push"
 
 QUERY?=select version();
 SHELL:=/bin/bash
@@ -114,10 +114,18 @@ verticalab-build:
 .PHONY: verticalab-push
 verticalab-push:
 	@source etc/vertica-demo.conf; \
+	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
+	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \
+	  exit 1; \
+	fi; \
+	declare -a SECOND_TAG=(); \
+	if (($$VERTICALAB_LATEST)); then \
+	  SECOND_TAG+=(-t "vertica/$$VERTICALAB_IMG:latest"); \
+	fi; \
 	docker context create mycontext; \
 	docker buildx create mycontext -name mybuilder; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" "$${SECOND_TAG[@]}" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo

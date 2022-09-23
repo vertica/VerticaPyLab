@@ -123,7 +123,7 @@ verticalab-push: etc/vertica-demo.conf
 	  SECOND_TAG+=(-t "vertica/$$VERTICALAB_IMG:latest"); \
 	fi; \
 	docker context create mycontext; \
-	docker buildx create mycontext -name mybuilder; \
+	docker buildx create mycontext --name mybuilder; \
 	docker buildx inspect --bootstrap; \
 	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" "$${SECOND_TAG[@]}" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
 

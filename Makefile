@@ -75,7 +75,7 @@ vertica-start: etc/vertica-demo.conf ## start/restart the vertica container.
 	fi
 
 .PHONY: vertica-uninstall
-vertica-uninstall: ## Remove the vertica container and associated images.
+vertica-uninstall: etc/vertica-demo.conf ## Remove the vertica container and associated images.
 	@source etc/vertica-demo.conf; \
 	bin/vertica-uninstall; \
 	docker image rm "$$VERTICA_DOCKER_IMAGE"
@@ -100,7 +100,7 @@ verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
 # this builds the image from the python base image for the purposes of
 # testing it locally before pushing it to dockerhub
 .PHONY: verticalab-build
-verticalab-build:
+verticalab-build: etc/vertica-demo.conf
 	@source etc/vertica-demo.conf; \
 	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
 	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \
@@ -112,7 +112,7 @@ verticalab-build:
 # run "docker login" first to supply credentials that are authorized to update
 # the vertica docker hub images.
 .PHONY: verticalab-push
-verticalab-push:
+verticalab-push: etc/vertica-demo.conf
 	@source etc/vertica-demo.conf; \
 	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
 	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \

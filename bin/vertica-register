@@ -23,10 +23,6 @@ function abort {
 # Load the configuration
 source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
-# defaults that can be overridden with environment variables.
-: ${DB_NAME:=demo}
-: ${VERTICA_CONTAINER_NAME:=vertica-demo}
-
 if [[ -n ${VERTICA_CE_SERIAL_NUMBER} ]]; then
   abort 1 "Already registered.  To change registration, edit $CONFIG_FILE"
 fi

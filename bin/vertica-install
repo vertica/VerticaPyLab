@@ -23,17 +23,6 @@ function abort {
 # Load the configuration
 source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
-# defaults that can be overridden with environment variables.
-: ${VERTICA_PORT:=5433}
-: ${VERTICA_SSH_PORT:=$((VERTICA_PORT-1))}
-: ${VERTICA_BIND_ADDRESS:=127.0.0.1}
-: ${VERTICALAB_CONTAINER_NAME:=verticalab}
-: ${VERTICA_CONTAINER_NAME:=vertica-demo}
-: ${VERTICA_HOST_NAME:=$VERTICA_CONTAINER_NAME}
-: ${DB_NAME:=demo}
-: ${VERTICA_DOCKER_IMAGE:=vertica/vertica-k8s:latest} # see https://hub.docker.com/r/vertica/vertica-k8s
-: ${DOCKER_NETWORK:=demo}
-
 # allow for enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
 for var in $VERTICA_ENV_FORWARD; do

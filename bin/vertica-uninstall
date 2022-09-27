@@ -13,9 +13,7 @@ if ! [[ -r $CONFIG_FILE ]]; then
   fi
 fi
 # Load the configuration
-source $CONFIG_FILE
-
-: ${VERTICA_CONTAINER_NAME:=vertica-demo}
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 # a sledgehammer
 docker stop $VERTICA_CONTAINER_NAME >/dev/null 2>&1

@@ -8,17 +8,17 @@
 #   1) check out a stable released version.  
 #   2) "make verticalab-install"
 # Developers of Vertica-Demo : 
-#   1) create a git branch and checkout
-#   2) change verticalab demos
-#   3) "make verticalab-build"
-#   4) test, git commit, git push, create PR, get approval, merge to main, checkout main
-#   5) "make verticalab-push"
+#   1) "git checkout -b <branch name>" to create a git branch and checkout
+#   2) set the version number in etc/vertica-demo.conf (VERTICALAB_IMG_VERSION=v0.1)
+#   3) make the desired changes verticalab demos
+#   4) build with "make verticalab-build"
+#   5) start with "make verticalab-start" and open the URL provided
+#   6) test changes and cycle back to step 3 if needed
+#   7) submit changes with git commit, git push, create PR, get approval, merge to main
 # Release process :
-#   1) create a release branch in github
-#   2) tag the release
-#   3) create/merge a PR to main that updates this version to the next release
-#   4) move the "latest" tag on dockerhub for the release
-VERTICALAB_IMG_VERSION=v0.1
+#   1) Use the above developer steps to set the desired version
+#   2) create a release in github with the tag set to the version (i.e., v0.1)
+#   3) create a release in docker hub with "VERTICALAB_LATEST=1 make verticalab-push"
 
 QUERY?=select version();
 SHELL:=/bin/bash
@@ -48,7 +48,14 @@ all: ## quickstart: install and run all containers
 
 # create new conf file or update timestamp if exists
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	@cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf || touch etc/vertica-demo.conf
+	if [[ -r etc/vertica-demo.conf ]]; then \
+	  echo DEFAULTS HAVE CHANGED.  Please update etc/vertica-demo.conf.; \
+	  diff etc/vertica-demo.conf etc/vertica-demo.conf.default; \
+	  exit 1; \
+	fi
+	cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf
+	source etc/vertica-demo.conf; \
+	docker container rm "$$VERTICA_CONTAINER_NAME" >/dev/null 2>&1 || true
 
 .PHONY: vertica-install
 vertica-install: etc/vertica-demo.conf ## Create a vertica container and start the database.
@@ -61,17 +68,17 @@ vertica-stop: ## Stop and delete the vertica container.
 .PHONY: vertica-start
 vertica-start: etc/vertica-demo.conf ## start/restart the vertica container.
 	@source etc/vertica-demo.conf; \
-	if (($$(docker ps -a --no-trunc -q -f NAME="$${VERTICA_CONTAINER_NAME:-vertica-demo}" | wc -l)==0)); then \
+	if (($$(docker ps -a --no-trunc -q -f NAME="$$VERTICA_CONTAINER_NAME" | wc -l)==0)); then \
 	    $(MAKE) vertica-install; \
 	else \
 	    bin/vertica-start; \
 	fi
 
 .PHONY: vertica-uninstall
-vertica-uninstall: ## Remove the vertica container and associated images.
-	@bin/vertica-uninstall; \
-	source etc/vertica-demo.conf; \
-	docker image rm "$${VERTICA_DOCKER_IMAGE:=vertica/vertica-k8s}"
+vertica-uninstall: etc/vertica-demo.conf ## Remove the vertica container and associated images.
+	@source etc/vertica-demo.conf; \
+	bin/vertica-uninstall; \
+	docker image rm "$$VERTICA_DOCKER_IMAGE"
 
 .PHONY: vsql
 vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
@@ -79,45 +86,63 @@ vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 
 .PHONY: verticalab-start
 verticalab-start: etc/vertica-demo.conf ## Start a jupyterlab
-	@if (($$(docker ps -a --no-trunc -q -f NAME="$${VERTICALAB_CONTAINER_NAME:-verticalab}" | wc -l)==0)); then \
-	    $(MAKE) verticalab-install; \
+	@source etc/vertica-demo.conf; \
+	if (($$(docker ps --no-trunc -q -f NAME="$$VERTICALAB_CONTAINER_NAME" | wc -l)==0)); then \
+	    if [[ -z $$(docker image ls -q "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" 2>&1) ]]; then \
+	      $(MAKE) verticalab-install || exit 1; \
+	    fi; \
+	    docker container rm "$$VERTICALAB_CONTAINER_NAME" >/dev/null 2>&1; \
+	    bin/verticalab; \
+	else \
+	  echo "$$VERTICALAB_CONTAINER_NAME is already running"; \
 	fi
-	@VERTICALAB_IMG_VERSION=$(VERTICALAB_IMG_VERSION) bin/verticalab
 
 # this builds the image from the python base image for the purposes of
 # testing it locally before pushing it to dockerhub
 .PHONY: verticalab-build
-verticalab-build:
-	@VERTICALAB_IMG_VERSION=$(VERTICALAB_IMG_VERSION) bin/verticalab-build
+verticalab-build: etc/vertica-demo.conf
+	@source etc/vertica-demo.conf; \
+	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
+	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \
+	  exit 1; \
+	fi; \
+	bin/verticalab-build
 
 # this builds images for multiple platforms and pushes them to docker hub
 # run "docker login" first to supply credentials that are authorized to update
 # the vertica docker hub images.
 .PHONY: verticalab-push
-verticalab-push:
-	@ source etc/vertica-demo.conf; \
+verticalab-push: etc/vertica-demo.conf
+	@source etc/vertica-demo.conf; \
+	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
+	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \
+	  exit 1; \
+	fi; \
+	declare -a SECOND_TAG=(); \
+	if (($$VERTICALAB_LATEST)); then \
+	  SECOND_TAG+=(-t "vertica/$$VERTICALAB_IMG:latest"); \
+	fi; \
 	docker context create mycontext; \
-	docker buildx create mycontext -name mybuilder; \
+	docker buildx create mycontext --name mybuilder; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$${PYTHON_VERSION:-3.8-slim-buster} -t "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" "$${SECOND_TAG[@]}" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo
-	@ source etc/vertica-demo.conf; \
-	docker pull "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)"; \
-	docker tag "vertica/$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)" "$${VERTICALAB_IMG:-verticapy-jupyterlab}:$(VERTICALAB_IMG_VERSION)"
+	@source etc/vertica-demo.conf; \
+	docker pull "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION";
 
 .PHONY: verticalab-stop
 verticalab-stop: ## Shut down the jupyterlab server and remove the container
 	@source etc/vertica-demo.conf; \
-	docker stop "$${VERTICALAB_CONTAINER_NAME:-verticalab}"
+	docker stop "$$VERTICALAB_CONTAINER_NAME"
 
 .PHONY: verticalab-uninstall
 verticalab-uninstall: ## Remove the verticalab container and associated images.
 	@source etc/vertica-demo.conf; \
-	docker stop "$${VERTICALAB_CONTAINER_NAME:-verticalab}" >/dev/null 2>&1; \
-	docker image rm "$${VERTICALAB_IMG:=verticapy-jupyterlab}"; \
-	docker image rm "python:$${PYTHON_VERSION:-3.8-slim-buster}"
+	docker stop "$$VERTICALAB_CONTAINER_NAME" >/dev/null 2>&1; \
+	docker image rm "vertica/$$VERTICALAB_IMG"; \
+	docker image rm "python:$$PYTHON_VERSION"
 
 # aliases for convenience
 start: all
@@ -133,9 +158,9 @@ register: etc/vertica-demo.conf ## Register vertica to increase data limit to 1T
 .PHONY: get-ip
 get-ip: etc/vertica-demo.conf ## Get the ip of the Vertica container
 	@source etc/vertica-demo.conf; \
-	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$${VERTICA_CONTAINER_NAME:-vertica-demo}"
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$$VERTICA_CONTAINER_NAME"
 
 .PHONY: test
 test: ## suite of tests to make sure everything is working
 	@source etc/vertica-demo.conf; \
-	docker exec -i "$${VERTICALAB_CONTAINER_NAME:-verticalab}" vsql -c "select version();"
+	docker exec -i "$$VERTICALAB_CONTAINER_NAME" vsql -c "select version();"

@@ -15,12 +15,9 @@ if ! [[ -r $CONFIG_FILE ]]; then
   fi
 fi
 # Load the configuration
-source $CONFIG_FILE
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
-: ${VERTICA_CONTAINER_NAME:=vertica-demo}
 : ${EXECNAME:=${BASH_SOURCE[0]##*/}}
-: ${VSQL_USER:=dbadmin}
-
 # Special cases for certain executables
 case "$EXECNAME" in
   ( admintools ) :

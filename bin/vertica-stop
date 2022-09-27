@@ -13,10 +13,7 @@ if ! [[ -r $CONFIG_FILE ]]; then
   fi
 fi
 # Load the configuration
-source $CONFIG_FILE
-
-: ${CONTAINER_NAME:=vertica-demo}
-: ${DBNAME:=demo} # default database name
+source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
 # always forward VSQL_*, but allow for other enviornment variables to be
 # specified in VERTICA_ENV_FORWARDING
@@ -34,7 +31,7 @@ if [[ $MACHTYPE =~ ^aarch64 ]] || [[ $MACHTYPE =~ ^arm64 ]] ; then
 fi
 
 # try to stop gracefully
-docker exec -i "${VERTICA_ENV[@]}" $CONTAINER_NAME /opt/vertica/bin/admintools -t stop_db --database=$DBNAME --password= 2>/dev/null
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME /opt/vertica/bin/admintools -t stop_db --database=$DB_NAME --password= 2>/dev/null
 
 # a polite sledgehammer
-docker stop $CONTAINER_NAME
+docker stop $VERTICA_CONTAINER_NAME

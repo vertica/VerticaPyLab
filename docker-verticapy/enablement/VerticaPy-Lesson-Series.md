@@ -142,9 +142,14 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
   - Basic terminology
   - Datasets
   - vDataFrame
-
-- _Basic data preparation_
+- _Basic data ingestion_
+  - Data types (tabular, unstructured etc.)
   - Data formats (csv, image, text, etc.)
+- _Basic data exploration_
+  - Visualizations
+    - Types of plots
+  - Dimension reduction (TSNE, PCA)
+- _Basic data preparation_
   - Basic operations
     - Impute
     - Null or missing values
@@ -153,15 +158,10 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
   - Advanced operations
     - Outlier detection
   - Test/Train split
-- _Basic data exploration_
-  - Visualizations
-    - Types of plots
-  - Dimension reduction (TSNE, PCA)
 - _Advanced statistics_
   - Hypothesis Testing
   - Bootstrapping
   - Bayes Rule
-
 - _Linear Regression_
   - Theory
   - Example

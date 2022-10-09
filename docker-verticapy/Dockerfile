@@ -19,7 +19,8 @@ RUN apt-get update \
     gpg \
     libgdal-dev \
     g++ \
-    ssh 
+    ssh \
+    graphviz
 
 RUN apt-get upgrade -y
 RUN apt-get clean

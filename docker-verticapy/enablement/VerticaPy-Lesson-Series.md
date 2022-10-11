@@ -153,7 +153,7 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
   - Basic operations
     - Impute
     - Null or missing values
-    - Normali ze
+    - Normalize
     - Concatenate and Transform
   - Advanced operations
     - Outlier detection
@@ -164,10 +164,11 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
   - Bayes Rule
 - _Linear Regression_
   - Theory
-  - Example
+  - Example Application
   - Exercise
 - _Classification_
-  - Theory
-  - Example
-  - Exercise
+  - Binary - Logistic Regression
+  - Binary - Example Applciation
+  - Multiclass - Random Forest
+  - Multiclass- Example Application
 - _Project_

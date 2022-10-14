@@ -68,7 +68,7 @@ vertica-stop: ## Stop and delete the vertica container.
 .PHONY: vertica-start
 vertica-start: etc/vertica-demo.conf ## start/restart the vertica container.
 	@source etc/vertica-demo.conf; \
-	if (($$(docker ps -a --no-trunc -q -f NAME="$$VERTICA_CONTAINER_NAME" | wc -l)==0)); then \
+	if [[ -z $$VERTICA_EULA ]] || [[ -z $$(docker ps -a --no-trunc -q -f NAME="$$VERTICA_CONTAINER_NAME") ]]; then \
 	    $(MAKE) vertica-install; \
 	else \
 	    bin/vertica-start; \

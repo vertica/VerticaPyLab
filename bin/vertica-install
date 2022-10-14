@@ -62,7 +62,8 @@ docker network create "$DOCKER_NETWORK" 2>/dev/null
 VERTICA_RUNARGS+=( --network "$DOCKER_NETWORK" )
 
 # clear out old container in case it had issues
-docker container rm $VERTICA_CONTAINER_NAME 2>/dev/null
+docker stop $VERTICA_CONTAINER_NAME >/dev/null 2>&1
+docker container rm $VERTICA_CONTAINER_NAME >/dev/null 2>&1
 
 docker run --detach "${VERTICA_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER_IMAGE" || abort $? "Could not create docker"
 

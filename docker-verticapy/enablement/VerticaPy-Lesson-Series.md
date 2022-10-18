@@ -147,7 +147,7 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
 - _Basic data exploration_
   - Descriptive Statistics
   - Visualizations
-    - Types of plots (pie,histogram etc)
+    - Types of plots (pie charts, histograms, etc.)
   - Dimension reduction (TSNE, PCA)
 - _Basic data preparation_
   - Basic operations
@@ -164,7 +164,7 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
   - Exercise
 - _Classification_
   - Binary - Logistic Regression
-  - Binary - Example Applciation
+  - Binary - Example Application
   - Multiclass - Random Forest
   - Multiclass- Example Application
 - _Project_

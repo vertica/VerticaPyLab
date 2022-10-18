@@ -138,7 +138,6 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
 **Data Science Essentials**
 
 - _Overview of Data Science_
-
   - Basic terminology
   - Datasets
   - vDataFrame
@@ -146,28 +145,26 @@ For example, the curriculum for the **Data Science Essentials** course is as fol
   - Data types (tabular, unstructured etc.)
   - Data formats (csv, image, text, etc.)
 - _Basic data exploration_
+  - Descriptive Statistics
   - Visualizations
-    - Types of plots
+    - Types of plots (pie charts, histograms, etc.)
   - Dimension reduction (TSNE, PCA)
 - _Basic data preparation_
   - Basic operations
     - Impute
     - Null or missing values
-    - Normali ze
+    - Normalize
     - Concatenate and Transform
   - Advanced operations
     - Outlier detection
   - Test/Train split
-- _Advanced statistics_
-  - Hypothesis Testing
-  - Bootstrapping
-  - Bayes Rule
 - _Linear Regression_
   - Theory
-  - Example
+  - Example Application
   - Exercise
 - _Classification_
-  - Theory
-  - Example
-  - Exercise
+  - Binary - Logistic Regression
+  - Binary - Example Application
+  - Multiclass - Random Forest
+  - Multiclass- Example Application
 - _Project_

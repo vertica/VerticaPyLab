@@ -5,6 +5,7 @@ This document will guide you through the contribution process. There are a numbe
  - [Bug Reports](#bug-reports)
  - [Feature Requests](#feature-requests)
  - [Code Contributions](#code-contributions)
+ - [Creating Lessons](#creating-lessons)
 
 # Bug Reports
 
@@ -196,3 +197,7 @@ Pull requests are usually reviewed within a few days. If there are comments to a
 That's it! Thank you for your code contribution!
 
 After your pull request is merged, you can safely delete your branch and pull the changes from the upstream repository.
+
+# Creating Lessons
+
+One part of the verticalab are the lessons that have been created for users to learn data science concepts using VerticaPy. You are welcome to create lessons on a topic of your interest. You can follow the instructions in the [read me](https://github.com/vertica/vertica-demo/blob/main/docker-verticapy/enablement/VerticaPy-Lesson-Series.md) for content creation. After you have created it, you can follow the steps of code contribution above. After review, your lesson will be added to the package.

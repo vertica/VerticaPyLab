@@ -134,10 +134,10 @@ else
 fi
 # Open the correct url in browser. We know that the correct url is the second one.
 # So even if in some cases a 3rd one is created this will not be affected
-if [[ -x ${OPEN_CMD%% *} ]]; then
-  echo
-  echo "Waiting for url to open in browser..."
-  $OPEN_CMD "$URL" 2> /dev/null
+echo
+echo "Waiting for url to open in browser..."
+$OPEN_CMD "$URL" 2> /dev/null
+if [[ $? -eq 0 ]]; then
   echo
   echo "If the link does not open or does not work, copy and paste this URL in browser:"
 else

@@ -151,6 +151,8 @@ Or, to put it in your bash_profile for future logins:
 make env >> ~/.bash_profile
 ```
 
+## Contributing
+For a short guide on contribution standards, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Getting started on Windows
 

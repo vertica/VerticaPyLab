@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This document is an overview of how to use the Jupyter Notebook templates to create lessons on data science concepts and VerticaPy. The core page types are as follows:
+This document is an overview of how to use the Jupyter Notebook templates to create lessons on data science concepts and VerticaPy. You can also look at [this video](https://microfocusinternational-my.sharepoint.com/:v:/g/personal/umarfarooq_ghumman_microfocus_com/EY3aXISIb7VMuViOAevszHYB5BwNsMumBcL-JB0gsf33ig?e=JVeuoO) to follow along on how to create lessons. 
+
+The core page types are as follows:
 
 - **Course** : Contains video content and covers prerequisites and lesson goals.
 
@@ -32,7 +34,7 @@ The following sections go into detail about the core page types and how they sho
 
 ### Course
 
-**Video** : Each course page should have a video that demonstrates the course topic(s). The video file must be stored in the  **course\_title/Figures** directory and named **Video\_1.mp4**. (The instructions of how to create the video will be shared separately.)
+**Video** : Each course page should have a video that demonstrates the course topic(s). The video file must be stored in the  **course\_title/Figures** directory and named **Video\_1.mp4**. (The instructions of how to create the video are summarized in this [video here](https://microfocusinternational-my.sharepoint.com/:v:/g/personal/umarfarooq_ghumman_microfocus_com/EVvxE9FitaBLmLcTgzkKEucBn3Ne6zZZRWhgMITmHzxLNw?e=quxMeC).)
 
 **Description** : Add a brief, high-level description of the course topics, focusing on the motivation and its applications. This can be added in the cell commented as "# Video, Brief Description & Highlights".
 

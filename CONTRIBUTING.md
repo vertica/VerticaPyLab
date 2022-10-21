@@ -201,3 +201,5 @@ After your pull request is merged, you can safely delete your branch and pull th
 # Creating Lessons
 
 One part of the verticalab are the lessons that have been created for users to learn data science concepts using VerticaPy. You are welcome to create lessons on a topic of your interest. You can follow the instructions in the [read me](https://github.com/vertica/vertica-demo/blob/main/docker-verticapy/enablement/VerticaPy-Lesson-Series.md) for content creation. After you have created it, you can follow the steps of code contribution above. After review, your lesson will be added to the package.
+
+You can also propose lessons of interest by opening an issue. Please explain in detail what you would like covered and our content creators will have a look at it. After approval, the content will be added to the list of lessons/modules.

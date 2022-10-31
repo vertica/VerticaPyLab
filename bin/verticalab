@@ -50,8 +50,10 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
+VERTICALAB_RUNARGS+=( -v $VERTICA_DEMO_PREFIX:/project/vertica-demo )
+
 if [[ -n $VERTICALAB_PROJECT ]] ; then
-  VERTICALAB_RUNARGS+=( -v $VERTICALAB_PROJECT:/project )
+  VERTICALAB_RUNARGS+=( -v $VERTICALAB_PROJECT:/project/workspace )
 fi
 
 if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then

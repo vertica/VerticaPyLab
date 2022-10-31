@@ -23,6 +23,7 @@ const CommandIDs = {
  * The known categories of launcher items and their default ordering.
  */
 const VERTICA_CATEGORY = 'Vertica';
+const VERTICAPY_LESSONS = 'VerticaPy Lessons';
 
 export class LauncherModel extends JupyterLauncherModel {
     /**
@@ -100,6 +101,7 @@ export class Launcher extends JupyterlabLauncher {
 
         const knownCategories = [
         VERTICA_CATEGORY,
+        VERTICAPY_LESSONS,
         this._translator.__('Notebook'),
         this._translator.__('Console'),
         this._translator.__('Other')
@@ -113,6 +115,9 @@ export class Launcher extends JupyterlabLauncher {
             if (cat.key === VERTICA_CATEGORY) {
                 cat = this.replaceCategoryIcon(cat, verticaIcon);
             }
+            if (cat.key === VERTICAPY_LESSONS) {
+                cat = this.replaceCategoryIcon(cat, verticaIcon);
+            } 
             categories.push(cat);
             }
         });

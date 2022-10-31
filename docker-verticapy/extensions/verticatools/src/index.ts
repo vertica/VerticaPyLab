@@ -36,6 +36,8 @@ namespace CommandIDs {
   export const setTheme = 'bash:set-theme';
 
   export const openHelp = 'vertica:open-help';
+
+  export const openCourseDSE = 'vertica:open-dse'
 }
 
 function activate(
@@ -100,6 +102,14 @@ function activate(
       command: CommandIDs.openHelp,
       category: 'Vertica',
       rank: 3
+    });
+  }
+
+  if (launcher) {
+    launcher.add({
+      command: CommandIDs.openCourseDSE,
+      category: 'VerticaPy Lessons',
+      rank: 0
     });
   }
 
@@ -220,6 +230,14 @@ export function addCommands(
     icon: verticapyIcon,
     execute: (args: any) => {
       window.open('https://www.vertica.com/python/documentation_last/', '_blank');
+    }
+  });
+
+  commands.addCommand(CommandIDs.openCourseDSE, {
+    label: 'Data Science Essentials',
+    icon: verticapyIcon,
+    execute: (args: any) => {
+      window.open('http://127.0.0.1:8889/voila/render/vertica-demo/docker-verticapy/enablement/Data%20Science%20Essentials/DataScienceEssentials.ipynb?', '_blank');
     }
   });
 

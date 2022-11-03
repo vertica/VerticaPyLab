@@ -1,0 +1,145 @@
+Rank,District/ Agency,"Province/Region","EducationScore",Enrolment Score,"LearningScore","Gender ParityScore"
+1,Bhimber,AJK,87.96,75.16,99.7,89.03
+2,Sudhnutti,AJK,86.77,75.65,86.43,98.23
+3,Hattian,AJK,83.44,61.08,94.6,94.63
+4,Panjgur,Balochistan,82.82,64.8,98.53,85.12
+5,Neelum,AJK,81.34,60.31,91.13,92.56
+6,Muzaffarabad,AJK,81.08,59,88.53,95.71
+7,Bagh,AJK,80.97,65.51,84.17,93.23
+8,Hunza Nagar,GB,80.09,52.12,89.6,98.56
+9,Haveli,AJK,80.05,55.59,93.8,90.77
+10,Poonch,AJK,79.32,69.02,78.17,90.78
+11,Islamabad,ICT,79.17,67.05,93.92,76.56
+12,Faisalabad,Punjab,77.33,46.71,88.45,96.82
+13,Mirpur,AJK,76.89,49.14,88.7,92.82
+14,Kotli,AJK,76.88,46.34,93,91.29
+15,Karachi,Sindh,76.74,49.2,87.52,93.5
+16,Swabi,KP,76.12,51.64,77.05,99.68
+17,Chakwal,Punjab,75.94,56.37,79.48,91.98
+18,Sialkot,Punjab,75.72,50.81,83.18,93.17
+19,Astor,GB,74.97,43.67,94.77,86.47
+20,Narowal,Punjab,74.76,48.29,89.35,86.65
+21,Ghizer,GB,74.17,52,84.73,85.77
+22,Nankana Sahib,Punjab,73.91,39.03,85.18,97.52
+23,Lahore,Punjab,73.89,45.17,91.43,85.06
+24,Quetta,Balochistan,73.8,37.32,88.18,95.91
+25,Abbottabad,KP,73.73,44.89,86.2,90.11
+26,Gujrat,Punjab,73.61,53.28,88.43,79.13
+27,Jhelum,Punjab,73.51,60.37,76.28,83.88
+28,Mandi Bahuddin,Punjab,72.9,48.47,79.35,90.87
+29,Haripur,KP,72.87,52.77,84.35,81.48
+30,Skardu,GB,72.48,27.56,90.1,99.79
+31,Hafizabad,Punjab,72.45,37.38,80.73,99.25
+32,Toba Tek Singh,Punjab,72.38,48.58,75.95,92.6
+33,Hyderabad,Sindh,71.48,38.35,81.62,94.47
+34,Kurram Agency,FATA,70.77,51.79,97.1,63.44
+35,Chitral,KP,70.67,52.65,62,97.36
+36,Sheikhupura,Punjab,70.34,38.88,79.8,92.36
+37,Mansehra,KP,70.25,45.51,89.88,75.37
+38,Ghanchi,GB,70.09,40.51,85.43,84.34
+39,Sargodha,Punjab,69.86,40.73,83.25,85.59
+40,Kasur,Punjab,69.83,37.52,78.85,93.11
+41,Rawalpindi,Punjab,69.5,53.3,88.6,66.6
+42,Okara,Punjab,69.49,32.71,78.08,97.67
+43,Sohbatpur,Balochistan,68.99,23.84,93.3,89.82
+44,Gujranwala,Punjab,68.98,42.16,78.1,86.69
+45,Layyah,Punjab,68.72,38.92,81.65,85.58
+46,Khanewal,Punjab,68.42,32.91,81,91.35
+47,Nowshera,KP,68.08,51.4,82.85,69.99
+48,Gilgit,GB,67.96,32.82,88.77,82.29
+49,Lodhran,Punjab,67.5,32.83,80.08,89.61
+50,Orakzai Agency,FATA,67.35,48.32,90.17,63.55
+51,Gwadar,Balochistan,67.28,42.22,90.5,69.12
+52,Mianwali,Punjab,67.25,42.68,83.98,75.09
+53,Bahawalpur,Punjab,66.79,21.06,83.45,95.88
+54,Vehari,Punjab,66.04,34.13,78.18,85.82
+55,Mardan,KP,65.96,47.89,82.52,67.47
+56,Karak,KP,64.94,49.44,89.53,55.85
+57,Multan,Punjab,64.27,31.49,72.53,88.78
+58,Khushab,Punjab,64.22,39.09,78.83,74.76
+59,Mastung,Balochistan,64.12,57.94,83.5,50.91
+60,Attock,Punjab,64,52.13,61.15,78.72
+61,Chiniot,Punjab,63.91,32.8,84.78,74.15
+62,Bhakkar,Punjab,63.45,28.65,84.58,77.14
+63,Kohat,KP,62.81,48.12,88,52.31
+64,Sahiwal,Punjab,62.8,35.5,83.98,68.91
+65,Sibi,Balochistan,62.47,30.08,82,75.34
+66,Bahawalnagar,Punjab,62.25,30.87,77.53,78.35
+67,Dadu,Sindh,61.96,41.45,68.28,76.15
+68,FR Bannu,FATA,61.93,32.04,100,53.75
+69,Zhob,Balochistan,61.6,26.35,81.58,76.88
+70,Larkana,Sindh,61.56,37.83,70.83,76.01
+71,Jhang,Punjab,61.06,37.1,78.6,67.47
+72,Malakand,KP,60.66,53.05,71.83,57.12
+73,Rajanpur,Punjab,60.2,26.06,64.73,89.8
+74,Pakpattan,Punjab,60.03,30.06,83.03,67.02
+75,Ziarat,Balochistan,59.88,28.63,82.35,68.66
+76,Kech,Balochistan,59.86,28.23,77.23,74.13
+77,Lower Dir,KP,59.79,41.93,45.78,91.66
+78,FR Peshawar,FATA,59.7,53.72,79.3,46.08
+79,Sukkur,Sindh,58.42,45.98,51.43,77.84
+80,Jamshoro,Sindh,58.05,29.12,78.13,66.89
+81,Kachhi,Balochistan,57.06,19.31,77.68,74.19
+82,Khyber Agency,FATA,56.67,43.88,79.67,46.46
+83,Peshawar,KP,55.73,48.43,48.04,70.73
+84,Dera Ghazi Khan,Punjab,55.48,25.87,72.95,67.64
+85,Lakki Marwat,KP,54.93,46.38,59.7,58.71
+86,"ShaheedBenazirabad",Sindh,54.84,31.01,73.33,60.19
+87,Lasbela,Balochistan,54.67,20.78,66.08,77.16
+88,Upper Dir,KP,54.04,23.89,78.73,59.51
+89,Mohmand Agency,FATA,53.9,33.51,93.77,34.43
+90,Sujawal,Sindh,53.48,10.28,55.9,94.25
+91,Loralai,Balochistan,53.35,28.71,86,45.34
+92,Shikarpur,Sindh,53.25,28.32,52.93,78.51
+93,Bajaur Agency,FATA,53.07,38.65,93.27,27.3
+94,Mirpurkhas,Sindh,53.06,24.67,52.8,81.71
+95,Rahim Yar Khan,Punjab,53.02,22.82,74.96,61.28
+96,Lehri,Balochistan,52.85,26.23,93.03,39.29
+97,Dera Bugti,Balochistan,52.81,15.61,81.25,61.57
+98,Nushki,Balochistan,52.8,33.43,39.55,85.42
+99,Khairpur,Sindh,52.45,32.39,51.08,73.9
+100,Nasirabad,Balochistan,52.39,16.68,74.85,65.65
+101,Bannu,KP,52.33,37.29,83.73,35.96
+102,Kambar-Shahdadkot,Sindh,52.21,22.32,70.88,63.43
+103,Tando Allah Yar,Sindh,51.5,23,51.9,79.61
+104,Naushehro Feroze,Sindh,50.76,27.45,72.95,51.88
+105,Muzaffargarh,Punjab,50.7,21.75,71.48,58.88
+106,Jaffarabad,Balochistan,49.83,22.49,78.83,48.18
+107,Swat,KP,49.73,38.32,65.68,45.2
+108,Dera Ismail Khan,KP,49.61,30.32,65.13,53.39
+109,Tank,KP,48.66,27.33,58.33,60.31
+110,Barkhan,Balochistan,48.65,22.7,78.68,44.59
+111,Sanghar,Sindh,48.43,22.44,62.18,60.68
+112,Kalat,Balochistan,47.66,35.26,88.5,19.21
+113,Khuzdar,Balochistan,47.49,23.45,86.25,32.78
+114,Charsadda,KP,47.47,38.54,52.55,51.31
+115,Thatta,Sindh,46.88,9.49,60.28,70.87
+116,Buner,KP,46.71,36.21,60.38,43.54
+117,Diamir,GB,45.9,32.82,95.93,8.95
+118,Matiari,Sindh,45.67,25.7,57.98,53.34
+119,Kharan,Balochistan,45.66,24.81,65.55,46.63
+120,Musakhail,Balochistan,44.8,18.46,77.43,38.52
+121,Pishin,Balochistan,44.53,21.05,67.08,45.47
+122,Hangu,KP,43.9,37.94,51.58,42.17
+123,Jhal Magsi,Balochistan,42.42,12.98,80.3,33.99
+124,Umerkot,Sindh,42.36,20.01,48.15,58.91
+125,Badin,Sindh,42.14,15.01,51.85,59.57
+126,Kashmore-Kandhkot,Sindh,41.97,24.27,65.23,36.41
+127,"Tando MuhammadKhan",Sindh,41.68,11.74,48.58,64.73
+128,Shangla,KP,41.21,21.03,54.05,48.55
+129,Batagram,KP,40.86,21.25,65.4,35.92
+130,Tor Ghar,KP,40.33,13.6,70.63,36.75
+131,Tharparkar,Sindh,39.66,19.44,58.13,41.4
+132,Harnai,Balochistan,39.14,15.74,80.23,21.46
+133,Ghotki,Sindh,38.91,28.75,45.03,42.95
+134,Chaghi,Balochistan,36.82,12.85,54.58,43.03
+135,Jacobabad,Sindh,36.22,28.15,29.55,50.97
+136,Kohistan,KP,35.93,7.87,64.33,35.6
+137,FR DI Khan,FATA,35.9,25,78.77,3.95
+138,FR Lakki Marwat,FATA,35.85,28.44,50.1,29
+139,Killa Abdullah,Balochistan,31.38,12.41,36.93,44.82
+140,Kohlu,Balochistan,28.22,17.5,56.2,10.96
+141,Killa Saifullah,Balochistan,28.09,20.57,56.43,7.28
+142,Sherani,Balochistan,27.83,14.72,68.78,0
+143,Awaran,Balochistan,27.74,20.44,48.38,14.4
+144,Washuk,Balochistan,26.27,22.93,40.65,15.23

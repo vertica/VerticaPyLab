@@ -1,0 +1,343 @@
+,Constituency,Name,Party,Picture
+0,Khyber Pukhtunkhwa (46),Khyber Pukhtunkhwa (46),Khyber Pukhtunkhwa (46),Khyber Pukhtunkhwa (46)
+1,NA-1Chitral,Moulana Abdul Akbar Chitrali,MMAP,Profile
+2,NA-2Swat-I,Dr. Haider Ali Khan,PTI,Profile
+3,NA-3Swat-II,Mr. Saleem Rehman,PTI,Profile
+4,NA-4Swat-III,Mr. Murad Saeed,PTI,Profile
+5,NA-5Upper Dir,Sahibzada Sibghatullah,PTI,Profile
+6,NA-6Lower Dir-I,Mr. Mehboob Shah,PTI,Profile
+7,NA-7Lower Dir-II,Mr. Muhammad Bashir Khan,PTI,Profile
+8,NA-8Malakand Protected Area,Mr. Junaid Akbar,PTI,Profile
+9,NA-9Buner,Mr. Sher Akbar Khan,PTI,Profile
+10,NA-10Shangla,Mr. Ibadullah Khan,PML-N,Profile
+11,NA-11Kohistan-cum-Lower Kohistan-cum-Kolai Pallas Kohistan,Mr. Afreen Khan,MMAP,Profile
+12,NA-12Battagram,Prince Muhammad Nawaz Allai,PTI,Profile
+13,NA-13Mansehra-I,Mr. Saleh Muhammad,PTI,Profile
+14,NA-14Mansehra-cum-Torghar,Mr. Muhammad Sajjad,PML-N,Profile
+15,NA-15Abbottabad-I,Mr. Murtaza Javed Abbasi,PML-N,Profile
+16,NA-16Abbottabad-II,Mr. Ali Khan Jadoon,PTI,Profile
+17,NA-17Haripur-I,Mr. Omar Ayub Khan,PTI,Profile
+18,NA-18Swabi-I,Mr. Asad Qaiser,PTI,Profile
+19,NA-19Swabi-II,Engr. Usman Khan Tarakai,PTI,Profile
+20,NA-20Mardan-I,Mr. Mujahid Ali,PTI,Profile
+21,NA-21Mardan-II,Mr. Amir Haider Azam Khan,ANP,Profile
+22,NA-23Charsadda-I,Mr. Malik Anwar Taj,PTI,Profile
+23,NA-25Nowshera-I,Mr. Pervez Khattak,PTI,Profile
+24,NA-26Nowshera-II,Mr. Imran Khattak,PTI,Profile
+25,NA-27Peshawar-I,Mr. Noor Alam Khan,PTI,Profile
+26,NA-28Peshawar-II,Mr. Arbab Amir Ayub,PTI,Profile
+27,NA-29Peshawar-III,Mr. Nasir Khan Musazai,PTI,Profile
+28,NA-30Peshawar-IV,Mr. Sher Ali Arbab,PTI,Profile
+29,NA-32Kohat,Mr. Shehryar Afridi,PTI,Profile
+30,NA-34Karak,Mr. Shahid Ahmad,PTI,Profile
+31,NA-35Bannu,"Mr. Zahid Akram Durrani, Deputy Speaker National Assembly",MMAP,Profile
+32,NA-36Lakki Marwat,Mr. Muhammad Anwar,MMAP,Profile
+33,NA-37Tank,Mr. Asad Mahmood,MMAP,Profile
+34,NA-38Dera Ismail Khan-I,Mr. Ali Amin Khan,PTI,Profile
+35,NA-39Dera Ismail Khan-II,Mr. Muhammad Yaqoob Shaikh,PTI,Profile
+36,NA-40Bajaur Agency-I Tribal Area-I,Mr. Gul Dad Khan,PTI,Profile
+37,NA-41Bajaur Agency-II Tribal Area-II,Mr. Gul Zafar Khan,PTI,Profile
+38,NA-42Mohmand Agency Tribal Area-III,Mr. Sajid Khan,PTI,Profile
+39,NA-43Khyber Agency-I Tribal Area-IV,Mr. Noor-Ul-Haq Qadri,PTI,Profile
+40,NA-44Khyber Agency-II Tribal Area-V,Mr. Muhammad Iqbal Khan,PTI,Profile
+41,NA-46Kurram Agency-II Tribal Area-VII,Mr. Sajid Hussain Turi,PPPP,Profile
+42,NA-47Orakzai Agency Tribal Area-VIII,Mr. Jawad Hussain,PTI,Profile
+43,NA-48North Waziristan Agency Tribal Area-IX,Mr. Mohsin Dawar,Ind,Profile
+44,NA-49South Waziristan Agency-I Tribal Area-X,Mr. Muhammad Jamal Ud Din,MMAP,Profile
+45,NA-50South Waziristan Agency-II Tribal Area-XI,Ali Wazir,Ind,Profile
+46,NA-51FR Tribal Area-XII,Mr. Abdul Shakoor,MMAP,Profile
+47,Federal (3),Federal (3),Federal (3),Federal (3)
+48,NA-52ICT-I,Raja Khurram Shahzad Nawaz,PTI,Profile
+49,NA-53ICT-II,Mr. Ali Nawaz Awan,PTI,Profile
+50,NA-54ICT-III,Mr. Asad Umer,PTI,Profile
+51,Punjab (138),Punjab (138),Punjab (138),Punjab (138)
+52,NA-55Attock-I,Mr. Tahir Sadiq,PTI,Profile
+53,NA-56Attock-II,Malik Sohail Khan,PML-N,Profile
+54,NA-57Rawalpindi-I,Mr. Sadaqat Ali Khan,PTI,Profile
+55,NA-58Rawalpindi-II,"Raja Pervaiz Ashraf, Speaker National Assembly",PPPP,Profile
+56,NA-59Rawalpindi-III,Mr. Ghulam Sarwar Khan,PTI,Profile
+57,NA-60Rawalpindi-IV,Sheikh Rashid Shafique,PTI,Profile
+58,NA-61Rawalpindi-V,Mr. Aamer Mehmood Kiani,PTI,Profile
+59,NA-62Rawalpindi-VI,Sheikh Rashid Ahmed,AMLP,Profile
+60,NA-63Rawalpindi-VII,Mr. Mansoor Hayat Khan,PTI,Profile
+61,NA-64Chakwal-I,Sardar Zulfiqar Ali Khan Dullah,PTI,Profile
+62,NA-65Chakwal-II,Chaudhry Salik Hussain,PML,Profile
+63,NA-66Jhelum-I,Chaudhary Farrukh Altaf,PTI,Profile
+64,NA-67Jhelum-II,Mr. Fawad Ahmed,PTI,Profile
+65,NA-68Gujrat-I,Mr. Hussain Elahi,PML,Profile
+66,NA-69Gujrat-II,Mr. Moonis Elahi,PML,Profile
+67,NA-70Gujrat-III,Syed Faiz Ul Hassan,PTI,Profile
+68,NA-71Gujrat-IV,Chaudhry Abid Raza,PML-N,Profile
+69,NA-72Sialkot-I,Chaudhry Armaghan Subhani,PML-N,Profile
+70,NA-73Sialkot-II,Khawaja Muhammad Asif,PML-N,Profile
+71,NA-74Sialkot-III,Mr. Ali Zahid,PML-N,Profile
+72,NA-75Sialkot-IV,Syeda Nosheen Iftikhar,PML-N,Profile
+73,NA-76Sialkot-V,Rana Shamim Ahmed Khan,PML-N,Profile
+74,NA-77Narowal-I,Ms. Mehnaz Akber Aziz,PML-N,Profile
+75,NA-78Narowal-II,Mr. Ahsan Iqbal Chaudhary,PML-N,Profile
+76,NA-79Gujranwala-I,Dr. Nisar Ahmad Cheema,PML-N,Profile
+77,NA-80Gujranwala-II,Ch Mahmood Bashir Virk,PML-N,Profile
+78,NA-81Gujranwala-III,Mr. Khurram Dastgir Khan,PML-N,Profile
+79,NA-82Gujranwala-IV,Mr. Usman Ibrahim,PML-N,Profile
+80,NA-83Gujranwala-V,Chaudhry Zulfiqar Ali Bhindar,PML-N,Profile
+81,NA-84Gujranwala-VI,Mr. Azhar Qayyum Nahra,PML-N,Profile
+82,NA-85Mandi Bahauddin-I,Haji Imtiaz Ahmed Choudhary,PTI,Profile
+83,NA-86Mandi Bahauddin-II,Mr. Nasir Iqbal Bosal,PML-N,Profile
+84,NA-87Hafizabad-I,Ch Shoukat Ali Bhatti,PTI,Profile
+85,NA-88Sargodha-I,Dr. Malik Mukhtar Ahmad,PML-N,Profile
+86,NA-89Sargodha-II,Mr. Mohsin Nawaz Ranjha,PML-N,Profile
+87,NA-90Sargodha-III,Ch. Muhammad Hamid Hameed,PML-N,Profile
+88,NA-91Sargodha-IV,Ch. Aamir Sultan Cheema,PTI,Profile
+89,NA-92Sargodha-V,Syed Javed Hasnain,PML-N,Profile
+90,NA-93Khushab-I,Malik Umar Aslam Khan,PTI,Profile
+91,NA-94Khushab-II,Malik Muhammad Ehsan Ullah Tiwana,PTI,Profile
+92,NA-95Mianwali-I,Mr. Imran Khan,PTI,Profile
+93,NA-96Mianwali-II,Mr. Amjad Ali Khan,PTI,Profile
+94,NA-97Bhakkar-I,Mr. Muhammad Sana Ullah Khan Masti Khel,PTI,Profile
+95,NA-98Bhakkar-II,Dr. Muhammad Afzal Khan Dhandla,PTI,Profile
+96,NA-99Chiniot-I,Mr. Mehar Ghulam Muhammad Lali,PTI,Profile
+97,NA-100Chiniot-II,Mr. Qaiser Ahmed Sheikh,PML-N,Profile
+98,NA-101Faisalabad-I,Mr. Muhammad Asim Nazir,PTI,Profile
+99,NA-102Faisalabad-II,Mr. Nawab Sher,PTI,Profile
+100,NA-103Faisalabad-III,Mr. Ali Gohar Khan,PML-N,Profile
+101,NA-104Faisalabad-IV,Ch. Muhammad Shahbaz Babar,PML-N,Profile
+102,NA-105Faisalabad-V,Mr. Raza Nasrullah,PTI,Profile
+103,NA-106Faisalabad-VI,Rana Sana Ullah Khan,PML-N,Profile
+104,NA-107Faisalabad-VII,Mr. Khurram Shahzad,PTI,Profile
+105,NA-109Faisalabad-IX,Mr. Faiz Ullah,PTI,Profile
+106,NA-110Faisalabad-X,"Raja Riaz Ahmad, Leader of the Oppisition",PTI,Profile
+107,NA-111Toba Tek Singh-I,Chaudhary Khalid Javed,PML-N,Profile
+108,NA-112Toba Tek Singh-II,Mr. Muhammad Junaid Anwar Chaudhry,PML-N,Profile
+109,NA-113Toba Tek Singh-III,Mr. Riaz Fatyana,PTI,Profile
+110,NA-114Jhang-I,Sahibzada Muhammad Mehboob Sultan,PTI,Profile
+111,NA-115Jhang-II,Ms. Ghulam Bibi Bharwana,PTI,Profile
+112,NA-116Jhang-III,Mr. Muhammad Ameer Sultan,PTI,Profile
+113,NA-117Nankana Sahib-I,Ch Muhammad Barjees Tahir,PML-N,Profile
+114,NA-119Sheikhupura-I,Mr. Rahat Aman Ullah Bhatti,PTI,Profile
+115,NA-120Sheikhupura-II,Rana Tanveer Hussain,PML-N,Profile
+116,NA-121Sheikhupura-III,Mian Javed Latif,PML-N,Profile
+117,NA-122Sheikhupura-IV,Sardar Muhammad Irfan Dogar,PML-N,Profile
+118,NA-123Lahore-I,Mr. Muhammad Riaz,PML-N,Profile
+119,NA-124Lahore-II,Mr. Shahid Khaqan Abbasi,PML-N,Profile
+120,NA-125Lahore-III,Mr. Waheed Alam Khan,PML-N,Profile
+121,NA-126Lahore-IV,Mr. Muhammad Hammad Azhar,PTI,Profile
+122,NA-127Lahore-V,Mr. Ali Pervaiz,PML-N,Profile
+123,NA-128Lahore-VI,Sheikh Rohale Asghar,PML-N,Profile
+124,NA-129Lahore-VII,Sardar Ayaz Sadiq,PML-N,Profile
+125,NA-130Lahore-VIII,Mr. Shafqat Mahmood,PTI,Profile
+126,NA-131Lahore-IX,Khawaja Saad Rafique,PML-N,Profile
+127,NA-132Lahore-X,"Mian Muhammad Shehbaz Sharif, Prime Minister Islamic Republic of Pakistan",PML-N,Profile
+128,NA-133Lahore-XI,Ms. Shaista Pervaiz Malik,PML-N,Profile
+129,NA-134Lahore-XII,Rana Mubashir Iqbal,PML-N,Profile
+130,NA-135Lahore-XIII,Malik Karamat Ali Khokhar,PTI,Profile
+131,NA-136Lahore-XIV,Mr. Muhammad Afzal Khokhar,PML-N,Profile
+132,NA-137Kasur-I,Mr. Saad Waseem,PML-N,Profile
+133,NA-138Kasur-II,Mr. Rasheed Ahmad Khan,PML-N,Profile
+134,NA-139Kasur-III,Rana Muhammad Ishaq Khan,PML-N,Profile
+135,NA-140Kasur-IV,Sardar Talib Hassan Nakai,PTI,Profile
+136,NA-141Okara-I,Mr. Nadeem Abbas,PML-N,Profile
+137,NA-142Okara-II,Mr. Riaz Ul Haq,PML-N,Profile
+138,NA-143Okara-III,Rao Muhammad Ajmal Khan,PML-N,Profile
+139,NA-144Okara-IV,Mr. Muhammad Mueen Wattoo,PML-N,Profile
+140,NA-145Pakpattan-I,Mr. Ahmad Raza Maneka,PML-N,Profile
+141,NA-146Pakpattan-II,Rana Iradat Sharif Khan,PML-N,Profile
+142,NA-147Sahiwal-I,Syed Imran Ahmad Shah,PML-N,Profile
+143,NA-148Sahiwal-II,Chaudry Muhammad Ashraf,PML-N,Profile
+144,NA-149Sahiwal-III,Mr. Rai Muhammad Murtaza Iqbal,PTI,Profile
+145,NA-150Khanewal-I,Syed Fakhar Imam,PTI,Profile
+146,NA-151Khanewal-II,Mr. Muhammad Khan Daha,PML-N,Profile
+147,NA-152Khanewal-III,Mr. Zahoor Hussain Qureshi,PTI,Profile
+148,NA-153Khanewal-IV,Chaudhry Iftikhar Nazir,PML-N,Profile
+149,NA-154Multan-I,Mr. Ahmed Hussain Deharr,PTI,Profile
+150,NA-155Multan-II,Malik Muhammad Amir Dogar,PTI,Profile
+151,NA-156Multan-III,Makhdoom Shah Mahmood Hussain Qureshi,PTI,Profile
+152,NA-158Multan-V,Mr. Muhammad Ibrahim Khan,PTI,Profile
+153,NA-159Multan-VI,Rana Muhammad Qasim Noon,PTI,Profile
+154,NA-160Lodhran-I,Mr. Abdul Rehman Khan Kanju,PML-N,Profile
+155,NA-161Lodhran-II,Mian Muhammad Shafiq,PTI,Profile
+156,NA-162Vehari-I,Choudhary Faqir Ahmad,PML-N,Profile
+157,NA-163Vehari-II,Mr. Sajid Mehdi,PML-N,Profile
+158,NA-164Vehari-III,Mr. Tahir Iqbal,PTI,Profile
+159,NA-165Vehari-IV,Mr. Aurangzeb Khan Khichi,PTI,Profile
+160,NA-166Bahawalnagar-I,Mr. Muhammad Abdul Ghafar Wattoo,PTI,Profile
+161,NA-167 Bahawalnagar-II,Mr. Alam Dad Laleka,PML-N,Profile
+162,NA-168 Bahawalnagar-III,Mr. Ehsan Ul Haq Bajwa,PML-N,Profile
+163,NA-169 Bahawalnagar-IV,Mr. Noor Ul Hassan Tanvir,PML-N,Profile
+164,NA-170 Bahawalpur-I,Mr. Muhammad Farooq Azam Malik,PTI,Profile
+165,NA-171 Bahawalpur-II,Mian Riaz Hussain Pirzada,PML-N,Profile
+166,NA-172 Bahawalpur-III,Chaudhary Tariq Bashir Cheema,PML,Profile
+167,NA-173 Bahawalpur-IV,Mian Najeeb Ud Din Awaisi,PML-N,Profile
+168,NA-174 Bahawalpur-V,Makhdoom Syed Sami Ul Hassan Gillani,PTI,Profile
+169,NA-175 Rahim Yar Khan-I,Syed Mobeen Ahmed,PTI,Profile
+170,NA-176 Rahim Yar Khan-II,Sheikh Fayyaz Ud Din,PML-N,Profile
+171,NA-177 Rahim Yar Khan-III,Makhdoom Khusro Bukhtiar,PTI,Profile
+172,NA-178 Rahim Yar Khan-IV,Syed Mustafa Mahmud,PPPP,Profile
+173,NA-179 Rahim Yar Khan-V,Chaudhary Javed Iqbal Warraich,PTI,Profile
+174,NA-180 Rahim Yar Khan-VI,Syed Murtaza Mahmud,PPPP,Profile
+175,NA-181 Muzaffargarh-I,Mr. Muhammad Shabbir Ali,PTI,Profile
+176,NA-182 Muzaffargarh-II,Mahar Irshad Ahmad Khan,PPPP,Profile
+177,NA-183 Muzaffargarh-III,Mr. Raza Rabani Khar,PPPP,Profile
+178,NA-184 Muzaffargarh-IV,Nawabzada Iftakhar Ahmed Khan Babar,PPPP,Profile
+179,NA-185 Muzaffargarh-V,Mr. Makhdom Zada Sayed Basit Ahmad Sultan,PTI,Profile
+180,NA-186 Muzaffargarh-VI,Mr. Aamir Talal Gopang,PTI,Profile
+181,NA-187 Layyah-I,Mr. Abdul Majeed Khan,PTI,Profile
+182,NA-188 Layyah-II,Mr. Niaz Ahmed Jakhar,PTI,Profile
+183,NA-189 D.G.Khan-I,Mr. Khawja Sheraz Mehmood,PTI,Profile
+184,NA-190 D.G.Khan-II,Mr. Muhammad Amjad Farooq Khan Khosa,PTI,Profile
+185,NA-191 D.G.Khan-III,Ms. Zartaj Gul,PTI,Profile
+186,NA-192 D.G.Khan-IV,Sardar Muhammad Khan Laghari,PTI,Profile
+187,NA-193 Rajanpur-I,Sardar Muhammad Jaffar Khan Leghari,PTI,Profile
+188,NA-194 Rajanpur-II,Sardar Nasrullah Khan Dreshak,PTI,Profile
+189,NA-195 Rajanpur-III,Sardar Riaz Mehmood Khan Mazari,PTI,Profile
+190,Sindh (56),Sindh (56),Sindh (56),Sindh (56)
+191,NA-197 Kashmore,Mr. Ehsan Ur Rehman Mazari,PPPP,Profile
+192,NA-198Shikarpur-I,Mr. Abid Hussain Bhayo,PPPP,Profile
+193,NA-199Shikarpur-II,Mr. Ghous Bux Khan Mahar,GDA,Profile
+194,NA-200Larkana-I,Mr. Bilawal Bhutto Zardari,PPPP,Profile
+195,NA-201Larkana-II,Mr. Khursheed Ahmed Junejo,PPPP,Profile
+196,NA-202Kamber Shahdadkot-I,Mr. Aftab Shahban Mirani,PPPP,Profile
+197,NA-203Kamber Shahdadkot-II,Mir Amer Ali Khan Magsi,PPPP,Profile
+198,NA-204Ghotki-I,Mr. Khalid Ahmed Khan Lund,PPPP,Profile
+199,NA-205Ghotki-II,Sardar Muhammad Bux Khan Mahar,PPPP,Profile
+200,NA-206Sukkur-I,Syed Khursheed Ahmed Shah,PPPP,Profile
+201,NA-207Sukkur-II,Mr. Nauman Islam Shaikh,PPPP,Profile
+202,NA-208Khairpur-I,Dr. Nafisa Shah,PPPP,Profile
+203,NA-209Khairpur-II,Pir Syed Fazal Ali Shah Jillani,PPPP,Profile
+204,NA-210Khairpur-III,Syed Javed Ali Shah Jillani,PPPP,Profile
+205,NA-211Naushero Feroze-I,Syed Abrar Ali Shah,PPPP,Profile
+206,NA-212Naushero Feroze-II,Mr. Zulfiqar Ali Behan,PPPP,Profile
+207,NA-213Shaheed Benazirabad-I,Mr. Asif Ali Zardari,PPPP,Profile
+208,NA-214Shaheed Benazirabad-II,Syed Ghulam Mustafa Shah,PPPP,Profile
+209,NA-215Sanghar-I,Mr. Naveed Dero,PPPP,Profile
+210,NA-216Sanghar-II,Ms. Shazia Marri,PPPP,Profile
+211,NA-217Sanghar-III,Mr. Roshanuddin Junejo,PPPP,Profile
+212,NA-218Mirpurkhas-I,Mr. Ali Nawaz Shah,Ind,Profile
+213,NA-219Mirpurkhas-II,Mir Munawar Ali Talpur,PPPP,Profile
+214,NA-220Umerkot,Nawab Muhammad Yousuf Talpur,PPPP,Profile
+215,NA-221Tharparkar-I,Pir Ameer Ali shah Jeelani,PPPP,Profile
+216,NA-222Tharparkar-II,Mr. Mahesh Kumar Malani,PPPP,Profile
+217,NA-223Matiari,Makhdoom Jameel Uz Zaman,PPPP,Profile
+218,NA-224Tando Allahyar,Mr. Zulfiqar Bachani,PPPP,Profile
+219,NA-225Hyderabad-I,Syed Hussain Tariq,PPPP,Profile
+220,NA-226Hyderabad-II,Engr. Sabir Hussain Kaim Khani,MQMP,Profile
+221,NA-227Hyderabad-III,Mr. Salahuddin,MQMP,Profile
+222,NA-228TANDO MUHAMMAD KHAN,Syed Naveed Qamar,PPPP,Profile
+223,NA-229Badin-I,Mir Ghulam Ali Talpur,PPPP,Profile
+224,NA-230Badin-II,Dr. Fehmida Mirza,GDA,Profile
+225,NA-231Sujawal,Syed Ayaz Ali Shah Sheerazi,PPPP,Profile
+226,NA-232Thatta,Ms. Shams Un Nisa,PPPP,Profile
+227,NA-233Jamshoro,Mr. Sikandar Ali Rahoupoto,PPPP,Profile
+228,NA-234Dadu-I,Mr. Irfan Ali Laghari,PPPP,Profile
+229,NA-235 Dadu-II,Mr. Rafique Ahmed Jamali,PPPP,Profile
+230,NA-236 Malir-I,Jam Abdul Karim Bijar,PPPP,Profile
+231,NA-238 Malir-III,Syed Agha Rafiullah,PPPP,Profile
+232,NA-240 Korangi Karachi-II,Mr. Muhammad Abubakar,MQMP,Profile
+233,NA-241 Korangi Karachi-III,Mr. Faheem Khan,PTI,Profile
+234,NA-242 Karachi East-I,Mr. Saif Ur Rehman,PTI,Profile
+235,NA-243 Karachi East-II,Mr. Muhammad Alamgir Khan,PTI,Profile
+236,NA-244 Karachi East-III,Syed Ali Haider Zaidi,PTI,Profile
+237,NA-247 Karachi South-II,Mr. Aftab Hussain Siddique,PTI,Profile
+238,NA-248 Karachi West-I,Mr. Abdul Qadir Patel,PPPP,Profile
+239,NA-249 Karachi West-II,Mr. Qadir Khan Mandokhail,PPPP,Profile
+240,NA-250 Karachi West-III,Mr. Attaullah,PTI,Profile
+241,NA-251 Karachi West-IV,Syed Amin Ul Haque,MQMP,Profile
+242,NA-252 Karachi West-V,Mr. Aftab Jehangir,PTI,Profile
+243,NA-253 Karachi Central-I,Mr. Usama Qadri,MQMP,Profile
+244,NA-254 Karachi Central-II,Mr. Muhammad Aslam Khan,PTI,Profile
+245,NA-255 Karachi Central-III,Dr. Khalid Maqbool Siddiqui,MQMP,Profile
+246,NA-256 Karachi Central-IV,Mr. Muhammad Najeeb Haroon,PTI,Profile
+247,Balochistan (16),Balochistan (16),Balochistan (16),Balochistan (16)
+248,NA-257 Killa Saifullah-cum-Zhob-cum-Sherani,Mr. Abdul Wasay,MMAP,Profile
+249,NA-258 Loralai-cum-Musa Khail-cum-Ziarat-cum-Dukki-cum-Harnai,Mr. Muhammad Israr Tareen,BAP,Profile
+250,NA-259 Dera Bugti-cum-Kohlu-cum-Sibi-cum-Lehri,Nawabzada Shazain Bugti,JWP,Profile
+251,NA-260 Nasirabad-cum-Kachhi-cum-Jhal-Magsi,Mr. Khalid Hussain Magsi,BAP,Profile
+252,NA-261 Jafarabad-cum-Sohbatpur,Mir Khan Muhammad Jamali,PTI,Profile
+253,NA-262 Pishin,Mr. Kamal Uddin,MMAP,Profile
+254,NA-263 Killa Abdullah,Mr. Salahuddin Ayubi,MMAP,Profile
+255,NA-264 Quetta-I,Mr. Asmatullah,MMAP,Profile
+256,NA-265 Quetta-II,Mr. Muhammad Qasim Khan Suri,PTI,Profile
+257,NA-266 Quetta-III,Mr. Agha Hassan Baloch,BNP,Profile
+258,NA-267 Mastung-cum-Kalat-cum-Shaheed-Sikandarabad,Syed Mehmood Shah,MMAP,Profile
+259,NA-268 Chagai-cum-Nushki-cum-Kharan,Mr. Muhammad Hashim Notezai,BNP,Profile
+260,NA-269 Khuzdar,Mr. Muhammad Akhtar Mengal,BNP,Profile
+261,NA-270 Panjgur-cum-Washuk-cum-Awaran,Mr. Ehsanullah Reki,BAP,Profile
+262,NA-271 Kech,Ms. Zubaida Jalal,BAP,Profile
+263,NA-272 Lesbela-cum-Gwadar,Mr. Mohammad Aslam Bhootani,Ind,Profile
+264,RESERVED SEATS FOR WOMEN ( 59 ),RESERVED SEATS FOR WOMEN ( 59 ),RESERVED SEATS FOR WOMEN ( 59 ),RESERVED SEATS FOR WOMEN ( 59 )
+265,#,Name,Party,Picture
+266,Khyber Pukhtunkhwa (8),Khyber Pukhtunkhwa (8),Khyber Pukhtunkhwa (8),Khyber Pukhtunkhwa (8)
+267,1,Ms. Nafeesa Inayatullah Khan Khattak,PTI,Profile
+268,2,Ms. Sajida Begum,PTI,Profile
+269,3,Ms. Naureen Farooq Ibrahim,PTI,Profile
+270,5,Ms. Uzma Riaz,PTI,Profile
+271,6,Ms. Zille Huma,PTI,Profile
+272,8,Ms. Shahida Akhtar Ali,MMAP,Profile
+273,9,Begum Tahira Bukhari,PML-N,Profile
+274,10,Ms. Shaheen Naz Saifullah,PTI,Profile
+275,Federal (0),Federal (0),Federal (0),Federal (0)
+276,Punjab (33),Punjab (33),Punjab (33),Punjab (33)
+277,1,Ms. Tahira Aurangzeb,PML-N,Profile
+278,3,Ms. Aysha Rajab Ali,PML-N,Profile
+279,4,Ms. Marriyum Aurangzeb,PML-N,Profile
+280,5,Ms. Shaza Fatima Khawaja,PML-N,Profile
+281,6,Dr. Aisha Ghaus Pasha,PML-N,Profile
+282,7,Ms. Zahra Wadood Fatemi,PML-N,Profile
+283,8,Ms. Kiran Imran Dar,PML-N,Profile
+284,9,Ms. Romina Khurshid Alam,PML-N,Profile
+285,10,Ms. Musarrat Asif Khawaja,PML-N,Profile
+286,11,Ms. Zeb Jaffar,PML-N,Profile
+287,12,Dr. Samina Matloob,PML-N,Profile
+288,13,Ms. Shahnaz Saleem Malik,PML-N,Profile
+289,14,Ms. Seema Mohiuddin Jameeli,PML-N,Profile
+290,15,Ms. Maiza Hameed,PML-N,Profile
+291,17,Ms. Munaza Hassan,PTI,Profile
+292,18,Ms. Andleeb Abbas,PTI,Profile
+293,19,Ms. Asma Qadeer,PTI,Profile
+294,20,Ms. Aliya Hamza Malik,PTI,Profile
+295,21,Ms. Javaria Zafar Aheer,PTI,Profile
+296,22,Ms. Kanwal Shauzab,PTI,Profile
+297,23,Dr. Seemi Bukhari,PTI,Profile
+298,24,Ms. Sobia Kamal Khan,PTI,Profile
+299,25,Dr. Nausheen Hamid,PTI,Profile
+300,26,Ms. Rubina Jamil,PTI,Profile
+301,27,Ms. Maleeka Ali Bokhari,PTI,Profile
+302,28,Ms. Fauzia Behram,PTI,Profile
+303,29,Ms. Rukhsana Naveed,PTI,Profile
+304,30,Ms. Tashfeen Safdar,PTI,Profile
+305,31,Ms. Wajiha Qamar,PTI,Profile
+306,32,Ms. Hina Rabbani Khar,PPPP,Profile
+307,33,Ms. Farukh Khan,PML,Profile
+308,34,Ms. Shakila Luqman,PML-N,Profile
+309,35,Ms. Asiya Azeem,PTI,Profile
+310,Sindh (14),Sindh (14),Sindh (14),Sindh (14)
+311,1,Ms. Shagufta Jumani,PPPP,Profile
+312,2,Ms. Nasiba Channa,PPPP,Profile
+313,3,Ms. Mussarat Rafique Mahesar,PPPP,Profile
+314,4,Ms. Naz Baloch,PPPP,Profile
+315,5,Ms. Shahida Rehmani,PPPP,Profile
+316,6,Dr. Mahreen Razzaq Bhutto,PPPP,Profile
+317,7,Dr. Shazia Sobia Aslam Soomro,PPPP,Profile
+318,8,Ms. Shamim Ara Panhwar,PPPP,Profile
+319,9,Ms. Syma Nadeem,PTI,Profile
+320,10,Ms. Ghazala Saifi,PTI,Profile
+321,11,Ms. Nuzhat Pathan,PTI,Profile
+322,12,Ms. Nusrat Wahid,PTI,Profile
+323,13,Ms. Kishwar Zehra,MQMP,Profile
+324,14,Ms. Saira Bano,GDA,Profile
+325,Balochistan (4),Balochistan (4),Balochistan (4),Balochistan (4)
+326,1,Ms. Aliya Kamran,MMAP,Profile
+327,2,Ms. Rubina Irfan,BAP,Profile
+328,3,Prof. Dr. Shahnaz Baloch,BNP,Profile
+329,4,Ms. Munawara Bibi Baloch,PTI,Profile
+330,RESERVED SEATS FOR NON-MUSLIM (10),RESERVED SEATS FOR NON-MUSLIM (10),RESERVED SEATS FOR NON-MUSLIM (10),RESERVED SEATS FOR NON-MUSLIM (10)
+331,#,Name,Party,Picture
+332,1,Mr. Lal Chand,PTI,Profile
+333,2,Ms. Shunila Ruth,PTI,Profile
+334,3,Mr. Ramesh Kumar Vankwani,PTI,Profile
+335,4,Mr. Jai Parkash,PTI,Profile
+336,5,Mr. Jamshed Thomas,PTI,Profile
+337,6,Dr. Darshan,PML-N,Profile
+338,7,Mr. Kesoo Mal Kheeal Das,PML-N,Profile
+339,8,Mr. Ramesh Lal,PPPP,Profile
+340,9,Mr. Naveed Aamir Jeeva,PPPP,Profile
+341,10,Mr. James Iqbal,MMAP,Profile

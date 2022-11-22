@@ -10,11 +10,18 @@ import { ArrayIterator, each, IIterator } from '@lumino/algorithm';
 
 import * as React from 'react';
 import verticaIconSvg from '../style/icons/vertica2.svg';
+import verticapyIconSvg from '../style/icons/verticapy.svg';
 
 export const verticaIcon = new LabIcon({
     name: 'vertica:vertica',
     svgstr: verticaIconSvg
   });
+
+export const verticapyIcon = new LabIcon({
+    name: 'vertica:verticapy2',
+    svgstr: verticapyIconSvg
+});
+
 const CommandIDs = {
     open: 'inspector:open',
     createNew: 'terminal:create-new'
@@ -116,7 +123,7 @@ export class Launcher extends JupyterlabLauncher {
                 cat = this.replaceCategoryIcon(cat, verticaIcon);
             }
             if (cat.key === VERTICAPY_LESSONS) {
-                cat = this.replaceCategoryIcon(cat, verticaIcon);
+                cat = this.replaceCategoryIcon(cat, verticapyIcon);
             } 
             categories.push(cat);
             }

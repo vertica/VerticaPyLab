@@ -16,7 +16,7 @@ import * as WidgetModuleType from '@jupyterlab/terminal/lib/widget';
 import { ITerminalTracker, 
          ITerminal 
 } from '@jupyterlab/terminal';
-import { verticapyIcon, admintoolsIcon, vsqlIcon } from './icons';
+import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon } from './icons';
 /**
  * The command IDs used by the terminal plugin.
  */
@@ -235,9 +235,9 @@ export function addCommands(
 
   commands.addCommand(CommandIDs.openCourseDSE, {
     label: 'Data Science Essentials',
-    icon: verticapyIcon,
+    icon: course1Icon,
     execute: (args: any) => {
-      window.open('http://127.0.0.1:8889/voila/render/vertica-demo/docker-verticapy/enablement/Data%20Science%20Essentials/DataScienceEssentials.ipynb?', '_blank');
+      window.open('http://127.0.0.1:8889/voila/render/enablement/Data%20Science%20Essentials/Data_Science_Essentials.ipynb?', '_blank');
     }
   });
 

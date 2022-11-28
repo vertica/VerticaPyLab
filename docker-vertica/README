@@ -1,0 +1,41 @@
+## How to set up DBLINK 
+
+### Prerequisites
+
+You need to have the `ldblink.so` inside docker-vertica/bin
+
+### 1. Build new vertica image
+
+Build a new vertica image that will come with all dblink files and postgresql installed:
+```
+make vertica-build
+```
+Now create the vertica container as usual. It will use this image you've just built.
+
+### 2. Deploy DBLINK and start postgresql server
+
+This step is after you have created a vertica container(with `make vertica-start` or `make all`)
+
+The following command will install dblink on vertica-demo container
+
+```
+make deploy
+```
+
+Now if you want to test dblink, you can do that using a postgresql server on vertica-demo container. You need to start the postgresql server and set as password "`postgres`":
+```
+make postgres-pwd
+```
+
+### 3.  Connect to postgresql database
+Now  you are ready to go, just start VerticaLab. Once on VerticaLab, to connect to postgresql, open a terminal and ssh into vertica-demo container:
+```
+ssh vertica-demo
+```
+then run the following command to open a session to postgresql:
+```
+sudo -u postgres psql
+```
+You can now interact with your postgresql database. You can for instance create a table and query that table using vsql and dblink.
+
+

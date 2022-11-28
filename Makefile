@@ -164,3 +164,13 @@ get-ip: etc/vertica-demo.conf ## Get the ip of the Vertica container
 test: ## suite of tests to make sure everything is working
 	@source etc/vertica-demo.conf; \
 	docker exec -i "$$VERTICALAB_CONTAINER_NAME" vsql -c "select version();"
+
+.PHONY: vertica-build
+vertica-build:
+	@source etc/vertica-demo.conf; \
+	docker build -t "$$VERTICA_DOCKER_IMAGE" docker-vertica
+
+.PHONY: deploy
+deploy:
+	@source etc/vertica-demo.conf; \
+	docker exec -i "$$VERTICA_CONTAINER_NAME" bash -c "cd /home/dbadmin; make deploy; sudo service postgresql start"

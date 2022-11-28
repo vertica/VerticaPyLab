@@ -164,3 +164,28 @@ get-ip: etc/vertica-demo.conf ## Get the ip of the Vertica container
 test: ## suite of tests to make sure everything is working
 	@source etc/vertica-demo.conf; \
 	docker exec -i "$$VERTICALAB_CONTAINER_NAME" vsql -c "select version();"
+
+.PHONY: vertica-build
+vertica-build:
+	@source etc/vertica-demo.conf; \
+	if [[ $$VERTICA_DOCKER_IMAGE == "vertica/vertica-k8s:latest" ]] ; then \
+	  echo "Replace image tag "latest" with something else for VERTICA_DOCKER_IMAGE in etc/vertica-demo.conf"; \
+	  exit 1; \
+	fi; \
+	docker build -t "$$VERTICA_DOCKER_IMAGE" docker-vertica
+
+.PHONY: deploy
+deploy:
+	@source etc/vertica-demo.conf; \
+	docker exec -i "$$VERTICA_CONTAINER_NAME" bash -c "cd /home/dbadmin; make deploy"
+
+.PHONY: postgres-start
+postgres-start:
+	@source etc/vertica-demo.conf; \
+	docker exec -i "$$VERTICA_CONTAINER_NAME" bash -c "sudo service postgresql start"
+
+.PHONY: postgres-pwd
+postgres-pwd: postgres-start
+	@source etc/vertica-demo.conf; \
+	docker exec -i "$$VERTICA_CONTAINER_NAME" bash -c "sudo -u postgres psql -c '\password postgres'"
+

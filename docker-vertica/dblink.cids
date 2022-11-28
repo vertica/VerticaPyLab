@@ -1,0 +1,14 @@
+# Vertica DBLINK Configuration File
+#
+# Connection IDs lines have the following format:
+#    <mnemonic code>:<ODBC configuration>
+# and are terminated by a SINGLE '\n' (ASCII dec 10, ASCII hex 0x0a) 
+# Be aware of this! Windows editors might end lines with \r\n. In
+# this case the Carriage Return is considered part of the ODBC config
+# and can cause undefined ODBC Driver Behavior.
+#
+# Lines starting with '#' are considered comments
+#
+# Sample configuration:
+
+pgdb:UID=postgres;PWD=postgres;DSN=pmf

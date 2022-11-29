@@ -6,6 +6,7 @@
 VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
 CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+WORKSPACE=$VERTICA_DEMO_PREFIX/workspace
 if ! [[ -r $CONFIG_FILE ]]; then
   if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
@@ -50,9 +51,10 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
-if [[ -n $VERTICALAB_PROJECT ]] ; then
-  VERTICALAB_RUNARGS+=( -v $VERTICALAB_PROJECT:/project )
-fi
+mkdir -p $WORKSPACE
+VERTICALAB_RUNARGS+=( -v $VERTICA_DEMO_PREFIX/docker-verticapy/enablement:/project/enablement:ro )
+
+VERTICALAB_RUNARGS+=( -v $WORKSPACE:/project/workspace )
 
 if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then
   # Try to support docker-machine networking

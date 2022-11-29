@@ -1,9 +1,9 @@
-jupyterlab
-jupyterlab-lsp
+jupyterlab==3.4.8
+jupyterlab-lsp==3.10.2
 python-lsp-server[all]
-ipython
+ipython==8.5.0
 ipywidgets==7.6.5
-voila
-graphviz
-plotly
+voila==0.3.6
+graphviz==0.20.1
+plotly==5.10.0
 verticapy[all]

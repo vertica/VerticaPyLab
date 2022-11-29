@@ -108,21 +108,8 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
 
 ### Shared Volumes
 
-By default, verticalab notebooks are isolated from the host machine and can only access files/dirs loaded at build time. However we offer the possibility to start from any directory of your choice. That way you will have access to the resources in that local directory and the changes you make will persist even after the container deletion. You just have to set VERTICALAB_PROJECT env var:
-
-```
-- VERTICALAB_PROJECT: the localhost path that will be used as shared volume with verticalab docker container
-```
-    
-So if you want to use your home directory as shared volume:
-
-```
-make verticalab-start VERTICALAB_PROJECT=$HOME
-```
-If you want to use another directory:
-```
-make verticalab-start VERTICALAB_PROJECT=<your-dir>
-```
+verticalab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (vertica-demo/workspace). If you do not do it, verticalab will do it for you during the first installation. Put all the files you would like to use in verticalab inside workspace before you start verticalab. That directory will be mounted into verticalab so when it starts, you will see a workspace directory there too.
+If when working on verticalab there are some files you would like to keep after the container deletion, just put them inside workspace(on verticalab) and you will find them in your local workspace directory.
 
 ### Additional Configuration
 

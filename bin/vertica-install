@@ -139,7 +139,7 @@ fi
 
 # is the account registered with Vertica?
 if [[ -z ${VERTICA_CE_SERIAL_NUMBER} ]]; then
-  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" cp $VERTICA_DEMO_PREFIX/etc/vertica-demo.dat /opt/vertica/config/ || abort $? "Cannot save demo license"
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo cp $VERTICA_DEMO_PREFIX/etc/vertica-demo.dat /opt/vertica/config/ || abort $? "Cannot save demo license"
   docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key -i -l /opt/vertica/config/vertica-demo.dat || abort $? "Cannot install demo license"
   echo "100 GB license installed."
   echo "To increase the license to 1TB, register on vertica.com for a community edition license then run $VERTICA_DEMO_PREFIX/bin/vertica-register"

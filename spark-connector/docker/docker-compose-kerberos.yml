@@ -1,0 +1,103 @@
+version: "3.9"
+services:
+  krb-client:
+    build: ./client-krb
+    entrypoint: /client-krb/docker-entrypoint.sh sleep infinity
+    container_name: client
+    hostname: client
+    domainname: example.com
+    networks:
+      default:
+        aliases:
+          - client.example.com
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./..:/spark-connector
+      - ./vertica-hdfs-config/hadoop-kerberized:/etc/hadoop/conf
+      - ./client-krb:/client-krb
+    env_file:
+      - krb.env
+    environment:
+      - HADOOP_VERSION
+      - SPARK_VERSION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - GCS_FILEPATH
+      - GCS_HMAC_KEY_ID
+      - GCS_HMAC_KEY_SECRET
+      - GCS_SERVICE_KEY_ID
+      - GCS_SERVICE_KEY
+      - GCS_SERVICE_EMAIL
+
+  kdc:
+    build: ./kdc
+    entrypoint: /kdc/docker-entrypoint.sh /usr/sbin/init
+    container_name: kdc
+    hostname: kdc
+    domainname: example.com
+    networks:
+      default:
+        aliases:
+          - kdc.example.com
+    volumes:
+      - ./kdc:/kdc
+      - ./keytabs:/keytabs
+    env_file:
+      - krb.env
+
+  vertica:
+    image: vertica/vertica-k8s:${VERTICA_VERSION:-latest}
+    container_name: vertica
+    hostname: vertica
+    domainname: example.com
+    networks:
+      default:
+        aliases:
+          - vertica.example.com
+    ports:
+      - "5433:5433"
+    volumes:
+      - ./vertica-krb/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+      - ./vertica-hdfs-config/hadoop-kerberized:/etc/hadoop/conf
+      - ./vertica-krb:/vertica-krb
+      - ./keytabs:/keytabs
+    env_file:
+      - krb.env
+    environment:
+      - VERTICA_MEMDEBUG=2
+
+  hdfs:
+    build: ./hdfs-krb
+    entrypoint: /usr/local/bin/docker-entrypoint.sh sleep infinity
+    # Must explicitly set container_name or add entries to /etc/hosts in other containers that
+    # communicate with hdfs (client and vertica), otherwise Kerberos is unable to perform both
+    # forward and reverse lookup
+    container_name: hdfs
+    hostname: hdfs
+    domainname: example.com
+    networks:
+      default:
+        aliases:
+          - hdfs.example.com
+    ports:
+      - "22022:22"
+      - "8020:8020"
+      - "50010:50010"
+      - "50020:50020"
+      - "50070:50070"
+      - "50071:50071"
+      - "50075:50075"
+      - "50076:50076"
+    volumes:
+      - ./hdfs-krb/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+      - ./vertica-hdfs-config/hadoop-kerberized:/hadoop/conf
+      - ./hdfs-krb:/hdfs-krb
+      - ./keytabs:/keytabs
+    env_file:
+      - krb.env
+
+networks:
+  default:
+    name: "EXAMPLE.COM"
+    driver: bridge

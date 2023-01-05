@@ -113,7 +113,7 @@ verticalab-build: etc/vertica-demo.conf
 # the vertica docker hub images.
 .PHONY: verticalab-push
 verticalab-push: etc/vertica-demo.conf
-	@source etc/vertica-demo.conf; \
+	source etc/vertica-demo.conf; \
 	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
 	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \
 	  exit 1; \
@@ -125,7 +125,7 @@ verticalab-push: etc/vertica-demo.conf
 	docker context create mycontext; \
 	docker buildx create mycontext --name mybuilder; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" "$${SECOND_TAG[@]}" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" "$${SECOND_TAG[@]}" $(PWD)/docker-verticapy/ --push
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo

@@ -129,7 +129,7 @@ verticalab-push: etc/vertica-demo.conf
 verticalab-push-latest: etc/vertica-demo.conf
 	# This should use the cache from the last buildx and just push the new tag.
 	source etc/vertica-demo.conf; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:latest" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:latest" $(PWD)/docker-verticapy/ --push
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo

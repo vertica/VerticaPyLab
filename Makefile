@@ -3,22 +3,25 @@
 
 # Release Engineering:
 # This is the version of the dockerhub image for the Jupyter Notebook that
-# is built/cached from this code base.  
+# is built/cached from this code base.
 # Demo Users :
-#   1) check out a stable released version.  
-#   2) "make verticalab-install"
-# Developers of Vertica-Demo : 
+#   1) check out a stable released version.
+#   2) "make all"
+# Developers of Vertica-Demo :
 #   1) "git checkout -b <branch name>" to create a git branch and checkout
-#   2) set the version number in etc/vertica-demo.conf (VERTICALAB_IMG_VERSION=v0.1)
+#   2) set the version number in etc/vertica-demo.conf (VERTICALAB_IMG_VERSION=anything)
 #   3) make the desired changes verticalab demos
 #   4) build with "make verticalab-build"
 #   5) start with "make verticalab-start" and open the URL provided
 #   6) test changes and cycle back to step 3 if needed
 #   7) submit changes with git commit, git push, create PR, get approval, merge to main
 # Release process :
-#   1) Use the above developer steps to set the desired version
-#   2) create a release in github with the tag set to the version (i.e., v0.1)
-#   3) create a release in docker hub with "VERTICALAB_LATEST=1 make verticalab-push"
+#   1) create a git branch and checkout (git checkout -b Release_v0.0.0)
+#   2) set the version number in etc/vertica-demo.conf* (VERTICALAB_IMG_VERSION=v0.0.0)
+#   3) create a release in github with the tag set to the version
+#   4) docker login
+#   5) create a release in docker hub with "make verticalab-push"
+#   6) move the latest release to this version with "make verticalab-push-latest"
 
 QUERY?=select version();
 SHELL:=/bin/bash
@@ -113,19 +116,20 @@ verticalab-build: etc/vertica-demo.conf
 # the vertica docker hub images.
 .PHONY: verticalab-push
 verticalab-push: etc/vertica-demo.conf
-	@source etc/vertica-demo.conf; \
+	source etc/vertica-demo.conf; \
 	if [[ $$VERTICALAB_IMG_VERSION == latest ]] ; then \
 	  echo "Set a version number for VERTICALAB_IMG_VERSION in etc/vertica-demo.conf"; \
 	  exit 1; \
 	fi; \
-	declare -a SECOND_TAG=(); \
-	if (($$VERTICALAB_LATEST)); then \
-	  SECOND_TAG+=(-t "vertica/$$VERTICALAB_IMG:latest"); \
-	fi; \
 	docker context create mycontext; \
 	docker buildx create mycontext --name mybuilder; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" "$${SECOND_TAG[@]}" /Users/bronson/src/vertica-demo/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" $(PWD)/docker-verticapy/ --push
+
+verticalab-push-latest: etc/vertica-demo.conf
+	# This should use the cache from the last buildx and just push the new tag.
+	source etc/vertica-demo.conf; \
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:latest" $(PWD)/docker-verticapy/ --push
 
 .PHONY: verticalab-install
 verticalab-install: etc/vertica-demo.conf ## Install the image to use for the demo

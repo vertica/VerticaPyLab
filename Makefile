@@ -51,7 +51,7 @@ all: ## quickstart: install and run all containers
 
 # create new conf file or update timestamp if exists
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	if [[ -r etc/vertica-demo.conf ]]; then \
+	@if [[ -r etc/vertica-demo.conf ]]; then \
 	  echo DEFAULTS HAVE CHANGED.  Please update etc/vertica-demo.conf.; \
 	  diff etc/vertica-demo.conf etc/vertica-demo.conf.default; \
 	  exit 1; \

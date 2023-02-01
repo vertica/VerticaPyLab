@@ -67,6 +67,9 @@ docker container rm $VERTICA_CONTAINER_NAME >/dev/null 2>&1
 
 docker run --detach "${VERTICA_RUNARGS[@]}" "${VERTICA_ENV[@]}" "$VERTICA_DOCKER_IMAGE" || abort $? "Could not create docker"
 
+# install some extra packages
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo apt-get update && sudo apt-get install -y curl unixodbc && sudo apt-get clean' >/dev/null
+
 # SSHD tweaks
 # don't use DNS in sshd because it slows down ssh
 # (this seems to execute before sshd starts, so the SIGHUP may not be needed)
@@ -152,3 +155,15 @@ docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" opt/vertica/bi
 if [[ -z $VERTICA_EULA ]] && docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" test -r /opt/vertica/config/d5415f948449e9d4c421b568f2411140.dat; then
   echo "VERTICA_EULA=$(date +%s)" >> $CONFIG_FILE
 fi
+
+# download dblink
+VERTICA_VERSION=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'vertica -V | perl -nE '\''say $1 if m/^Vertica Analytic Database v(\d+\.\d+\.\d+)-\d*/;'\')
+DBLINK_URL=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "curl -Ls -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' https://api.github.com/repos/vertica/dblink/releases/latest | perl -nE 'say \$1 if m/\"browser_download_url\": \"(.*ubuntu-v$VERTICA_VERSION)\"/;'")
+if [[ -z $DBLINK_URL ]]; then
+  echo "DBLink not built for Vertica $VERTICA_VERSION" >&2
+  exit 1
+fi
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "curl -Ls '$DBLINK_URL' > /home/dbadmin/ldblink.so"
+# install dblink
+docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME vsql -c "CREATE OR REPLACE LIBRARY DBLink AS '/home/dbadmin/ldblink.so' LANGUAGE 'C++'; CREATE OR REPLACE TRANSFORM FUNCTION dblink AS LANGUAGE 'C++' NAME 'DBLinkFactory' LIBRARY DBLink ;  GRANT EXECUTE ON TRANSFORM FUNCTION dblink() TO PUBLIC ;" >/dev/null
+

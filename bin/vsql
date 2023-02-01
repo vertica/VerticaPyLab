@@ -46,13 +46,16 @@ DOCKER_EXECARGS+=( -u "$USERID" )
 
 test -t 0 && DOCKER_EXECARGS+=( -t )
 
-# does this version of docker support starting in a particular directory?
-if docker exec --help | grep workdir >/dev/null ; then
-  DOCKER_EXECARGS+=( --workdir $PWD )
-else
-  # some hackery to chdir
-  set -- -c "cd $PWD; exec "'"$@"' "$EXECNAME" "$EXECNAME" "$@"
-  EXECNAME=bash
+# does the current directory exist in the container?
+if docker exec -i "${DOCKER_EXECARGS[@]}" "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME test -d "$PWD"; then
+  # does this version of docker support starting in a particular directory?
+  if docker exec --help | grep workdir >/dev/null ; then
+    DOCKER_EXECARGS+=( --workdir $PWD )
+  else
+    # some hackery to chdir
+    set -- -c "cd $PWD; exec "'"$@"' "$EXECNAME" "$EXECNAME" "$@"
+    EXECNAME=bash
+  fi
 fi
 
 docker exec -i "${DOCKER_EXECARGS[@]}" "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME $EXECNAME "$@"

@@ -148,6 +148,10 @@ verticalab-uninstall: ## Remove the verticalab container and associated images.
 	docker image rm "vertica/$$VERTICALAB_IMG"; \
 	docker image rm "python:$$PYTHON_VERSION"
 
+.PHONY: spark-install
+spark-install:
+	@bin/spark-install
+
 # aliases for convenience
 start: all
 

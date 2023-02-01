@@ -1,0 +1,5 @@
+#!/bin/bash
+
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd $VERTICA_DEMO_PREFIX/../docker-spark/docker && docker-compose up -d

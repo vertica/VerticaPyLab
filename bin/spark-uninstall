@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# this script removes the images used to run the Spark environment containers
+
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd $VERTICA_DEMO_PREFIX/../docker-spark/docker && docker image rm docker-spark && docker image rm docker-spark-worker && docker image rm mdouchement/hdfs  

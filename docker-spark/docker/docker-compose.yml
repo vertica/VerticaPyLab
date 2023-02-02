@@ -13,12 +13,12 @@ services:
       - "50075:50075"
     volumes:
       - ./hdfs/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
-      - ./vertica-hdfs-config/hadoop:/hadoop/conf
+      - ./hdfs/hadoop:/hadoop/conf
 
   spark:
     # Use a modified image to ensure the Spark and Python version are the same for all containers (Client, Spark, Jupyter)
     build:
-      context: ./client
+      context: ./spark
       args:
         SPARK: ${SPARK_INSTALL:-latest}
     ports:
@@ -38,7 +38,7 @@ services:
 
   spark-worker:
     build:
-      context: ./client
+      context: ./spark
       args:
         SPARK: ${SPARK_INSTALL:-latest}
     volumes:

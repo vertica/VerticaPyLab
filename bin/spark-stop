@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# this script shuts off the Spark docker environment 
+
+VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd $VERTICA_DEMO_PREFIX/../docker-spark/docker && docker-compose down

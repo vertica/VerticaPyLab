@@ -23,6 +23,7 @@ RUN apt-get update \
     graphviz \
     openjdk-11-jdk \
     scala \
+    maven \
     wget
 
 RUN apt-get upgrade -y

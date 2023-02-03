@@ -106,6 +106,27 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
     make verticalab-uninstall
     ```
 
+## Spark
+
+A Docker environment can be installed and ran to facilitate the included Jupyter examples that use the Spark-Connector alongside Vertica.
+
+1. Follow the steps above to set up Vertica Demo and VerticaLab. Running ```make all``` will start both.
+2. From there you can run ```make spark-install``` to install and start the Spark environment.
+
+This will create a Docker group with three containers for Spark, a Spark-Worker, and HDFS.
+Inside of VerticaLab you can find the Spark examples within ```notebooks/spark/```.  
+
+The examples contain:
+
+* The basic read/write with Spark Connector
+* A complex arrays read/write with Spark Connector
+* Linear Regression examples using:
+    * Apache Spark
+    * VerticaPy
+    * Direct Vertica (SQL Execution)
+
+Each example is annotated and walks you through step-by-step through various Spark jobs. Simply execute each cell by hitting ```Shift-Enter```. 
+
 ### Shared Volumes
 
 verticalab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (vertica-demo/workspace). If you do not do it, verticalab will do it for you during the first installation. Put all the files you would like to use in verticalab inside workspace before you start verticalab. That directory will be mounted into verticalab so when it starts, you will see a workspace directory there too.

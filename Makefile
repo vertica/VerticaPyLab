@@ -23,8 +23,8 @@
 #   5) create a release in docker hub with "make verticalab-push"
 #   6) move the latest release to this version with "make verticalab-push-latest"
 # Spark installation :
-#	1) follow the steps above to set up Vertica Demo and VerticaLab.
-#	2) run "make spark-install" to install and start the Spark environment.
+#   1) follow the steps above to set up Vertica Demo and VerticaLab.
+#   2) run "make spark-install" to install and start the Spark environment.
 
 QUERY?=select version();
 SHELL:=/bin/bash

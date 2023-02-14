@@ -20,7 +20,11 @@ RUN apt-get update \
     libgdal-dev \
     g++ \
     ssh \
-    graphviz
+    graphviz \
+    openjdk-11-jdk \
+    scala \
+    maven \
+    wget
 
 RUN apt-get upgrade -y
 RUN apt-get clean
@@ -35,6 +39,8 @@ RUN pip install --upgrade pip \
     && pip install /project/theme \
     && pip install /project/verticatools \
     && pip install /project/sql-editor \
+    && pip install PySpark \
+    && pip install PrettyTable \
     && rm -r /project/verticatools \
     && rm -r /project/theme \
     && rm -r /project/sql-editor \
@@ -46,9 +52,19 @@ RUN pip install --upgrade pip \
     # We are still having some problem to install it in some environments and we are still 
     # investigating.
     # && jupyter labextension install jupyterlab-chart-editor
-    
+
+# Install Spark
+RUN wget https://dlcdn.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz \
+    && tar xvf spark-3* \
+    && rm spark-3*.tgz \
+    && mv spark-3* /opt/ \
+    && mv /opt/spark-3* /opt/spark
+
+ENV SPARK_HOME=/opt/spark
+
 EXPOSE 8888
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin:$PATH
+ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 
 ENTRYPOINT ["jupyter", "lab","--ip=0.0.0.0","--allow-root"]

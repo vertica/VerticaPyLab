@@ -1,0 +1,60 @@
+version: "3.9"
+services:
+  hdfs:
+    image: mdouchement/hdfs
+    # See original command under https://github.com/mdouchement/docker-hdfs/blob/master/Dockerfile
+    entrypoint: /usr/local/bin/docker-entrypoint.sh sleep infinity
+    ports:
+      - "22022:22"
+      - "8020:8020"
+      - "50010:50010"
+      - "50020:50020"
+      - "50070:50070"
+      - "50075:50075"
+    volumes:
+      - ./hdfs/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+      - ./hdfs/hadoop:/hadoop/conf
+
+  spark:
+    # Use a modified image to ensure the Spark and Python version are the same for all containers (Client, Spark, Jupyter)
+    build:
+      context: ./spark
+      args:
+        SPARK: ${SPARK_INSTALL:-latest}
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+      - "4040:4040"
+    volumes:
+      - ./../..:/vertica-demo
+      - ./../../docker-verticapy/data/:/project/data/
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_PUBLIC_DNS=localhost
+
+  spark-worker:
+    build:
+      context: ./spark
+      args:
+        SPARK: ${SPARK_INSTALL:-latest}
+    volumes:
+      - ./../..:/vertica-demo
+      - ./../../docker-verticapy/data/:/project/data/
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_PUBLIC_DNS=localhost
+networks:
+  default:
+    name: demo
+    driver: bridge

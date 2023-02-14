@@ -22,6 +22,9 @@
 #   4) docker login
 #   5) create a release in docker hub with "make verticalab-push"
 #   6) move the latest release to this version with "make verticalab-push-latest"
+# Spark installation :
+#   1) follow the steps above to set up Vertica Demo and VerticaLab.
+#   2) run "make spark-install" to install and start the Spark environment.
 
 QUERY?=select version();
 SHELL:=/bin/bash
@@ -147,6 +150,27 @@ verticalab-uninstall: ## Remove the verticalab container and associated images.
 	docker stop "$$VERTICALAB_CONTAINER_NAME" >/dev/null 2>&1; \
 	docker image rm "vertica/$$VERTICALAB_IMG"; \
 	docker image rm "python:$$PYTHON_VERSION"
+
+# these set of commands handle the Spark Docker environment
+# spark-start will build the images and start them
+.PHONY: spark-install
+spark-install:
+	cd docker-spark/docker && docker-compose up -d
+
+.PHONY: spark-start
+spark-start:
+	cd docker-spark/docker && docker-compose start
+
+.PHONY: spark-stop
+spark-stop:
+	cd docker-spark/docker && docker-compose stop
+
+.PHONY: spark-uninstall
+spark-uninstall:
+	cd docker-spark/docker && docker-compose down && \
+	docker image rm docker-spark && \
+	docker image rm docker-spark-worker && \
+	docker image rm mdouchement/hdfs  
 
 # aliases for convenience
 start: all

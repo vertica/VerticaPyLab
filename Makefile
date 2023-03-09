@@ -54,14 +54,25 @@ all: ## quickstart: install and run all containers
 
 # create new conf file or update timestamp if exists
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	@if [[ -r etc/vertica-demo.conf ]]; then \
-	  echo DEFAULTS HAVE CHANGED.  Please update etc/vertica-demo.conf.; \
-	  diff etc/vertica-demo.conf etc/vertica-demo.conf.default; \
-	  exit 1; \
+	# If vertica-demo.conf.default changes in a breaking
+	# way, update this version number
+	@ conf_version="vertica-demo configuration file V1"; \
+	if [[ -r $@ ]]; then \
+	  if ! grep "$$conf_version" "$@" >/dev/null 2>&1; then \
+	    echo "WARNING: default configuration changed.  Please review etc/vertica-demo.conf" >&2; \
+	  fi; \
+	else \
+	  ( \
+	    echo '#!/bin/bash'; \
+	    echo; \
+	    echo "# $$conf_version"; \
+	    echo; \
+	    echo '# Keep this at the top so everything below will override the defaults'; \
+	    echo 'source $$BASH_SOURCE.default'; \
+	    echo; \
+	    perl -pE 'next if m,#!/bin/bash,; s/^([^#])/#$$1/' etc/vertica-demo.conf.default; \
+	  ) > $@; \
 	fi
-	cp -n etc/vertica-demo.conf.default etc/vertica-demo.conf
-	source etc/vertica-demo.conf; \
-	docker container rm "$$VERTICA_CONTAINER_NAME" >/dev/null 2>&1 || true
 
 .PHONY: vertica-install
 vertica-install: etc/vertica-demo.conf ## Create a vertica container and start the database.

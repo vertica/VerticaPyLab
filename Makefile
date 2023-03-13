@@ -172,6 +172,29 @@ spark-uninstall:
 	docker image rm docker-spark-worker && \
 	docker image rm mdouchement/hdfs  
 
+# A set of command to handle grafana
+.PHONY: grafana-env
+grafana-env: ## Set environment variables to run grafana with docker-compose
+	@bin/grafana
+
+.PHONY: grafana-install
+grafana-install: grafana-env ## Create grafana container
+	cd docker-grafana && docker-compose up -d --no-start
+
+.PHONY: grafana-start
+grafana-start: grafana-install ## Start grafana container
+	cd docker-grafana && docker-compose start
+
+.PHONY: grafana-stop
+grafana-stop: ## Stop grafana
+	cd docker-grafana && docker-compose stop
+
+.PHONY: grafana-uninstall
+grafana-uninstall: grafana-stop## Remove the grafana container and its associated images
+	@source etc/vertica-demo.conf; \
+	cd docker-grafana && docker-compose rm -f; \
+	docker image rm grafana/grafana-oss:$$GF_VERSION
+
 # aliases for convenience
 start: all
 

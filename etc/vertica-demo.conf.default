@@ -31,5 +31,11 @@ VSQL_USER=dbadmin
 DOCKER_NETWORK=demo
 
 #
+# Grafana
+#
+GF_VERSION=9.4.3 
+GF_VERTICA_PLUGIN_VERSION=2.0.3
+
+#
 # Other
 #

@@ -1,0 +1,1079 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Performance metrics for Vertica",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 16615,
+    "graphTooltip": 0,
+    "id": 2,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "gridPos": {
+          "h": 3,
+          "w": 4,
+          "x": 0,
+          "y": 0
+        },
+        "id": 16,
+        "links": [
+          {
+            "title": "Logo",
+            "url": "<img_src=\"https://www.vertica.com/wp-content/uploads/2017/09/vertica_wht_rgb@2x.png\"/>"
+          }
+        ],
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "<img src=\"https://www.vertica.com/wp-content/uploads/2017/09/vertica_wht_rgb@2x.png\"/>",
+          "mode": "html"
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \naverage_cpu_usage_percent \nFROM \nv_monitor.cpu_usage \nWHERE \n$__timeFilter(end_time)",
+            "refId": "A"
+          }
+        ],
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "gridPos": {
+          "h": 2,
+          "w": 18,
+          "x": 4,
+          "y": 0
+        },
+        "id": 17,
+        "links": [
+          {
+            "title": "Logo",
+            "url": "<img_src=\"https://www.vertica.com/wp-content/uploads/2017/09/vertica_wht_rgb@2x.png\"/>"
+          }
+        ],
+        "options": {
+          "code": {
+            "language": "plaintext",
+            "showLineNumbers": false,
+            "showMiniMap": false
+          },
+          "content": "",
+          "mode": "html"
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \naverage_cpu_usage_percent \nFROM \nv_monitor.cpu_usage \nWHERE \n$__timeFilter(end_time)",
+            "refId": "A"
+          }
+        ],
+        "transparent": true,
+        "type": "text"
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgb(0, 121, 239)",
+                  "value": null
+                },
+                {
+                  "color": "rgb(198, 23, 157)",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 7,
+          "x": 4,
+          "y": 2
+        },
+        "id": 6,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \nNET_RX_KBYTES_PER_SECOND as \"rx\",  NET_TX_KBYTES_PER_SECOND as \"tx\"\nFROM \nv_monitor.SYSTEM_RESOURCE_USAGE \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A"
+          }
+        ],
+        "title": "Network KB/sec",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgb(0, 121, 239)",
+                  "value": null
+                },
+                {
+                  "color": "rgb(47, 214, 195)",
+                  "value": 300
+                },
+                {
+                  "color": "rgb(198, 23, 157)",
+                  "value": 500
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 7,
+          "x": 11,
+          "y": 2
+        },
+        "id": 11,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \nIO_READ_KBYTES_PER_SECOND as \"read\",  IO_written_KBYTES_PER_SECOND as \"write\"\nFROM \nv_monitor.SYSTEM_RESOURCE_USAGE \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A"
+          }
+        ],
+        "title": "IO Usage KB/s",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgb(41, 206, 255)",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 4,
+          "x": 18,
+          "y": 2
+        },
+        "id": 7,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \nAVERAGE_MEMORY_USAGE_PERCENT\nFROM \nv_monitor.SYSTEM_RESOURCE_USAGE \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A"
+          }
+        ],
+        "title": "Memory Usage %",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "rgb(0, 121, 239)",
+                  "value": null
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 45
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 4,
+          "x": 0,
+          "y": 3
+        },
+        "id": 8,
+        "options": {
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \naverage_cpu_usage_percent \nFROM \nv_monitor.cpu_usage \nWHERE \n$__timeFilter(end_time)",
+            "refId": "A"
+          }
+        ],
+        "title": "CPU Usage",
+        "type": "gauge"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 8,
+        "fillGradient": 10,
+        "gridPos": {
+          "h": 7,
+          "w": 11,
+          "x": 0,
+          "y": 9
+        },
+        "hiddenSeries": false,
+        "id": 4,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "9.4.3",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "$$hashKey": "object:1348",
+            "alias": "average_cpu_usage_percent",
+            "color": "rgb(0, 121, 239)"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "group": [],
+            "hide": false,
+            "metricColumn": "none",
+            "rawQuery": true,
+            "rawSql": "SELECT \n$__time(end_time), \naverage_cpu_usage_percent \nFROM \nv_monitor.cpu_usage \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A",
+            "schema": "select schema",
+            "select": [
+              [
+                {
+                  "name": "Column",
+                  "params": [
+                    "value"
+                  ],
+                  "type": "column"
+                }
+              ]
+            ],
+            "table": "select table",
+            "timeColumn": "time",
+            "timeColumnType": "timestamp",
+            "where": []
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "CPU Usage %",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:520",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:521",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 8,
+        "fillGradient": 10,
+        "gridPos": {
+          "h": 7,
+          "w": 11,
+          "x": 11,
+          "y": 9
+        },
+        "hiddenSeries": false,
+        "id": 5,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "9.4.3",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "$$hashKey": "object:3431",
+            "alias": "IO_written_KBYTES_PER_SECOND",
+            "color": "rgb(116, 37, 173)"
+          },
+          {
+            "$$hashKey": "object:3449",
+            "alias": "IO_READ_KBYTES_PER_SECOND",
+            "color": "rgb(198, 23, 157)"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \nIO_READ_KBYTES_PER_SECOND,  IO_written_KBYTES_PER_SECOND\nFROM \nv_monitor.SYSTEM_RESOURCE_USAGE \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "IO Usage (read/write)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:520",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:521",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 8,
+        "fillGradient": 10,
+        "gridPos": {
+          "h": 7,
+          "w": 11,
+          "x": 0,
+          "y": 16
+        },
+        "hiddenSeries": false,
+        "id": 9,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "9.4.3",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "$$hashKey": "object:3183",
+            "alias": "AVERAGE_MEMORY_USAGE_PERCENT",
+            "color": "rgb(41, 206, 255)"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "group": [],
+            "hide": false,
+            "metricColumn": "none",
+            "rawQuery": true,
+            "rawSql": "SELECT \n$__time(end_time), \nAVERAGE_MEMORY_USAGE_PERCENT\nFROM \nv_monitor.SYSTEM_RESOURCE_USAGE \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A",
+            "schema": "select schema",
+            "select": [
+              [
+                {
+                  "name": "Column",
+                  "params": [
+                    "value"
+                  ],
+                  "type": "column"
+                }
+              ]
+            ],
+            "table": "select table",
+            "timeColumn": "time",
+            "timeColumnType": "timestamp",
+            "where": []
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Memory Usage %",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:520",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:521",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 8,
+        "fillGradient": 10,
+        "gridPos": {
+          "h": 7,
+          "w": 11,
+          "x": 11,
+          "y": 16
+        },
+        "hiddenSeries": false,
+        "id": 10,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 2,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "9.4.3",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "$$hashKey": "object:3571",
+            "alias": "NET_RX_KBYTES_PER_SECOND",
+            "color": "rgb(116, 37, 173)"
+          },
+          {
+            "$$hashKey": "object:3611",
+            "alias": "NET_TX_KBYTES_PER_SECOND",
+            "color": "rgb(198, 23, 157)"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "time_series",
+            "rawSql": "SELECT \n$__time(end_time), \nNET_RX_KBYTES_PER_SECOND,  NET_TX_KBYTES_PER_SECOND\nFROM \nv_monitor.SYSTEM_RESOURCE_USAGE \nWHERE \n$__timeFilter(end_time)\norder by end_time",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Network (rx/tx)",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:520",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:521",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
+        }
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "user_name"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 102
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "time"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 164
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "error_level"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 99
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "error_code"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 11,
+          "x": 0,
+          "y": 23
+        },
+        "id": 13,
+        "options": {
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "table",
+            "rawSql": "select event_timestamp as time,  user_name, error_level, error_code, message from v_monitor.error_messages order by 1 desc limit 10",
+            "refId": "A"
+          }
+        ],
+        "title": "Error Messages",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "vertica-grafana-datasource",
+          "uid": "P9981B0B7DF9F5BE0"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "user_name"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 102
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "time"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 164
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "error_level"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 99
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "error_code"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 92
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 11,
+          "x": 11,
+          "y": 23
+        },
+        "id": 14,
+        "options": {
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "9.4.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "vertica-grafana-datasource",
+              "uid": "P9981B0B7DF9F5BE0"
+            },
+            "format": "table",
+            "rawSql": "select transaction_start as time,  user_name, current_statement from v_monitor.sessions order by 1 desc limit 10",
+            "refId": "A"
+          }
+        ],
+        "title": "SQL Statements",
+        "type": "table"
+      }
+    ],
+    "refresh": "10s",
+    "revision": 1,
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": true,
+            "text": "Vertica",
+            "value": "Vertica"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "Data Source",
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "vertica-grafana-datasource",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-5m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "",
+    "title": "Vertica Performance Dashboard",
+    "uid": "NtvHPFiMz",
+    "version": 2,
+    "weekStart": ""
+  }

@@ -16,7 +16,7 @@ import * as WidgetModuleType from '@jupyterlab/terminal/lib/widget';
 import { ITerminalTracker, 
          ITerminal 
 } from '@jupyterlab/terminal';
-import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon } from './icons';
+import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon, grafanaIcon } from './icons';
 /**
  * The command IDs used by the terminal plugin.
  */
@@ -37,7 +37,11 @@ namespace CommandIDs {
 
   export const openHelp = 'vertica:open-help';
 
-  export const openCourseDSE = 'vertica:open-dse'
+  export const openCourseDSE = 'vertica:open-dse';
+
+  export const openGrafanaExplorer = 'grafana:open-exp';
+
+  export const openVerticaPerformanceDashboard = 'grafana:open-perf'
 }
 
 function activate(
@@ -102,6 +106,22 @@ function activate(
       command: CommandIDs.openHelp,
       category: 'Vertica',
       rank: 3
+    });
+  }
+
+  if (launcher) {
+    launcher.add({
+      command: CommandIDs.openGrafanaExplorer,
+      category: 'Vertica',
+      rank: 4
+    });
+  }
+
+  if (launcher) {
+    launcher.add({
+      command: CommandIDs.openVerticaPerformanceDashboard,
+      category: 'Vertica',
+      rank: 5
     });
   }
 
@@ -238,6 +258,22 @@ export function addCommands(
     icon: course1Icon,
     execute: (args: any) => {
       window.open('http://127.0.0.1:8889/voila/render/enablement/Data%20Science%20Essentials/Data_Science_Essentials.ipynb?', '_blank');
+    }
+  });
+
+  commands.addCommand(CommandIDs.openGrafanaExplorer, {
+    label: 'Grafana Explorer',
+    icon: grafanaIcon,
+    execute: (args: any) => {
+      window.open('http://127.0.0.1:3000/explore', '_blank');
+    }
+  });
+
+  commands.addCommand(CommandIDs.openVerticaPerformanceDashboard, {
+    label: 'Vertica Performance Dashboard',
+    icon: grafanaIcon,
+    execute: (args: any) => {
+      window.open('http://127.0.0.1:3000/d/NtvHPFiMz/vertica-performance-dashboard', '_blank');
     }
   });
 

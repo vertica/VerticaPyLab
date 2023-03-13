@@ -8,6 +8,6 @@ version=$(curl --silent "https://api.github.com/repos/vertica/spark-connector/re
 
 echo "Installing..."
 echo
-mvn -U dependency:copy --quiet -Dartifact=com.vertica.spark:vertica-spark:$version -DoutputDirectory=/project/notebooks/spark 2> /dev/null && echo -e "\e[32mBUILD SUCCESS" || echo -e "\e[31mBUILD FAILURE"
+mvn -U dependency:copy --quiet -Dartifact=com.vertica.spark:vertica-spark:$version -DoutputDirectory=/project/demos/spark 2> /dev/null && echo -e "\e[32mBUILD SUCCESS" || echo -e "\e[31mBUILD FAILURE"
 
 exit 0

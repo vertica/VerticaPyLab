@@ -114,7 +114,7 @@ A Docker environment can be installed and ran to facilitate the included Jupyter
 2. From there you can run `make spark-install` to install and start the Spark environment.
 
 This will create a Docker group with three containers for Spark, a Spark-Worker, and HDFS.
-Inside of VerticaLab you can find the Spark examples within `notebooks/spark/`.  
+Inside of VerticaLab you can find the Spark examples within `demos/spark/`.  
 
 The examples contain:
 

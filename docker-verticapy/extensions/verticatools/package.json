@@ -1,6 +1,6 @@
 {
   "name": "verticatools",
-  "version": "1.22.19",
+  "version": "0.1.0",
   "description": "An extension to open an admintools/vsql session",
   "keywords": [
     "jupyter",

@@ -166,8 +166,8 @@ spark-stop:
 	cd docker-spark/docker && docker-compose stop
 
 .PHONY: spark-uninstall
-spark-uninstall:
-	cd docker-spark/docker && docker-compose down && \
+spark-uninstall: spark-stop
+	cd docker-spark/docker && docker-compose rm -f && \
 	docker image rm docker-spark && \
 	docker image rm docker-spark-worker && \
 	docker image rm mdouchement/hdfs  

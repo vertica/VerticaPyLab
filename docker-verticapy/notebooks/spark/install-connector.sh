@@ -6,5 +6,8 @@
 
 version=$(curl --silent "https://api.github.com/repos/vertica/spark-connector/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")'| sed 's/v//g')
 
-mvn -U dependency:copy -Dartifact=com.vertica.spark:vertica-spark:$version -DoutputDirectory=/project/notebooks/spark 2> /dev/null
+echo "Installing..."
+echo
+mvn -U dependency:copy --quiet -Dartifact=com.vertica.spark:vertica-spark:$version -DoutputDirectory=/project/notebooks/spark 2> /dev/null && echo -e "\e[32mBUILD SUCCESS" || echo -e "\e[31mBUILD FAILURE"
 
+exit 0

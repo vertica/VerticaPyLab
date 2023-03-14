@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION="3.8-slim-buster"
+ARG PYTHON_VERSION="3.9-slim-buster"
 FROM python:${PYTHON_VERSION}
 
 ENV VIRTUAL_ENV=/opt/venv
@@ -38,7 +38,6 @@ RUN pip install --upgrade pip \
     && apt-get -y install nodejs \
     && pip install /project/theme \
     && pip install /project/verticatools \
-    && pip install /project/sql-editor \
     && pip install PySpark \
     && pip install PrettyTable \
     && rm -r /project/verticatools \
@@ -54,7 +53,7 @@ RUN pip install --upgrade pip \
     # && jupyter labextension install jupyterlab-chart-editor
 
 # Install Spark
-RUN wget https://dlcdn.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz \
+RUN wget https://dlcdn.apache.org/spark/spark-3.3.2/spark-3.3.2-bin-hadoop3.tgz \
     && tar xvf spark-3* \
     && rm spark-3*.tgz \
     && mv spark-3* /opt/ \

@@ -20,7 +20,7 @@ jobs:
     - name: Make sure errors happen when building "latest"
       run: bash -ec "! make verticalab-build"
     - name: Create a VerticaLab container
-      run: sed -i s/VERSION=latest/VERSION=v0.0/ etc/vertica-demo.conf && make verticalab-build
+      run: sed -i s/#VERTICALAB_IMG_VERSION=latest/VERTICALAB_IMG_VERSION=v0.0/ etc/vertica-demo.conf && make verticalab-build
     - name: Run the Vertica Demo container
       run: make verticalab-start
     - name: Vertica up and functional

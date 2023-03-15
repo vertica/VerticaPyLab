@@ -1,6 +1,5 @@
-#!/bin/bash
-
-# This is sourced by vertica-demo bash scripts and can override environment settings
+# This is sourced by vertica-demo bash scripts to set up a consitant
+# environment for starting containers
 
 #
 # Verticalab (ML development environment)
@@ -10,13 +9,13 @@ VERTICALAB_IMG=verticapy-jupyterlab
 VERTICALAB_IMG_VERSION=latest
 VERTICALAB_PORT=8889 # Optionally set VERTICALAB_PORT=RANDOM
 VERTICALAB_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
-PYTHON_VERSION=3.8-slim-buster
+PYTHON_VERSION=3.9-slim-buster
 
 #
 # Vertica demo server
 #
 VERTICA_PORT=5433
-VERTICA_SSH_PORT=$((VERTICA_PORT-1)) # defaults to VERTICA_PORT-1. $ ssh localhost -l 5432
+VERTICA_SSH_PORT=5432 # ssh localhost -l 5432
 VERTICA_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
 VERTICA_CONTAINER_NAME=vertica-demo
 VERTICA_HOST_NAME=$VERTICA_CONTAINER_NAME

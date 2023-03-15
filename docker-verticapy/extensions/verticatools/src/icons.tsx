@@ -5,7 +5,8 @@ import admintoolsIconSvg from '../style/icons/admintools.svg';
 import vsqlIconSvg from '../style/icons/vsql.svg';
 import verticalabIconSvg from '../style/icons/verticalab.svg';
 import course1IconSvg from '../style/icons/course1.svg';
-import grafanaIconSvg from '../style/icons/grafana-icon.svg'
+import grafanaIconSvg from '../style/icons/grafana-icon.svg';
+import rocketIconSvg from '../style/icons/rocket.svg'
 
 export const verticalabIcon = new LabIcon({
     name: 'vertica:verticalab',
@@ -35,5 +36,10 @@ export const course1Icon = new LabIcon({
 export const grafanaIcon = new LabIcon({
     name: 'grafana:grafanaicon',
     svgstr: grafanaIconSvg
+});
+
+export const rocketIcon = new LabIcon({
+    name: 'grafana:rocketicon',
+    svgstr: rocketIconSvg
 });
 

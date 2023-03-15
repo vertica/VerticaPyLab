@@ -16,7 +16,7 @@ import * as WidgetModuleType from '@jupyterlab/terminal/lib/widget';
 import { ITerminalTracker, 
          ITerminal 
 } from '@jupyterlab/terminal';
-import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon, grafanaIcon } from './icons';
+import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon, grafanaIcon, rocketIcon } from './icons';
 /**
  * The command IDs used by the terminal plugin.
  */
@@ -103,14 +103,6 @@ function activate(
 
   if (launcher) {
     launcher.add({
-      command: CommandIDs.openHelp,
-      category: 'Vertica',
-      rank: 3
-    });
-  }
-
-  if (launcher) {
-    launcher.add({
       command: CommandIDs.openGrafanaExplorer,
       category: 'Vertica',
       rank: 4
@@ -130,6 +122,14 @@ function activate(
       command: CommandIDs.openCourseDSE,
       category: 'VerticaPy Lessons',
       rank: 0
+    });
+  }
+
+  if (launcher) {
+    launcher.add({
+      command: CommandIDs.openHelp,
+      category: 'VerticaPy Lessons',
+      rank: 1
     });
   }
 
@@ -262,7 +262,8 @@ export function addCommands(
   });
 
   commands.addCommand(CommandIDs.openGrafanaExplorer, {
-    label: 'Grafana Explorer',
+    label: 'Grafana',
+    caption: 'Open Grafana',
     icon: grafanaIcon,
     execute: (args: any) => {
       window.open('http://127.0.0.1:3000/explore', '_blank');
@@ -270,8 +271,9 @@ export function addCommands(
   });
 
   commands.addCommand(CommandIDs.openVerticaPerformanceDashboard, {
-    label: 'Vertica Performance Dashboard',
-    icon: grafanaIcon,
+    label: 'Performance',
+    caption: 'Open Performance Dashboard',
+    icon: rocketIcon,
     execute: (args: any) => {
       window.open('http://127.0.0.1:3000/d/NtvHPFiMz/vertica-performance-dashboard', '_blank');
     }

@@ -237,7 +237,7 @@ export function addCommands(
     label: 'Data Science Essentials',
     icon: course1Icon,
     execute: (args: any) => {
-      window.open('http://127.0.0.1:8889/voila/render/enablement/Data%20Science%20Essentials/Data_Science_Essentials.ipynb?', '_blank');
+      window.open('/voila/render/demos/enablement/Data%20Science%20Essentials/Data_Science_Essentials.ipynb?', '_blank');
     }
   });
 

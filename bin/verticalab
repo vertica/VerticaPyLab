@@ -53,7 +53,7 @@ while getopts "p:c:i:h" opt; do
 done
 
 VERTICALAB_RUNARGS+=( -v $WORKSPACE:/project )
-VERTICALAB_RUNARGS+=( -v $WORKSPACE_ENAVLEMENT:/project/enablement:ro )
+VERTICALAB_RUNARGS+=( -v $WORKSPACE_ENABLEMENT:/project/demos/enablement:ro )
 
 if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then
   # Try to support docker-machine networking

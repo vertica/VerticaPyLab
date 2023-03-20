@@ -6,7 +6,8 @@
 VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
 CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
-WORKSPACE=$VERTICA_DEMO_PREFIX/workspace
+WORKSPACE=$VERTICA_DEMO_PREFIX/project
+WORKSPACE_ENABLEMENT=$VERTICA_DEMO_PREFIX/docker-verticapy/enablement
 if ! [[ -r $CONFIG_FILE ]]; then
   if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
@@ -51,10 +52,8 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
-mkdir -p $WORKSPACE
-VERTICALAB_RUNARGS+=( -v $VERTICA_DEMO_PREFIX/docker-verticapy/enablement:/project/enablement:ro )
-
-VERTICALAB_RUNARGS+=( -v $WORKSPACE:/project/workspace )
+VERTICALAB_RUNARGS+=( -v $WORKSPACE:/project )
+VERTICALAB_RUNARGS+=( -v $WORKSPACE_ENABLEMENT:/project/demos/enablement:ro )
 
 if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then
   # Try to support docker-machine networking
@@ -124,7 +123,12 @@ while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and p
 done
 
 # Get the basic URL and remap the hostname and port
-URL=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT/")
+if  [[ $VERTICALAB_BIND_ADDRESS == 0.0.0.0 ]]; then
+  url_host=$(hostname)
+else
+  url_host="$VERTICALAB_BIND_ADDRESS"
+fi
+URL=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$url_host:$VERTICALAB_PORT/")
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open
 if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat

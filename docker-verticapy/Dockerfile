@@ -8,35 +8,45 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR /project
 
 COPY  requirements.txt requirements.txt
-COPY ./data /project/data
-COPY ./notebooks /project/notebooks
 COPY ./bin /usr/bin/
 COPY ./extensions/ /project/
 
 RUN apt-get update \
     && apt-get install -y \
-    software-properties-common \
-    gpg \
-    libgdal-dev \
-    g++ \
-    ssh \
-    graphviz \
-    openjdk-11-jdk \
-    scala \
-    maven \
-    wget
+      software-properties-common \
+      gpg \
+      libgdal-dev \
+      g++ \
+      ssh \
+      graphviz \
+      openjdk-11-jdk \
+      scala \
+      maven \
+      wget \
+      curl \
+      dirmngr \
+      apt-transport-https \
+      lsb-release ca-certificates
 
 RUN apt-get upgrade -y
 RUN apt-get clean
    
+# Install Spark
+RUN wget https://dlcdn.apache.org/spark/spark-3.3.2/spark-3.3.2-bin-hadoop3.tgz \
+    && tar xvf spark-3* \
+    && rm spark-3*.tgz \
+    && mv spark-3* /opt/ \
+    && mv /opt/spark-3* /opt/spark
+
+ENV SPARK_HOME=/opt/spark
 # Install python dependencies
-RUN pip install --upgrade pip \
-    pip install -r requirements.txt \
+RUN    pip install --upgrade pip \
+    && pip install -r requirements.txt \
     && rm requirements.txt \
-    && apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates \
     && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt-get -y install nodejs \
-    && pip install /project/theme \
+    && apt-get -y install nodejs
+
+RUN    pip install /project/theme \
     && pip install /project/verticatools \
     && pip install PySpark \
     && pip install PrettyTable \
@@ -52,14 +62,6 @@ RUN pip install --upgrade pip \
     # investigating.
     # && jupyter labextension install jupyterlab-chart-editor
 
-# Install Spark
-RUN wget https://dlcdn.apache.org/spark/spark-3.3.2/spark-3.3.2-bin-hadoop3.tgz \
-    && tar xvf spark-3* \
-    && rm spark-3*.tgz \
-    && mv spark-3* /opt/ \
-    && mv /opt/spark-3* /opt/spark
-
-ENV SPARK_HOME=/opt/spark
 
 EXPOSE 8888
 

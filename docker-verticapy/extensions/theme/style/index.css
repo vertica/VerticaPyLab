@@ -15,7 +15,7 @@ div[data-category="Notebook"] .jp-LauncherCard-label p {
 } 
 
 div[data-category="Notebook"] .jp-LauncherCard-label:before {
-  content: "Jupyter Notebook";
+  content: "New Notebook";
 }
 
 div[data-category="Notebook"] .jp-LauncherCard-label {

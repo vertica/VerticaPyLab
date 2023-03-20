@@ -132,4 +132,5 @@ dmypy.json
 .pyre/
 
 # Shared directory with verticalab container
-workspace
+/project/.virtual_documents/
+/project/demos/spark/vertica-spark-3.3.5.jar

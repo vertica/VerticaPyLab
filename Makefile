@@ -54,8 +54,8 @@ all: ## quickstart: install and run all containers
 
 # create new conf file or update timestamp if exists
 etc/vertica-demo.conf: etc/vertica-demo.conf.default
-	# If vertica-demo.conf.default changes in a breaking
-	# way, update this version number
+	@# If vertica-demo.conf.default changes in a breaking
+	@# way, update this version number
 	@ conf_version="vertica-demo configuration file V1"; \
 	if [[ -r $@ ]]; then \
 	  if ! grep "$$conf_version" "$@" >/dev/null 2>&1; then \
@@ -141,7 +141,7 @@ verticalab-push: etc/vertica-demo.conf
 	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:$$VERTICALAB_IMG_VERSION" $(PWD)/docker-verticapy/ --push
 
 verticalab-push-latest: etc/vertica-demo.conf
-	# This should use the cache from the last buildx and just push the new tag.
+	@# This should use the cache from the last buildx and just push the new tag.
 	source etc/vertica-demo.conf; \
 	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICALAB_IMG:latest" $(PWD)/docker-verticapy/ --push
 

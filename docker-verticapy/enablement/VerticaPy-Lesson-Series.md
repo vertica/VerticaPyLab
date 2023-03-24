@@ -19,7 +19,7 @@ A set of example pages (theory, application, exercise) is provided in the **/Dat
 - Ipython
 - voila (0.3.6 preferred).
 
-**Note** : The current version of vertica-demo has all the these prerequisites, so you do not need to create your own environment.
+**Note** : The current version of VerticaPyLab has all the these prerequisites, so you do not need to create your own environment.
 
 Basic usage
 

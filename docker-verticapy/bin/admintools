@@ -1,4 +1,6 @@
 #!/bin/bash
 
 unset LANG
-ssh vertica-demo "${BASH_SOURCE[0]##*/}" "${@@Q}"
+: ${VERTICA_HOST_NAME:=VerticaDB}
+
+ssh $VERTICA_HOST_NAME "${BASH_SOURCE[0]##*/}" "${@@Q}"

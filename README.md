@@ -1,9 +1,9 @@
-# Vertica Demo
+# VerticaPyLab
 
-This Docker image lets you create and run a single-node Vertica database 
+This git repo includes scripts that let you create and run a single-node Vertica database 
 on a local machine. It uses the Community Edition (CE) license (limited to  of 1TB of data).
 
-The Docker image also includes VerticaLab, a custom JupyterLab environment. 
+The Docker image VerticaLab is a custom JupyterLab environment. 
 VerticaLab provides extensions for autocompletion, graphics, options to run
 vsql or admintools, etc. and uses the lastest VerticaPy version.
 
@@ -14,7 +14,7 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
 ## Quickstart
 
 1. Clone this repository.
-2. Open a terminal in the `vertica-demo` directory.
+2. Open a terminal in the `VerticaPyLab` directory.
 3. Build and start vertica and verticalab
     ```
     make all
@@ -83,8 +83,8 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
 
 ### Quickstart - VerticaLab
 
-1. Move the notebooks you want to import into the `vertica-demo/docker-verticapy/notebooks` directory.
-2. Move the data you want to import into the `vertica-demo/docker-verticapy/data` directory.
+1. Move the notebooks you want to import into the `VerticaPyLab/docker-verticapy/notebooks` directory.
+2. Move the data you want to import into the `VerticaPyLab/docker-verticapy/data` directory.
 3. (Optional) To use a different image name, set the `VERTICALAB_IMG` environment variable:
     ```
     export VERTICALAB_IMG=<your-custom-name>
@@ -110,7 +110,7 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
 
 A Docker environment can be installed and ran to facilitate the included Jupyter examples that use the Spark-Connector alongside Vertica.
 
-1. Follow the steps above to set up Vertica Demo and VerticaLab. Running `make all` will start both.
+1. Follow the steps above to set up VerticaPyLab and VerticaLab. Running `make all` will start both.
 2. From there you can run `make spark-install` to install and start the Spark environment.
 
 This will create a Docker group with three containers for Spark, a Spark-Worker, and HDFS.
@@ -129,7 +129,7 @@ Each example is annotated and walks you through step-by-step through various Spa
 
 ### Shared Volumes
 
-verticalab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (vertica-demo/workspace). If you do not do it, verticalab will do it for you during the first installation. Put all the files you would like to use in verticalab inside workspace before you start verticalab. That directory will be mounted into verticalab so when it starts, you will see a workspace directory there too.
+verticalab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (VerticaPyLab/workspace). If you do not do it, verticalab will do it for you during the first installation. Put all the files you would like to use in verticalab inside workspace before you start verticalab. That directory will be mounted into verticalab so when it starts, you will see a workspace directory there too.
 If when working on verticalab there are some files you would like to keep after the container deletion, just put them inside workspace(on verticalab) and you will find them in your local workspace directory.
 
 ### Additional Configuration

@@ -14,13 +14,13 @@ jobs:
     - name: Checkout the project
       uses: actions/checkout@v3
     - name: Sign the EULA
-      run: make etc/vertica-demo.conf; echo "VERTICA_EULA=1" >> etc/vertica-demo.conf
+      run: make etc/VerticaPyLab.conf; echo "VERTICA_EULA=1" >> etc/VerticaPyLab.conf
     - name: Create a Vertica Demo container
       run: make vertica-install
     - name: Make sure errors happen when building "latest"
       run: bash -ec "! make verticalab-build"
     - name: Create a VerticaLab container
-      run: sed -i s/#VERTICALAB_IMG_VERSION=latest/VERTICALAB_IMG_VERSION=v0.0/ etc/vertica-demo.conf && make verticalab-build
+      run: sed -i s/#VERTICALAB_IMG_VERSION=latest/VERTICALAB_IMG_VERSION=v0.0/ etc/VerticaPyLab.conf && make verticalab-build
     - name: Run the Vertica Demo container
       run: make verticalab-start
     - name: Vertica up and functional

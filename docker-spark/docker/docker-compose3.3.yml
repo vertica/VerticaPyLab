@@ -26,8 +26,7 @@ services:
       - "7077:7077"
       - "4040:4040"
     volumes:
-      - ./../..:/vertica-demo
-      - ./../../docker-verticapy/data/:/project/data/
+      - ./../../project/:/project/
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -42,8 +41,7 @@ services:
       args:
         SPARK: ${SPARK_INSTALL:-latest}
     volumes:
-      - ./../..:/vertica-demo
-      - ./../../docker-verticapy/data/:/project/data/
+      - ./../../project/:/project/
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark:7077

@@ -1,10 +1,10 @@
-# Vertica-demo on Windows
+# VerticaPyLab on Windows
 
-To set up vertica-demo, install Windows Subsystem for Linux (WSL) and Docker Desktop.
+To set up VerticaPyLab, install Windows Subsystem for Linux (WSL) and Docker Desktop.
 
 ## Windows Subsystem for Linux (WSL)
 
-The Windows Subsystem for Linux lets developers run a GNU/Linux environment on Windows. This guide and vertica-demo use WSL 2, which allows you to use Linux on top of Windows natively using a lightweight virtual machine.
+The Windows Subsystem for Linux lets developers run a GNU/Linux environment on Windows. This guide and VerticaPyLab use WSL 2, which allows you to use Linux on top of Windows natively using a lightweight virtual machine.
 
 ### Prerequisites
 
@@ -39,19 +39,19 @@ Install WSL 2.
 3. Click the gear icon on the top right and navigate to the <b>General</b> tab.
 4. Verify that the <b>Use WSL 2 based engine</b> option is checked. If not, check it and click <b>Apply & Restart.</b>
 
-## Import vertica-demo
+## Import VerticaPyLab
 
 1. Start Ubuntu from the Start menu.
 2. Install <b>make</b>:
     ```
     sudo apt install make
     ```
-3. Clone the vertica-demo repository:
+3. Clone the VerticaPyLab repository:
     ```
-    git clone https://github.com/vertica/vertica-demo.git
+    git clone https://github.com/vertica/VerticaPyLab.git
     ```
 4. Navigate to the cloned directory:
     ```
-    cd vertica-demo
+    cd VerticaPyLab
     ```
-5. Run vertica-demo. For instructions, see the [README](../README.md).
+5. Run VerticaPyLab. For instructions, see the [README](../README.md).

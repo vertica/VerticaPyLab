@@ -1,7 +1,7 @@
 #!/bin/bash
 
 unset LANG
-: ${VERTICA_HOST_NAME:=vertica-demo}
+: ${VERTICA_HOST_NAME:=VerticaDB}
 : ${DB:=demo}
 
 echo "Checking ssh connection..."

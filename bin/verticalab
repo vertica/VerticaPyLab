@@ -3,13 +3,13 @@
 # this script sets up a docker container with an ML development environment
 
 # Find the config file
-VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
-CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
-WORKSPACE=$VERTICA_DEMO_PREFIX/project
-WORKSPACE_ENABLEMENT=$VERTICA_DEMO_PREFIX/docker-verticapy/enablement
+VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICAPYLAB_PREFIX=${VERTICAPYLAB_PREFIX%/bin}
+CONFIG_FILE=$VERTICAPYLAB_PREFIX/etc/VerticaPyLab.conf
+WORKSPACE=$VERTICAPYLAB_PREFIX/project
+WORKSPACE_ENABLEMENT=$VERTICAPYLAB_PREFIX/docker-verticapy/enablement
 if ! [[ -r $CONFIG_FILE ]]; then
-  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICAPYLAB_PREFIX etc/VerticaPyLab.conf || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
     exit 1
   fi
@@ -21,9 +21,10 @@ function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
     echo
     echo "Options:"
-    echo "  -i <image> The name of the image to use for the demo"
-    echo "  -c <container> The name you want the container to have to use (Default: verticapy-demo)"
-    echo "  -p <port>  Port to use to run jupyterlab (Default: 8889)"
+    echo "  -i <image> The name of the image to use for the demo (Default: $VERTICALAB_IMG)"
+    echo "  -v <image version> The version of the image to use for the demo (Default: $VERTICALAB_IMG_VERSION)"
+    echo "  -c <container> The name you want the container to have to use (Default: $VERTICALAB_CONTAINER_NAME)"
+    echo "  -p <port>  Port to use to run jupyterlab (Default: $VERTICALAB_PORT)"
     echo
     exit 1
 }
@@ -45,8 +46,7 @@ while getopts "p:c:i:h" opt; do
         c)
             VERTICALAB_CONTAINER_NAME=$OPTARG
             ;;
-        \?)
-            echo "Unknown option: -${opt}"
+        *)
             usage
             ;;
     esac
@@ -80,24 +80,24 @@ docker run --detach "${VERTICALAB_RUNARGS[@]}" "vertica/$VERTICALAB_IMG:$VERTICA
 VERTICALAB_PORT=$(docker port "$VERTICALAB_CONTAINER_NAME" 8888/tcp)
 VERTICALAB_PORT=${VERTICALAB_PORT##*:}
 
-# if vertica-demo is running
+# if VerticaPyLab is running
 if docker exec -i "$VERTICA_CONTAINER_NAME" true 2>/dev/null; then
-  # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
+  # copy dbadmin@$VERTICA_HOST_NAME credentials to root@verticapy-demo to enable ssh
   docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
 fi
 
-# if we can get the ip address of the vertica-demo, then add a hosts entry
+# if we can get the ip address of the $VERTICA_HOST_NAME then add a hosts entry
 if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (ne .Name "'"$VERTICALAB_CONTAINER_NAME"'")}}{{index (split .IPv4Address "/") 0}}        {{.Name}}{{println}}{{end}}{{end}}' "$DOCKER_NETWORK"); then 
-  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v vertica-demo /etc/hosts)
-  if [[ $VERTICA_CONTAINER_NAME != vertica-demo ]] ; then
-    # so vertica-demo works no matter what you call your demo container
-    HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME vertica-demo/")
-    SSH_CONFIG_EXTRA_HOSTNAME="vertica-demo"
+  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v $VERTICA_HOST_NAME /etc/hosts)
+  if [[ $VERTICA_HOST_NAME != VerticaDB ]] ; then
+    # so "ssh VerticaDB" works no matter what you call your demo container
+    HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME VerticaDB/")
+    SSH_CONFIG_EXTRA_HOSTNAME="VerticaPyLab"
   fi
   # add docker containers and host ip address to /etc/hosts
   printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICALAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
 else
-  echo "Warning: Cannot determine ip address of vertica-demo container" >&2
+  echo "Warning: Cannot determine ip address of VerticaPyLab container" >&2
 fi
 
 # write a .ssh/config
@@ -111,7 +111,7 @@ Host *
     LogLevel=error
     RequestTTY=yes
 
-Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
+Host $VERTICA_HOST_NAME
     User dbadmin
 " | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 

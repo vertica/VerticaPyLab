@@ -3,11 +3,11 @@
 # this script sets up a docker container running vertica
 
 # Find the config file
-VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
-CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICAPYLAB_PREFIX=${VERTICAPYLAB_PREFIX%/bin}
+CONFIG_FILE=$VERTICAPYLAB_PREFIX/etc/VerticaPyLab.conf
 if ! [[ -r $CONFIG_FILE ]]; then
-  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICAPYLAB_PREFIX etc/VerticaPyLab.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
     exit 1
   fi
@@ -76,19 +76,19 @@ docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo apt-get
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo sed -i "s/^#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config; sudo kill -1 $(/bin/pgrep -x sshd) 2>/dev/null'
 
 # regenerate the ssh key for security
-echo y | docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME ssh-keygen -t rsa -f /home/dbadmin/.ssh/id_rsa -N '' -C vertica-demo -q >/dev/null
+echo y | docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME ssh-keygen -t rsa -f /home/dbadmin/.ssh/id_rsa -N '' -C $VERTICA_DB_NAME-q >/dev/null
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "cat /home/dbadmin/.ssh/id_rsa.pub > /home/dbadmin/.ssh/authorized_keys; rm /home/dbadmin/.ssh/authorized_keys2"
 
-# if verticalab is running, make sure it can connect to vertica-demo
+# if verticalab is running, make sure it can connect to vertica
 if docker exec -i "$VERTICALAB_CONTAINER_NAME" true 2>/dev/null; then
-  # copy dbadmin@vertica-demo credentials to root@verticapy-demo to enable ssh
+  # copy dbadmin@$VERTICA_HOST_NAME credentials to root@verticalab to enable ssh
   docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
-  # add the ip address of vertica-demo to /etc/hosts
-  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v vertica-demo /etc/hosts)
+  # add the ip address of $VERTICA_HOST_NAME to /etc/hosts
+  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v $VERTICA_HOST_NAME /etc/hosts)
   if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (eq .Name "'"$VERTICA_CONTAINER_NAME"'")}}{{index (split .IPv4Address "/") 0}}        {{.Name}}{{println}}{{end}}{{end}}' "$DOCKER_NETWORK"); then 
-    if [[ $VERTICA_CONTAINER_NAME != vertica-demo ]] ; then
-      # so vertica-demo works no matter what you call your demo container
-      HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME vertica-demo/")
+    if [[ $VERTICA_HOST_NAME != VerticaDB ]] ; then
+      # so "ssh VerticaDB" works no matter what you call your demo container
+      HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME VerticaDB/")
     fi
     printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICALAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
   fi
@@ -142,10 +142,10 @@ fi
 
 # is the account registered with Vertica?
 if [[ -z ${VERTICA_CE_SERIAL_NUMBER} ]]; then
-  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo cp $VERTICA_DEMO_PREFIX/etc/vertica-demo.dat /opt/vertica/config/ || abort $? "Cannot save demo license"
-  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key -i -l /opt/vertica/config/vertica-demo.dat || abort $? "Cannot install demo license"
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo cp $VERTICAPYLAB_PREFIX/etc/demo.dat /opt/vertica/config/ || abort $? "Cannot save demo license"
+  docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" sudo -u dbadmin /opt/vertica/bin/admintools -t upgrade_license_key -i -l /opt/vertica/config/demo.dat || abort $? "Cannot install demo license"
   echo "100 GB license installed."
-  echo "To increase the license to 1TB, register on vertica.com for a community edition license then run $VERTICA_DEMO_PREFIX/bin/vertica-register"
+  echo "To increase the license to 1TB, register on vertica.com for a community edition license then run $VERTICAPYLAB_PREFIX/bin/vertica-register"
 fi
 
 # create the database

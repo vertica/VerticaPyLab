@@ -1,4 +1,4 @@
-# This is sourced by vertica-demo bash scripts to set up a consitant
+# This is sourced by VerticaPyLab bash scripts to set up a consitant
 # environment for starting containers
 
 #
@@ -17,8 +17,9 @@ PYTHON_VERSION=3.9-slim-buster
 VERTICA_PORT=5433
 VERTICA_SSH_PORT=5432 # ssh localhost -l 5432
 VERTICA_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
-VERTICA_CONTAINER_NAME=vertica-demo
+VERTICA_CONTAINER_NAME=VerticaDB
 VERTICA_HOST_NAME=$VERTICA_CONTAINER_NAME
+VERTICA_DB_NAME=$VERTICA_CONTAINER_NAME
 DB_NAME=demo
 VERTICA_DOCKER_IMAGE=vertica/vertica-k8s:latest # see https://hub.docker.com/r/vertica/vertica-k8s
 VSQL_USER=dbadmin

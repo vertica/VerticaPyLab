@@ -9,12 +9,12 @@ This document will guide you through the contribution process. There are a numbe
 
 # Bug Reports
 
-If you find a bug, submit an [issue](https://github.com/vertica/vertica-demo/issues) with a complete and reproducible bug report. If the issue can't be reproduced, it will be closed. If you opened an issue, but figured out the answer later on your own, comment on the issue to let people know, then close the issue.
+If you find a bug, submit an [issue](https://github.com/vertica/VerticaPyLab/issues) with a complete and reproducible bug report. If the issue can't be reproduced, it will be closed. If you opened an issue, but figured out the answer later on your own, comment on the issue to let people know, then close the issue.
 
 # Feature Requests
 
 Feel free to share your ideas for how to improve *VerticaLab*. We’re always open to suggestions.
-You can open an [issue](https://github.com/vertica/vertica-demo/issues)
+You can open an [issue](https://github.com/vertica/VerticaPyLab/issues)
 with details describing what feature(s) you'd like to be added or changed. For example: a new extension that could improve *VerticaLab* experience, a better way to organise extensions, etc...
 
 If you would like to implement the feature yourself, open an issue to ask before working on it. Once approved, please refer to the [Code Contributions](#code-contributions) section.
@@ -23,18 +23,18 @@ If you would like to implement the feature yourself, open an issue to ask before
 
 ## Step 1: Fork
 
-Fork the project [on Github](https://github.com/vertica/vertica-demo) and check out your copy locally.
+Fork the project [on Github](https://github.com/vertica/VerticaPyLab) and check out your copy locally.
 
 ```shell
-git clone git@github.com:YOURUSERNAME/vertica-demo.git
-cd vertica-demo
+git clone git@github.com:YOURUSERNAME/VerticaPyLab.git
+cd VerticaPyLab
 ```
 
-Your GitHub repository **YOURUSERNAME/vertica-demo** will be called "origin" in
-Git. You should also setup **vertica/vertica-demo** as an "upstream" remote.
+Your GitHub repository **YOURUSERNAME/VerticaPyLab** will be called "origin" in
+Git. You should also setup **vertica/VerticaPyLab** as an "upstream" remote.
 
 ```shell
-git remote add upstream git@github.com:vertica/vertica-demo.git
+git remote add upstream git@github.com:vertica/VerticaPyLab.git
 git fetch upstream
 ```
 ### Configure Git for the first time
@@ -169,7 +169,7 @@ git push origin my-fix-branch
 
 When you go to your GitHub page, you will notice commits made on your local branch is pushed to the remote repository.
 
-When upstream (vertica/vertica-demo) has changed, you should rebase your work. The **rebase** command creates a linear history by moving your local commits onto the tip of the upstream commits.
+When upstream (vertica/VerticaPyLab) has changed, you should rebase your work. The **rebase** command creates a linear history by moving your local commits onto the tip of the upstream commits.
 
 You can rebase your branch locally and force-push to your GitHub repository by doing:
 
@@ -182,14 +182,14 @@ git push -f origin my-fix-branch
 
 ## Step 8: Make a Pull Request
 
-When you think your work is ready to be pulled into *vertica-demo*, you should create a pull request(PR) at GitHub.
+When you think your work is ready to be pulled into *VerticaPyLab*, you should create a pull request(PR) at GitHub.
 
 A good pull request means:
  - commits with one logical change in each
  - well-formed messages for each commit
  - documentation and tests, if needed
 
-Go to https://github.com/YOURUSERNAME/vertica-demo and [make a Pull Request](https://help.github.com/articles/creating-a-pull-request/) to `vertica-demo:main`.
+Go to https://github.com/YOURUSERNAME/VerticaPyLab and [make a Pull Request](https://help.github.com/articles/creating-a-pull-request/) to `VerticaPyLab:main`.
 
 ### Review
 Pull requests are usually reviewed within a few days. If there are comments to address, apply your changes in new commits, rebase your branch and force-push to the same branch. In order to produce a clean commit history, our maintainers would do squash merging once your PR is approved, which means combining all commits of your PR into a single commit in the master branch.
@@ -200,6 +200,6 @@ After your pull request is merged, you can safely delete your branch and pull th
 
 # Creating Lessons
 
-One part of the verticalab are the lessons that have been created for users to learn data science concepts using VerticaPy. You are welcome to create lessons on a topic of your interest. You can follow the instructions in the [read me](https://github.com/vertica/vertica-demo/blob/main/docker-verticapy/enablement/VerticaPy-Lesson-Series.md) for content creation. After you have created it, you can follow the steps of code contribution above. After review, your lesson will be added to the package.
+One part of the verticalab are the lessons that have been created for users to learn data science concepts using VerticaPy. You are welcome to create lessons on a topic of your interest. You can follow the instructions in the [read me](https://github.com/vertica/VerticaPyLab/blob/main/docker-verticapy/enablement/VerticaPy-Lesson-Series.md) for content creation. After you have created it, you can follow the steps of code contribution above. After review, your lesson will be added to the package.
 
 You can also propose lessons of interest by opening an issue. Please explain in detail what you would like covered and our content creators will have a look at it. After approval, the content will be added to the list of lessons/modules.

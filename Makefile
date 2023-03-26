@@ -50,6 +50,7 @@ env: ## set up an environment by running "eval $(make env)"
 
 all: ## quickstart: install and run all containers
 	$(MAKE) vertica-start
+	$(MAKE) grafana-start
 	$(MAKE) verticalab-start
 
 # create new conf file or update timestamp if exists
@@ -184,12 +185,11 @@ spark-uninstall: spark-stop
 	docker image rm mdouchement/hdfs  
 
 # A set of command to handle grafana
-.PHONY: grafana-env
-grafana-env: ## Set environment variables to run grafana with docker-compose
+docker-grafana/.env: ## Set environment variables to run grafana with docker-compose
 	@bin/grafana
 
 .PHONY: grafana-install
-grafana-install: grafana-env ## Create grafana container
+grafana-install: docker-grafana/.env ## Create grafana container
 	cd docker-grafana && docker-compose up -d --no-start
 
 .PHONY: grafana-start
@@ -209,9 +209,9 @@ grafana-uninstall: grafana-stop## Remove the grafana container and its associate
 # aliases for convenience
 start: all
 
-stop: verticalab-stop vertica-stop
+stop: verticalab-stop grafana-stop vertica-stop
 
-uninstall: verticalab-uninstall vertica-uninstall
+uninstall: verticalab-uninstall grafana-uninstall vertica-uninstall
 
 .PHONY: reguster
 register: etc/vertica-demo.conf ## Register vertica to increase data limit to 1TB

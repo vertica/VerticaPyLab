@@ -162,8 +162,8 @@ Each example is annotated and walks you through step-by-step through various Spa
 
 Grafana is an open-source observability platform for visualizing metrics, logs, and traces collected from your applications. When Verticalab is installed, a grafana container is created and connected to the single node database.  Two extensions are available on the jupyterlab launcher to make use of it:
 
-- Grafana: to open an explorer, on a new tab, where we can run sql queries.
-- Performance: this will open a performance dashboard where we can visualize CPU usage, Memory usage, SQL statements, etc...
+- Grafana: Opens a new tab containing a Grafana Explorer for running sql queries.
+- Performance: Opens a new tab containing a performance dashboard to visualize CPU usage, Memory usage, SQL statements, etc..
 
 ## Contributing
 For a short guide on contribution standards, see [CONTRIBUTING.md](CONTRIBUTING.md)

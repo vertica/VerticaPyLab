@@ -16,6 +16,8 @@ fi
 # Load the configuration
 source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
-echo "GF_VERSION=$GF_VERSION" > $VERTICA_DEMO_PREFIX/docker-grafana/.env
-echo "GF_VERTICA_PLUGIN_VERSION=$GF_VERTICA_PLUGIN_VERSION" >> $VERTICA_DEMO_PREFIX/docker-grafana/.env
+GF_ENV_FILE=$VERTICA_DEMO_PREFIX/docker-grafana/.env
+echo "GF_VERSION=$GF_VERSION" > $GF_ENV_FILE
+echo "GF_VERTICA_PLUGIN_VERSION=$GF_VERTICA_PLUGIN_VERSION" >> $GF_ENV_FILE
+echo "GF_PORT=$GF_PORT" >> $GF_ENV_FILE
 echo "Grafana docker-compose environment variables successfully set!"

@@ -1,9 +1,12 @@
 ARG PYTHON_VERSION="3.9-slim-buster"
+ARG GF_PORT=3000
 FROM python:${PYTHON_VERSION}
 
+ENV PIP_NO_CACHE_DIR=1
 ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ARG GF_PORT
 
 WORKDIR /project
 
@@ -26,7 +29,9 @@ RUN apt-get update \
       curl \
       dirmngr \
       apt-transport-https \
-      lsb-release ca-certificates
+      lsb-release ca-certificates \
+    # Set the port number for grafana extensions
+    && sed -i s/PORT/${GF_PORT}/ /project/verticatools/src/index.ts
 
 RUN apt-get upgrade -y
 RUN apt-get clean

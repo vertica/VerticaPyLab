@@ -44,6 +44,19 @@ namespace CommandIDs {
   export const openVerticaPerformanceDashboard = 'grafana:open-perf'
 }
 
+/**
+ * constants used by grafana commands
+ */
+
+namespace Grafana {
+  // 'PORT' will be overridden by the actual port used by the grafana container
+  export const port = "PORT";
+
+  export const explorerPathName = "explore";
+
+  export const perfDashboardPathName = "d/vertica-perf/vertica-performance-dashboard";
+}
+
 function activate(
   app: JupyterFrontEnd,
   settingRegistry: ISettingRegistry,
@@ -261,21 +274,29 @@ export function addCommands(
     }
   });
 
+  let grafanaUrl = new URL(window.location.href);
+  grafanaUrl.port = Grafana.port;
+  // Create grafana explorer and vertica performance dashboard urls
+  let explorerUrl = new URL(grafanaUrl.href);
+  let perfDashboardUrl = new URL(grafanaUrl.href);
+  explorerUrl.pathname = Grafana.explorerPathName;
+  perfDashboardUrl.pathname = Grafana.perfDashboardPathName;
+  
   commands.addCommand(CommandIDs.openGrafanaExplorer, {
     label: 'Grafana',
     caption: 'Open Grafana',
     icon: grafanaIcon,
     execute: (args: any) => {
-      window.open('http://127.0.0.1:3000/explore', '_blank');
+      window.open(explorerUrl.href, '_blank');
     }
   });
-
+  
   commands.addCommand(CommandIDs.openVerticaPerformanceDashboard, {
     label: 'Performance',
     caption: 'Open Performance Dashboard',
     icon: rocketIcon,
     execute: (args: any) => {
-      window.open('http://127.0.0.1:3000/d/NtvHPFiMz/vertica-performance-dashboard', '_blank');
+      window.open(perfDashboardUrl.href, '_blank');
     }
   });
 

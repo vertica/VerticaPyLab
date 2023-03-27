@@ -16,7 +16,7 @@ import * as WidgetModuleType from '@jupyterlab/terminal/lib/widget';
 import { ITerminalTracker, 
          ITerminal 
 } from '@jupyterlab/terminal';
-import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon } from './icons';
+import { verticapyIcon, admintoolsIcon, vsqlIcon, course1Icon, grafanaIcon, rocketIcon } from './icons';
 /**
  * The command IDs used by the terminal plugin.
  */
@@ -37,7 +37,24 @@ namespace CommandIDs {
 
   export const openHelp = 'vertica:open-help';
 
-  export const openCourseDSE = 'vertica:open-dse'
+  export const openCourseDSE = 'vertica:open-dse';
+
+  export const openGrafanaExplorer = 'grafana:open-exp';
+
+  export const openVerticaPerformanceDashboard = 'grafana:open-perf'
+}
+
+/**
+ * constants used by grafana commands
+ */
+
+namespace Grafana {
+  // 'PORT' will be overridden by the actual port used by the grafana container
+  export const port = "PORT";
+
+  export const explorerPathName = "explore";
+
+  export const perfDashboardPathName = "d/vertica-perf/vertica-performance-dashboard";
 }
 
 function activate(
@@ -99,9 +116,17 @@ function activate(
 
   if (launcher) {
     launcher.add({
-      command: CommandIDs.openHelp,
+      command: CommandIDs.openGrafanaExplorer,
       category: 'Vertica',
-      rank: 3
+      rank: 4
+    });
+  }
+
+  if (launcher) {
+    launcher.add({
+      command: CommandIDs.openVerticaPerformanceDashboard,
+      category: 'Vertica',
+      rank: 5
     });
   }
 
@@ -110,6 +135,14 @@ function activate(
       command: CommandIDs.openCourseDSE,
       category: 'VerticaPy Lessons',
       rank: 0
+    });
+  }
+
+  if (launcher) {
+    launcher.add({
+      command: CommandIDs.openHelp,
+      category: 'VerticaPy Lessons',
+      rank: 1
     });
   }
 
@@ -238,6 +271,32 @@ export function addCommands(
     icon: course1Icon,
     execute: (args: any) => {
       window.open('/voila/render/demos/enablement/Data%20Science%20Essentials/Data_Science_Essentials.ipynb?', '_blank');
+    }
+  });
+
+  let grafanaUrl = new URL(window.location.href);
+  grafanaUrl.port = Grafana.port;
+  // Create grafana explorer and vertica performance dashboard urls
+  let explorerUrl = new URL(grafanaUrl.href);
+  let perfDashboardUrl = new URL(grafanaUrl.href);
+  explorerUrl.pathname = Grafana.explorerPathName;
+  perfDashboardUrl.pathname = Grafana.perfDashboardPathName;
+  
+  commands.addCommand(CommandIDs.openGrafanaExplorer, {
+    label: 'Grafana',
+    caption: 'Open Grafana',
+    icon: grafanaIcon,
+    execute: (args: any) => {
+      window.open(explorerUrl.href, '_blank');
+    }
+  });
+  
+  commands.addCommand(CommandIDs.openVerticaPerformanceDashboard, {
+    label: 'Performance',
+    caption: 'Open Performance Dashboard',
+    icon: rocketIcon,
+    execute: (args: any) => {
+      window.open(perfDashboardUrl.href, '_blank');
     }
   });
 

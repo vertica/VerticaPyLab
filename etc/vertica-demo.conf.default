@@ -9,7 +9,7 @@ VERTICALAB_IMG=verticapy-jupyterlab
 VERTICALAB_IMG_VERSION=latest
 VERTICALAB_PORT=8889 # Optionally set VERTICALAB_PORT=RANDOM
 VERTICALAB_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
-PYTHON_VERSION=3.9-slim-buster
+PYTHON_VERSION=3.10-slim-buster
 
 #
 # Vertica demo server
@@ -28,6 +28,16 @@ VSQL_USER=dbadmin
 # Docker
 #
 DOCKER_NETWORK=demo
+
+#
+# Grafana
+#
+GF_VERSION=9.4.3 
+GF_VERTICA_PLUGIN_VERSION=2.0.3
+# Do not change this variable unless you want to run grafana on a diffrent port
+# either as standalone or together with VerticaPyLab(in this case you need to run
+# `make verticalab-build` to crete a custom image)
+GF_PORT=3001
 
 #
 # Other

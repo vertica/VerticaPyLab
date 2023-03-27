@@ -124,7 +124,7 @@ done
 
 # Get the basic URL and remap the hostname and port
 if  [[ $VERTICALAB_BIND_ADDRESS == 0.0.0.0 ]]; then
-  url_host=$(hostname)
+  url_host=$(hostname -f)
 else
   url_host="$VERTICALAB_BIND_ADDRESS"
 fi

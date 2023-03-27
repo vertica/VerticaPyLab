@@ -26,6 +26,9 @@ fi
 
 # Specify the python base image version to use
 DOCKER_BUILDARGS+=( --build-arg PYTHON_VERSION=$PYTHON_VERSION )
+# Specify the port number used by the grafana container.
+# This is useful for extensions in order to open grafana in browser.
+DOCKER_BUILDARGS+=( --build-arg GF_PORT=$GF_PORT )
 # The name of the image
 DOCKER_BUILDARGS+=( -t vertica/$VERTICALAB_IMG:$VERTICALAB_IMG_VERSION )
 

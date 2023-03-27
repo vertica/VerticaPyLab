@@ -37,7 +37,7 @@ GF_VERTICA_PLUGIN_VERSION=2.0.3
 # Do not change this variable unless you want to run grafana on a diffrent port
 # either as standalone or together with VerticaPyLab(in this case you need to run
 # `make verticalab-build` to crete a custom image)
-GF_PORT=3000
+GF_PORT=3001
 
 #
 # Other

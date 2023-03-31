@@ -1,4 +1,5 @@
 # Vertica Demo
+&copy; 2023 Open Text
 
 This Docker image lets you create and run a single-node Vertica database 
 on a local machine. It uses the Community Edition (CE) license (limited to  of 1TB of data).

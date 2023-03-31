@@ -1,4 +1,6 @@
 # Makefile for vertica-demo
+# Copyright 2023 Open Text
+#
 # Run "make help" for instructions on installing and starting the demo
 
 # Release Engineering:

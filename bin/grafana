@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2023 Open Text
 
 # this script set env vars for grafana in docker-compose
 

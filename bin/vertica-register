@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2023 Open Text
 
 # this script increases the license from 100GB to 1TB for registered users
 

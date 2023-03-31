@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2023 Open Text
 
 # this script tries to run the command you typed on the command line into the
 # docker environment seamlessly.  It works by checking the name it was

@@ -2,22 +2,22 @@
 # environment for starting containers
 
 #
-# Verticalab (ML development environment)
+# VerticaPyLab container (ML development environment)
 #
-VERTICALAB_CONTAINER_NAME=verticalab
-VERTICALAB_IMG=verticapy-jupyterlab
-VERTICALAB_IMG_VERSION=latest
-VERTICALAB_PORT=8889 # Optionally set VERTICALAB_PORT=RANDOM
-VERTICALAB_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
+VERTICAPYLAB_CONTAINER_NAME=verticapylab
+VERTICAPYLAB_IMG=verticapy-jupyterlab
+VERTICAPYLAB_IMG_VERSION=latest
+VERTICAPYLAB_PORT=8889 # Optionally set VERTICAPYLAB_PORT=RANDOM
+VERTICAPYLAB_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
 PYTHON_VERSION=3.9-slim-buster
 
 #
-# Vertica demo server
+# Vertica server
 #
 VERTICA_PORT=5433
 VERTICA_SSH_PORT=5432 # ssh localhost -l 5432
 VERTICA_BIND_ADDRESS=127.0.0.1 # change to 0.0.0.0 if you want to connect from a remote
-VERTICA_CONTAINER_NAME=VerticaDB
+VERTICA_CONTAINER_NAME=verticadb
 VERTICA_HOST_NAME=$VERTICA_CONTAINER_NAME
 VERTICA_DB_NAME=$VERTICA_CONTAINER_NAME
 DB_NAME=demo

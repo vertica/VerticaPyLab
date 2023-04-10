@@ -3,19 +3,19 @@
 This git repo includes scripts that let you create and run a single-node Vertica database 
 on a local machine. It uses the Community Edition (CE) license (limited to  of 1TB of data).
 
-The Docker image VerticaLab is a custom JupyterLab environment. 
-VerticaLab provides extensions for autocompletion, graphics, options to run
+The Docker image verticapylab is a custom JupyterLab environment. 
+verticapylab provides extensions for autocompletion, graphics, options to run
 vsql or admintools, etc. and uses the lastest VerticaPy version.
 
 <div align="center">
-    <img src="VerticaLabDiagram.png" alt="VerticaLab" height="40%" width="40%" />
+    <img src="verticapylabDiagram.png" alt="VerticaPyLab" height="40%" width="40%" />
 </div>
 
 ## Quickstart
 
 1. Clone this repository.
 2. Open a terminal in the `VerticaPyLab` directory.
-3. Build and start vertica and verticalab
+3. Build and start verticadb and verticapylab
     ```
     make all
     ```
@@ -73,7 +73,7 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
     make get-ip
     ```
 
-## VerticaLab
+## VerticaPyLab
 
 You can build a JupyterLab image with VerticaPy installed, and then use that image to create a container that imports your existing notebooks.
 
@@ -81,40 +81,40 @@ You can build a JupyterLab image with VerticaPy installed, and then use that ima
 
 A Vertica database. To get a simple single-node Vertica CE database, see the [Vertica quickstart guide](#Vertica-CE-Container).
 
-### Quickstart - VerticaLab
+### Quickstart - VerticaPyLab
 
 1. Move the notebooks you want to import into the `VerticaPyLab/docker-verticapy/notebooks` directory.
 2. Move the data you want to import into the `VerticaPyLab/docker-verticapy/data` directory.
-3. (Optional) To use a different image name, set the `VERTICALAB_IMG` environment variable:
+3. (Optional) To use a different image name, set the `VERTICAPYLAB_IMG` environment variable:
     ```
-    export VERTICALAB_IMG=<your-custom-name>
+    export VERTICAPYLAB_IMG=<your-custom-name>
     ```
 
 4. Build and start JupyterLab in docker. This creates a container on port 8889 (default):
     ```
-    make verticalab-start
+    make verticapylab-start
     ```
 
 5. Open the displayed link in a browser.
 6. To stop the container:
     ```
-    make verticalab-stop
+    make verticapylab-stop
     ```
 
 6. To uninstall the container:
     ```
-    make verticalab-uninstall
+    make verticapylab-uninstall
     ```
 
 ## Spark
 
 A Docker environment can be installed and ran to facilitate the included Jupyter examples that use the Spark-Connector alongside Vertica.
 
-1. Follow the steps above to set up VerticaPyLab and VerticaLab. Running `make all` will start both.
-2. From there you can run `make spark-install` to install and start the Spark environment.
+1. Follow the steps above to set up VerticaPyLab and VerticaPyLab. Running `make all` will start both.
+2. From there you can run `make spark-start` to start the Spark environment.
 
 This will create a Docker group with three containers for Spark, a Spark-Worker, and HDFS.
-Inside of VerticaLab you can find the Spark examples within `demos/spark/`.  
+Inside of VerticaPyLab you can find the Spark examples within `demos/spark/`.  
 
 The examples contain:
 
@@ -129,8 +129,8 @@ Each example is annotated and walks you through step-by-step through various Spa
 
 ### Shared Volumes
 
-verticalab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (VerticaPyLab/workspace). If you do not do it, verticalab will do it for you during the first installation. Put all the files you would like to use in verticalab inside workspace before you start verticalab. That directory will be mounted into verticalab so when it starts, you will see a workspace directory there too.
-If when working on verticalab there are some files you would like to keep after the container deletion, just put them inside workspace(on verticalab) and you will find them in your local workspace directory.
+verticapylab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (VerticaPyLab/workspace). If you do not do it, verticapylab will do it for you during the first installation. Put all the files you would like to use in verticapylab inside workspace before you start verticapylab. That directory will be mounted into verticapylab so when it starts, you will see a workspace directory there too.
+If when working on verticapylab there are some files you would like to keep after the container deletion, just put them inside workspace(on verticapylab) and you will find them in your local workspace directory.
 
 ### Additional Configuration
 

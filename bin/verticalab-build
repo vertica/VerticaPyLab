@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# this script builds the verticalab docker container
+# this script builds the verticapylab docker container
 
 # Find the config file
 VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -27,6 +27,6 @@ fi
 # Specify the python base image version to use
 DOCKER_BUILDARGS+=( --build-arg PYTHON_VERSION=$PYTHON_VERSION )
 # The name of the image
-DOCKER_BUILDARGS+=( -t vertica/$VERTICALAB_IMG:$VERTICALAB_IMG_VERSION )
+DOCKER_BUILDARGS+=( -t vertica/$VERTICAPYLAB_IMG:$VERTICAPYLAB_IMG_VERSION )
 
 docker build "${DOCKER_BUILDARGS[@]}" $REPO_DIR/docker-verticapy/

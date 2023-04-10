@@ -3,12 +3,12 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import verticapyIconSvg from '../style/icons/verticapy.svg';
 import admintoolsIconSvg from '../style/icons/admintools.svg';
 import vsqlIconSvg from '../style/icons/vsql.svg';
-import verticalabIconSvg from '../style/icons/verticalab.svg';
+import verticapylabIconSvg from '../style/icons/verticapylab.svg';
 import course1IconSvg from '../style/icons/course1.svg'
 
-export const verticalabIcon = new LabIcon({
-    name: 'vertica:verticalab',
-    svgstr: verticalabIconSvg
+export const verticapylabIcon = new LabIcon({
+    name: 'vertica:verticapylab',
+    svgstr: verticapylabIconSvg
 });
 
 export const admintoolsIcon = new LabIcon({

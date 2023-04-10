@@ -1,4 +1,4 @@
-Thank you for considering contributing to *VerticaLab* and helping to make it even better than it is today!
+Thank you for considering contributing to *VerticaPyLab* and helping to make it even better than it is today!
 
 This document will guide you through the contribution process. There are a number of ways you can help:
 
@@ -13,9 +13,9 @@ If you find a bug, submit an [issue](https://github.com/vertica/VerticaPyLab/iss
 
 # Feature Requests
 
-Feel free to share your ideas for how to improve *VerticaLab*. We’re always open to suggestions.
+Feel free to share your ideas for how to improve *VerticaPyLab*. We’re always open to suggestions.
 You can open an [issue](https://github.com/vertica/VerticaPyLab/issues)
-with details describing what feature(s) you'd like to be added or changed. For example: a new extension that could improve *VerticaLab* experience, a better way to organise extensions, etc...
+with details describing what feature(s) you'd like to be added or changed. For example: a new extension that could improve *VerticaPyLab* experience, a better way to organise extensions, etc...
 
 If you would like to implement the feature yourself, open an issue to ask before working on it. Once approved, please refer to the [Code Contributions](#code-contributions) section.
 
@@ -133,14 +133,14 @@ If you get `Cannot find module '@module_name'` errors you will need to install t
 jlpm add @module_name ## for each missing module
 ```
 
-### Build a local verticalab image
+### Build a local verticapylab image
 Build a local image containing your new extension.
 Update the Dockerfile with your extension.
 
-open a second terminal, go the repository root folder and run the following to build an image and run a verticalab container with your new extension:
+open a second terminal, go the repository root folder and run the following to build an image and run a verticapylab container with your new extension:
 ```
-make verticalab-build ## build the image
-make verticalab-start ## start the container 
+make verticapylab-build ## build the image
+make verticapylab-start ## start the container 
 ```
 
 ### Change an existing extension
@@ -200,6 +200,6 @@ After your pull request is merged, you can safely delete your branch and pull th
 
 # Creating Lessons
 
-One part of the verticalab are the lessons that have been created for users to learn data science concepts using VerticaPy. You are welcome to create lessons on a topic of your interest. You can follow the instructions in the [read me](https://github.com/vertica/VerticaPyLab/blob/main/docker-verticapy/enablement/VerticaPy-Lesson-Series.md) for content creation. After you have created it, you can follow the steps of code contribution above. After review, your lesson will be added to the package.
+One part of the verticapylab are the lessons that have been created for users to learn data science concepts using VerticaPy. You are welcome to create lessons on a topic of your interest. You can follow the instructions in the [read me](https://github.com/vertica/VerticaPyLab/blob/main/docker-verticapy/enablement/VerticaPy-Lesson-Series.md) for content creation. After you have created it, you can follow the steps of code contribution above. After review, your lesson will be added to the package.
 
 You can also propose lessons of interest by opening an issue. Please explain in detail what you would like covered and our content creators will have a look at it. After approval, the content will be added to the list of lessons/modules.

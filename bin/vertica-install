@@ -79,18 +79,18 @@ docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'sudo sed -i 
 echo y | docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME ssh-keygen -t rsa -f /home/dbadmin/.ssh/id_rsa -N '' -C $VERTICA_DB_NAME-q >/dev/null
 docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "cat /home/dbadmin/.ssh/id_rsa.pub > /home/dbadmin/.ssh/authorized_keys; rm /home/dbadmin/.ssh/authorized_keys2"
 
-# if verticalab is running, make sure it can connect to vertica
-if docker exec -i "$VERTICALAB_CONTAINER_NAME" true 2>/dev/null; then
-  # copy dbadmin@$VERTICA_HOST_NAME credentials to root@verticalab to enable ssh
-  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+# if verticapylab is running, make sure it can connect to vertica
+if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" true 2>/dev/null; then
+  # copy dbadmin@$VERTICA_HOST_NAME credentials to root@verticapylab to enable ssh
+  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
   # add the ip address of $VERTICA_HOST_NAME to /etc/hosts
-  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v $VERTICA_HOST_NAME /etc/hosts)
+  HOSTS_START=$(docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" grep -v $VERTICA_HOST_NAME /etc/hosts)
   if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (eq .Name "'"$VERTICA_CONTAINER_NAME"'")}}{{index (split .IPv4Address "/") 0}}        {{.Name}}{{println}}{{end}}{{end}}' "$DOCKER_NETWORK"); then 
-    if [[ $VERTICA_HOST_NAME != VerticaDB ]] ; then
-      # so "ssh VerticaDB" works no matter what you call your demo container
-      HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME VerticaDB/")
+    if [[ $VERTICA_HOST_NAME != verticadb ]] ; then
+      # so "ssh verticadb" works no matter what you call your demo container
+      HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME verticadb/")
     fi
-    printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICALAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
+    printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
   fi
 fi
 

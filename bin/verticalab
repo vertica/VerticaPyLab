@@ -21,10 +21,10 @@ function usage {
     echo "usage: $0 [-h] [-c <container>][-i <image>] [-p <port>]"
     echo
     echo "Options:"
-    echo "  -i <image> The name of the image to use for the demo (Default: $VERTICALAB_IMG)"
-    echo "  -v <image version> The version of the image to use for the demo (Default: $VERTICALAB_IMG_VERSION)"
-    echo "  -c <container> The name you want the container to have to use (Default: $VERTICALAB_CONTAINER_NAME)"
-    echo "  -p <port>  Port to use to run jupyterlab (Default: $VERTICALAB_PORT)"
+    echo "  -i <image> The name of the image to use for the demo (Default: $VERTICAPYLAB_IMG)"
+    echo "  -v <image version> The version of the image to use for the demo (Default: $VERTICAPYLAB_IMG_VERSION)"
+    echo "  -c <container> The name you want the container to have to use (Default: $VERTICAPYLAB_CONTAINER_NAME)"
+    echo "  -p <port>  Port to use to run jupyterlab (Default: $VERTICAPYLAB_PORT)"
     echo
     exit 1
 }
@@ -35,16 +35,16 @@ while getopts "p:c:i:h" opt; do
             usage
             ;;
         i)
-            VERTICALAB_IMG=$OPTARG
+            VERTICAPYLAB_IMG=$OPTARG
             ;;
         v)
-            VERTICALAB_IMG_VERSION=$OPTARG
+            VERTICAPYLAB_IMG_VERSION=$OPTARG
             ;;
         p)
-            VERTICALAB_PORT=$OPTARG
+            VERTICAPYLAB_PORT=$OPTARG
             ;;
         c)
-            VERTICALAB_CONTAINER_NAME=$OPTARG
+            VERTICAPYLAB_CONTAINER_NAME=$OPTARG
             ;;
         *)
             usage
@@ -52,57 +52,57 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
-VERTICALAB_RUNARGS+=( -v $WORKSPACE:/project )
-VERTICALAB_RUNARGS+=( -v $WORKSPACE_ENABLEMENT:/project/demos/enablement:ro )
+VERTICAPYLAB_RUNARGS+=( -v $WORKSPACE:/project )
+VERTICAPYLAB_RUNARGS+=( -v $WORKSPACE_ENABLEMENT:/project/demos/enablement:ro )
 
-if [[ -n $DOCKER_HOST ]] && [[ $VERTICALAB_BIND_ADDRESS == 127.0.0.1 ]]; then
+if [[ -n $DOCKER_HOST ]] && [[ $VERTICAPYLAB_BIND_ADDRESS == 127.0.0.1 ]]; then
   # Try to support docker-machine networking
-  VERTICALAB_BIND_ADDRESS=${DOCKER_HOST##tcp://}
-  VERTICALAB_BIND_ADDRESS=${VERTICALAB_BIND_ADDRESS%%:*}
+  VERTICAPYLAB_BIND_ADDRESS=${DOCKER_HOST##tcp://}
+  VERTICAPYLAB_BIND_ADDRESS=${VERTICAPYLAB_BIND_ADDRESS%%:*}
 fi
 
-if [[ $VERTICALAB_PORT =~ ^[0-9]*$ ]] ; then
-  VERTICALAB_RUNARGS+=( -p $VERTICALAB_BIND_ADDRESS:$VERTICALAB_PORT:8888 )
+if [[ $VERTICAPYLAB_PORT =~ ^[0-9]*$ ]] ; then
+  VERTICAPYLAB_RUNARGS+=( -p $VERTICAPYLAB_BIND_ADDRESS:$VERTICAPYLAB_PORT:8888 )
 else
-  echo "Warning: VERTICALAB_PORT must be numeric.  Using a random port." >&2
-  VERTICALAB_RUNARGS+=( --expose 8888 -P )
+  echo "Warning: VERTICAPYLAB_PORT must be numeric.  Using a random port." >&2
+  VERTICAPYLAB_RUNARGS+=( --expose 8888 -P )
 fi
-VERTICALAB_RUNARGS+=( --hostname "$VERTICALAB_CONTAINER_NAME" )
-VERTICALAB_RUNARGS+=( --name "$VERTICALAB_CONTAINER_NAME" )
-VERTICALAB_RUNARGS+=( --rm )
+VERTICAPYLAB_RUNARGS+=( --hostname "$VERTICAPYLAB_CONTAINER_NAME" )
+VERTICAPYLAB_RUNARGS+=( --name "$VERTICAPYLAB_CONTAINER_NAME" )
+VERTICAPYLAB_RUNARGS+=( --rm )
 
 # Use a network just for this demo
 docker network create "$DOCKER_NETWORK" 2>/dev/null
-VERTICALAB_RUNARGS+=( --network "$DOCKER_NETWORK" )
+VERTICAPYLAB_RUNARGS+=( --network "$DOCKER_NETWORK" )
 
-docker run --detach "${VERTICALAB_RUNARGS[@]}" "vertica/$VERTICALAB_IMG:$VERTICALAB_IMG_VERSION" || exit $?
+docker run --detach "${VERTICAPYLAB_RUNARGS[@]}" "vertica/$VERTICAPYLAB_IMG:$VERTICAPYLAB_IMG_VERSION" || exit $?
 
-VERTICALAB_PORT=$(docker port "$VERTICALAB_CONTAINER_NAME" 8888/tcp)
-VERTICALAB_PORT=${VERTICALAB_PORT##*:}
+VERTICAPYLAB_PORT=$(docker port "$VERTICAPYLAB_CONTAINER_NAME" 8888/tcp)
+VERTICAPYLAB_PORT=${VERTICAPYLAB_PORT##*:}
 
 # if VerticaPyLab is running
 if docker exec -i "$VERTICA_CONTAINER_NAME" true 2>/dev/null; then
   # copy dbadmin@$VERTICA_HOST_NAME credentials to root@verticapy-demo to enable ssh
-  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
+  docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
 fi
 
 # if we can get the ip address of the $VERTICA_HOST_NAME then add a hosts entry
-if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (ne .Name "'"$VERTICALAB_CONTAINER_NAME"'")}}{{index (split .IPv4Address "/") 0}}        {{.Name}}{{println}}{{end}}{{end}}' "$DOCKER_NETWORK"); then 
-  HOSTS_START=$(docker exec -i "$VERTICALAB_CONTAINER_NAME" grep -v $VERTICA_HOST_NAME /etc/hosts)
-  if [[ $VERTICA_HOST_NAME != VerticaDB ]] ; then
-    # so "ssh VerticaDB" works no matter what you call your demo container
-    HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME VerticaDB/")
+if HOSTS_ADD=$(docker network inspect -f '{{range .Containers}}{{if (ne .Name "'"$VERTICAPYLAB_CONTAINER_NAME"'")}}{{index (split .IPv4Address "/") 0}}        {{.Name}}{{println}}{{end}}{{end}}' "$DOCKER_NETWORK"); then 
+  HOSTS_START=$(docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" grep -v $VERTICA_HOST_NAME /etc/hosts)
+  if [[ $VERTICA_HOST_NAME != verticadb ]] ; then
+    # so "ssh verticadb" works no matter what you call your demo container
+    HOSTS_ADD=$(echo "$HOSTS_ADD" | sed "s/$VERTICA_CONTAINER_NAME/$VERTICA_CONTAINER_NAME verticadb/")
     SSH_CONFIG_EXTRA_HOSTNAME="VerticaPyLab"
   fi
   # add docker containers and host ip address to /etc/hosts
-  printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICALAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
+  printf "%s\n" "$HOSTS_START" "$HOSTS_ADD" | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" tee /etc/hosts > /dev/null
 else
   echo "Warning: Cannot determine ip address of VerticaPyLab container" >&2
 fi
 
 # write a .ssh/config
 # tweak some settings to disable the fingerprint warnings
-echo "# ssh config generated by verticalab script
+echo "# ssh config generated by verticapylab script
 Host *
     GlobalKnownHostsFile=/dev/nulls
     UserKnownHostsFile=/dev/null
@@ -113,22 +113,22 @@ Host *
 
 Host $VERTICA_HOST_NAME
     User dbadmin
-" | docker exec -i "$VERTICALAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
+" | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
 echo "Starting..."
 # sleep some time to wait for jupyterlab logs
 timeout=10 #seconds
-while ! docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and paste one of these URLs:' >/dev/null && ((timeout--)); do
+while ! docker logs -n 5 "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and paste one of these URLs:' >/dev/null && ((timeout--)); do
   sleep 1
 done
 
 # Get the basic URL and remap the hostname and port
-if  [[ $VERTICALAB_BIND_ADDRESS == 0.0.0.0 ]]; then
+if  [[ $VERTICAPYLAB_BIND_ADDRESS == 0.0.0.0 ]]; then
   url_host=$(hostname)
 else
-  url_host="$VERTICALAB_BIND_ADDRESS"
+  url_host="$VERTICAPYLAB_BIND_ADDRESS"
 fi
-URL=$(docker logs -n 5 "$VERTICALAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$url_host:$VERTICALAB_PORT/")
+URL=$(docker logs -n 5 "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open
 if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat

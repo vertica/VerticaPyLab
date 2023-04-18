@@ -1,0 +1,22 @@
+services:
+  # My grafana service
+  grafana:
+    image: grafana/grafana-oss:${GF_VERSION:-9.4.3}
+    environment:
+      - GF_INSTALL_PLUGINS=vertica-grafana-datasource ${GF_VERTICA_PLUGIN_VERSION:-2.0.2}
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    container_name: grafana
+    ports:
+      - "${GF_PORT}:3000"
+    volumes:
+      - ./dashboards:/var/lib/grafana/dashboards
+      - ./provisioning:/etc/grafana/provisioning
+
+networks:
+  default:
+    name: demo
+    driver: bridge
+
+
+   

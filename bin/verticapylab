@@ -47,6 +47,7 @@ while getopts "p:c:i:h" opt; do
             VERTICAPYLAB_CONTAINER_NAME=$OPTARG
             ;;
         *)
+            echo "Unknown option: -${opt}"
             usage
             ;;
     esac
@@ -82,7 +83,7 @@ VERTICAPYLAB_PORT=${VERTICAPYLAB_PORT##*:}
 
 # if VerticaPyLab is running
 if docker exec -i "$VERTICA_CONTAINER_NAME" true 2>/dev/null; then
-  # copy dbadmin@$VERTICA_HOST_NAME credentials to root@verticapy-demo to enable ssh
+  # copy dbadmin@$VERTICA_HOST_NAME credentials to root@$VERTICAPYLAB_CONTAINER_NAME to enable ssh
   docker exec -i "$VERTICA_CONTAINER_NAME" bash -c "cd; tar -zcf - .ssh" | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c "cd; tar -zxf -"
 fi
 
@@ -111,7 +112,7 @@ Host *
     LogLevel=error
     RequestTTY=yes
 
-Host $VERTICA_HOST_NAME
+Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
     User dbadmin
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 

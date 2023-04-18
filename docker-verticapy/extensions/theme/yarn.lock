@@ -521,14 +521,9 @@
     react-dom "^17.0.1"
     typestyle "^2.0.4"
 
-"@lumino/algorithm@^1.3.3", "@lumino/algorithm@^1.9.0":
+"@lumino/algorithm@^1.3.3", "@lumino/algorithm@^1.9.0", "@lumino/algorithm@^1.9.1":
   version "1.9.1"
   resolved "https://registry.npmjs.org/@lumino/algorithm/-/algorithm-1.9.1.tgz"
-  integrity sha512-d0rj7IYRzYj6WbWSrbJbKvrfO4H0NUnXT2yjSWS/sCklpTpSp0IGmndK/X4r6gG+ev5lb5+wBg9ofUDBvoAlAw==
-
-"@lumino/algorithm@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@lumino/algorithm/-/algorithm-1.9.1.tgz#a870598e031f5ee85e20e77ce7bfffbb0dffd7f5"
   integrity sha512-d0rj7IYRzYj6WbWSrbJbKvrfO4H0NUnXT2yjSWS/sCklpTpSp0IGmndK/X4r6gG+ev5lb5+wBg9ofUDBvoAlAw==
 
 "@lumino/application@^1.16.0", "@lumino/application@^1.27.0":
@@ -627,26 +622,9 @@
   dependencies:
     "@lumino/algorithm" "^1.9.1"
 
-"@lumino/widgets@^1.19.0", "@lumino/widgets@^1.30.0":
+"@lumino/widgets@^1.19.0", "@lumino/widgets@^1.30.0", "@lumino/widgets@^1.31.1":
   version "1.31.1"
   resolved "https://registry.npmjs.org/@lumino/widgets/-/widgets-1.31.1.tgz"
-  integrity sha512-4RzAMqWwWHa5IiaQaeIbiZdIBm/FOg6ub0w8dG3km0k+zIQyA4LFq2dbB1w6SHT1d06N+L/ebYfgvMFswPENag==
-  dependencies:
-    "@lumino/algorithm" "^1.9.1"
-    "@lumino/commands" "^1.20.0"
-    "@lumino/coreutils" "^1.12.0"
-    "@lumino/disposable" "^1.10.1"
-    "@lumino/domutils" "^1.8.1"
-    "@lumino/dragdrop" "^1.14.0"
-    "@lumino/keyboard" "^1.8.1"
-    "@lumino/messaging" "^1.10.1"
-    "@lumino/properties" "^1.8.1"
-    "@lumino/signaling" "^1.10.1"
-    "@lumino/virtualdom" "^1.14.1"
-
-"@lumino/widgets@^1.31.1":
-  version "1.31.1"
-  resolved "https://registry.yarnpkg.com/@lumino/widgets/-/widgets-1.31.1.tgz#c9c0b8c7940b412e55369fa277392bf86c6e4136"
   integrity sha512-4RzAMqWwWHa5IiaQaeIbiZdIBm/FOg6ub0w8dG3km0k+zIQyA4LFq2dbB1w6SHT1d06N+L/ebYfgvMFswPENag==
   dependencies:
     "@lumino/algorithm" "^1.9.1"

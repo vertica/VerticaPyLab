@@ -3,11 +3,11 @@
 # this script increases the license from 100GB to 1TB for registered users
 
 # Find the config file
-VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
-CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICAPYLAB_PREFIX=${VERTICAPYLAB_PREFIX%/bin}
+CONFIG_FILE=$VERTICAPYLAB_PREFIX/etc/VerticaPyLab.conf
 if ! [[ -r $CONFIG_FILE ]]; then
-  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICAPYLAB_PREFIX etc/VerticaPyLab.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
     exit 1
   fi
@@ -32,7 +32,7 @@ function validate_sn {
   [[ $ts =~ ^[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$ ]] || abort 1 "$1 is not a serial number"
 
   # date is different on OSX, so use the date program in docker.
-  local datediff=$( docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" bash -c "echo \$(( \$(date -d '$ts + 90 days' +%s) - \$(date -d now +%s) ))" 2>/dev/null )|| abort $? "Vertica-demo must be running to register."
+  local datediff=$( docker exec -i $TTY "${VERTICA_ENV[@]}" "$VERTICA_CONTAINER_NAME" bash -c "echo \$(( \$(date -d '$ts + 90 days' +%s) - \$(date -d now +%s) ))" 2>/dev/null )|| abort $? "VerticaPyLab must be running to register."
   ((datediff > 0))
 }
 

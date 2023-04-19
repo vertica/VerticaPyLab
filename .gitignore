@@ -1,5 +1,5 @@
 # Configuration file
-/etc/vertica-demo.conf
+/etc/VerticaPyLab.conf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -131,6 +131,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Shared directory with verticalab container
+# Shared directory with verticapylab container
 /project/.virtual_documents/
-/project/demos/spark/vertica-spark-3.3.5.jar
+/project/demos/spark/vertica-spark-*.jar

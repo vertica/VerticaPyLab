@@ -3,11 +3,11 @@
 # this script uninstalls the vertica docker container created by vertica-install
 
 # Find the config file
-VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
-CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICAPYLAB_PREFIX=${VERTICAPYLAB_PREFIX%/bin}
+CONFIG_FILE=$VERTICAPYLAB_PREFIX/etc/VerticaPyLab.conf
 if ! [[ -r $CONFIG_FILE ]]; then
-  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf || ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICAPYLAB_PREFIX etc/VerticaPyLab.conf || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
     exit 1
   fi

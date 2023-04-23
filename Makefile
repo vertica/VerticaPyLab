@@ -189,11 +189,10 @@ docker-grafana/.env: ## Set environment variables to run grafana with docker-com
 
 .PHONY: grafana-install
 grafana-install: docker-grafana/.env ## Create grafana container
-	cd docker-grafana && docker-compose up -d --no-start
+	cd docker-grafana && docker-compose up -d
 
 .PHONY: grafana-start
 grafana-start: grafana-install ## Start grafana container
-	cd docker-grafana && docker-compose start
 
 .PHONY: grafana-stop
 grafana-stop: ## Stop grafana

@@ -18,7 +18,7 @@ datasources:
 #   # <int> org id. will default to orgId 1 if not specified
    orgId: 1
 #   # <string> url
-   url: vertica-demo:5433
+   url: verticadb:5433
 #   # <string> database user, if used
 #   user:
 #   # <string> database name, if used
@@ -35,7 +35,7 @@ datasources:
    jsonData:
       database: demo
       user: dbadmin
-      url: vertica-demo:5433
+      url: verticadb:5433
       maxIdealConnections: 3
       maxOpenConnections: 3
 #      graphiteVersion: "1.1"

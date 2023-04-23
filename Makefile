@@ -174,7 +174,7 @@ spark-start: spark-install
 
 .PHONY: spark-stop
 spark-stop:
-	cd docker-spark/docker && docker-compose down
+	cd docker-spark/docker && docker-compose stop
 
 .PHONY: spark-uninstall
 spark-uninstall: spark-stop
@@ -201,7 +201,7 @@ grafana-stop: ## Stop grafana
 
 .PHONY: grafana-uninstall
 grafana-uninstall: grafana-stop## Remove the grafana container and its associated images
-	@source etc/vertica-demo.conf; \
+	@source etc/VerticaPyLab.conf; \
 	cd docker-grafana && docker-compose rm -f; \
 	docker image rm grafana/grafana-oss:$$GF_VERSION
 

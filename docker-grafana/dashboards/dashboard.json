@@ -45,7 +45,7 @@
         "links": [
           {
             "title": "Logo",
-            "url": "<img_src=\"https://www.vertica.com/wp-content/uploads/2017/09/vertica_wht_rgb@2x.png\"/>"
+            "url": "<img_src=\"https://www.vertica.com/wp-content/uploads/2023/01/Vertica-OT-White.png\"/>"
           }
         ],
         "options": {
@@ -54,7 +54,7 @@
             "showLineNumbers": false,
             "showMiniMap": false
           },
-          "content": "<img src=\"https://www.vertica.com/wp-content/uploads/2017/09/vertica_wht_rgb@2x.png\"/>",
+          "content": "<img src=\"https://www.vertica.com/wp-content/uploads/2023/01/Vertica-OT-White.png\"/>",
           "mode": "html"
         },
         "pluginVersion": "9.4.3",

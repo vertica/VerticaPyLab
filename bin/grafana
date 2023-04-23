@@ -3,11 +3,11 @@
 # this script set env vars for grafana in docker-compose
 
 # Find the config file
-VERTICA_DEMO_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-VERTICA_DEMO_PREFIX=${VERTICA_DEMO_PREFIX%/bin}
-CONFIG_FILE=$VERTICA_DEMO_PREFIX/etc/vertica-demo.conf
+VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERTICAPYLAB_PREFIX=${VERTICAPYLAB_PREFIX%/bin}
+CONFIG_FILE=$VERTICAPYLAB_PREFIX/etc/VerticaPyLab.conf
 if ! [[ -r $CONFIG_FILE ]]; then
-  if ! make -C $VERTICA_DEMO_PREFIX etc/vertica-demo.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
+  if ! make -C $VERTICAPYLAB_PREFIX etc/VerticaPyLab.conf >/dev/null || ! [[ -r $CONFIG_FILE ]]; then
     echo "Cannot find config file ($CONFIG_FILE)" >&2
     exit 1
   fi
@@ -16,7 +16,7 @@ fi
 # Load the configuration
 source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
-GF_ENV_FILE=$VERTICA_DEMO_PREFIX/docker-grafana/.env
+GF_ENV_FILE=$VERTICAPYLAB_PREFIX/docker-grafana/.env
 echo "GF_VERSION=$GF_VERSION" > $GF_ENV_FILE
 echo "GF_VERTICA_PLUGIN_VERSION=$GF_VERTICA_PLUGIN_VERSION" >> $GF_ENV_FILE
 echo "GF_PORT=$GF_PORT" >> $GF_ENV_FILE

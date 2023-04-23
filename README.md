@@ -7,9 +7,6 @@ The Docker image verticapylab is a custom JupyterLab environment.
 verticapylab provides extensions for autocompletion, graphics, options to run
 vsql or admintools, etc. and uses the lastest VerticaPy version.
 
-<div align="center">
-    <img src="verticapylabDiagram.png" alt="VerticaPyLab" height="40%" width="40%" />
-</div>
 
 ## Quickstart
 

@@ -224,4 +224,7 @@ get-ip: etc/VerticaPyLab.conf ## Get the ip of the Vertica container
 .PHONY: test
 test: ## suite of tests to make sure everything is working
 	@source etc/VerticaPyLab.conf; \
-	docker exec -i "$$VERTICAPYLAB_CONTAINER_NAME" vsql -c "select version();"
+	docker exec -i "$$VERTICAPYLAB_CONTAINER_NAME" vsql -c "select version();"; \
+	docker exec -i grafana ls /var/lib/grafana/plugins | grep -q vertica-grafana-datasource || exit 1; \
+    docker exec -i grafana ls /var/lib/grafana/dashboards | grep -q dashboard.json || exit 1; \
+    docker exec -i grafana cat /etc/grafana/provisioning/datasources/sample.yaml | grep -q "url: $$VERTICA_CONTAINER_NAME:$$VERTICA_PORT" || exit 1

@@ -35,15 +35,9 @@ RUN apt-get update \
 
 RUN apt-get upgrade -y
 RUN apt-get clean
-   
-# Install Spark
-RUN wget https://dlcdn.apache.org/spark/spark-3.3.2/spark-3.3.2-bin-hadoop3.tgz \
-    && tar xvf spark-3* \
-    && rm spark-3*.tgz \
-    && mv spark-3* /opt/ \
-    && mv /opt/spark-3* /opt/spark
 
 ENV SPARK_HOME=/opt/spark
+
 # Install python dependencies
 RUN    pip install --upgrade pip \
     && pip install -r requirements.txt \

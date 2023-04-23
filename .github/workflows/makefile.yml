@@ -15,14 +15,16 @@ jobs:
       uses: actions/checkout@v3
     - name: Sign the EULA
       run: make etc/VerticaPyLab.conf; echo "VERTICA_EULA=1" >> etc/VerticaPyLab.conf
-    - name: Create a Vertica Demo container
+    - name: Create a Vertica container
       run: make vertica-install
     - name: Make sure errors happen when building "latest"
       run: bash -ec "! make verticapylab-build"
     - name: Create a VerticaPyLab container
       run: sed -i s/#VERTICAPYLAB_IMG_VERSION=latest/VERTICAPYLAB_IMG_VERSION=v0.0/ etc/VerticaPyLab.conf && make verticapylab-build
-    - name: Run the Vertica Demo container
+    - name: Run the VerticaPyLab container
       run: make verticapylab-start
+    - name: Create and run  a grafana container
+      run: make grafana-start
     - name: Vertica up and functional
       run: make vsql
     - name: VerticaPyLab can connect to vertica
@@ -35,5 +37,7 @@ jobs:
       run: make verticapylab-stop
     - name: uninstall vertica
       run: make vertica-uninstall
+    - name: uninstall grafana
+      run: make grafana-uninstall
     - name: uninstall verticapylab
       run: make verticapylab-uninstall

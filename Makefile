@@ -174,7 +174,7 @@ spark-start: spark-install
 
 .PHONY: spark-stop
 spark-stop:
-	cd docker-spark/docker && docker-compose down
+	cd docker-spark/docker && docker-compose stop
 
 .PHONY: spark-uninstall
 spark-uninstall: spark-stop
@@ -189,11 +189,10 @@ docker-grafana/.env: ## Set environment variables to run grafana with docker-com
 
 .PHONY: grafana-install
 grafana-install: docker-grafana/.env ## Create grafana container
-	cd docker-grafana && docker-compose up -d --no-start
+	cd docker-grafana && docker-compose up -d
 
 .PHONY: grafana-start
 grafana-start: grafana-install ## Start grafana container
-	cd docker-grafana && docker-compose start
 
 .PHONY: grafana-stop
 grafana-stop: ## Stop grafana
@@ -201,7 +200,7 @@ grafana-stop: ## Stop grafana
 
 .PHONY: grafana-uninstall
 grafana-uninstall: grafana-stop## Remove the grafana container and its associated images
-	@source etc/vertica-demo.conf; \
+	@source etc/VerticaPyLab.conf; \
 	cd docker-grafana && docker-compose rm -f; \
 	docker image rm grafana/grafana-oss:$$GF_VERSION
 
@@ -224,4 +223,7 @@ get-ip: etc/VerticaPyLab.conf ## Get the ip of the Vertica container
 .PHONY: test
 test: ## suite of tests to make sure everything is working
 	@source etc/VerticaPyLab.conf; \
-	docker exec -i "$$VERTICAPYLAB_CONTAINER_NAME" vsql -c "select version();"
+	docker exec -i "$$VERTICAPYLAB_CONTAINER_NAME" vsql -c "select version();"; \
+	docker exec -i grafana ls /var/lib/grafana/plugins | grep -q vertica-grafana-datasource || exit 1; \
+    docker exec -i grafana ls /var/lib/grafana/dashboards | grep -q dashboard.json || exit 1; \
+    docker exec -i grafana cat /etc/grafana/provisioning/datasources/sample.yaml | grep -q "url: $$VERTICA_CONTAINER_NAME:$$VERTICA_PORT" || exit 1

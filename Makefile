@@ -1,4 +1,6 @@
 # Makefile for VerticaPyLab
+# Copyright 2023 Open Text
+#
 # Run "make help" for instructions on installing and starting the services
 
 # Release Engineering:

@@ -1,3 +1,5 @@
+# Copyright 2023 Open Text
+
 ARG PYTHON_VERSION="3.9-slim-buster"
 ARG GF_PORT=3000
 FROM python:${PYTHON_VERSION}

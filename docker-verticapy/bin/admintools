@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2023 Open Text
 
 unset LANG
 : ${VERTICA_HOST_NAME:=verticadb}

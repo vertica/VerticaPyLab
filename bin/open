@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+# Copyright 2023 Open Text
+
+# This scripts is to use on WSL to open jupyterlab on browser
+
+curdir=$(pwd)
+powershelldir=$(dirname $(whereis powershell.exe | cut -d " " -f 2))
+param="$1"
+cd "$powershelldir"
+$(./powershell.exe /c start "$param")
+cd $curdir

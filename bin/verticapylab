@@ -7,6 +7,7 @@
 VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 VERTICAPYLAB_PREFIX=${VERTICAPYLAB_PREFIX%/bin}
 CONFIG_FILE=$VERTICAPYLAB_PREFIX/etc/VerticaPyLab.conf
+BIN=$VERTICAPYLAB_PREFIX/bin
 WORKSPACE=$VERTICAPYLAB_PREFIX/project
 WORKSPACE_ENABLEMENT=$VERTICAPYLAB_PREFIX/docker-verticapy/enablement
 if ! [[ -r $CONFIG_FILE ]]; then
@@ -136,7 +137,7 @@ URL=$(docker logs -n 5 "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?:
 if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat
   OPEN_CMD=open
 elif [[ $(uname -r) =~ WSL ]]; then
-  OPEN_CMD="powershell.exe /c start"
+  OPEN_CMD="$BIN/open"
 else
   OPEN_CMD=xdg-open
 fi

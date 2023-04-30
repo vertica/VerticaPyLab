@@ -30,6 +30,7 @@
 
 QUERY?=select version();
 SHELL:=/bin/bash
+SPARK_ENV_FILE=docker-spark/docker/.env
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
@@ -166,9 +167,13 @@ verticapylab-uninstall: ## Remove the verticapylab container and associated imag
 	docker image rm "python:$$PYTHON_VERSION"
 
 # these set of commands handle the Spark Docker environment
+$(SPARK_ENV_FILE): etc/VerticaPyLab.conf
+	@source etc/VerticaPyLab.conf; \
+	echo "SPARK_INSTALL=$$SPARK_VERSION" > $(SPARK_ENV_FILE)
+
 # spark-start will build the images and start them
 .PHONY: spark-install
-spark-install:
+spark-install: $(SPARK_ENV_FILE)
 	cd docker-spark/docker && docker-compose up -d
 
 .PHONY: spark-start

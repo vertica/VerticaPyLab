@@ -2,6 +2,7 @@
 
 ARG PYTHON_VERSION="3.9-slim-buster"
 ARG GF_PORT=3000
+ARG SPARK_VERSION="3.3.2"
 FROM python:${PYTHON_VERSION}
 
 ENV PIP_NO_CACHE_DIR=1
@@ -9,6 +10,7 @@ ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ARG GF_PORT
+ARG SPARK_VERSION
 
 WORKDIR /project
 
@@ -39,6 +41,7 @@ RUN apt-get upgrade -y
 RUN apt-get clean
 
 ENV SPARK_HOME=/opt/spark
+ENV SPARK_VERSION=${SPARK_VERSION}
 
 # Install python dependencies
 RUN    pip install --upgrade pip \
@@ -49,7 +52,7 @@ RUN    pip install --upgrade pip \
 
 RUN    pip install /project/theme \
     && pip install /project/verticatools \
-    && pip install PySpark \
+    && pip install PySpark==${SPARK_VERSION} \
     && pip install PrettyTable \
     && rm -r /project/verticatools \
     && rm -r /project/theme \

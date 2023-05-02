@@ -41,6 +41,10 @@ GF_VERTICA_PLUGIN_VERSION=2.1.0
 GF_PORT=3001
 
 #
-# Other
+# Spark
 #
 SPARK_VERSION=3.3.2
+
+#
+# Other
+#

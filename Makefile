@@ -163,8 +163,7 @@ verticapylab-stop: ## Shut down the jupyterlab server and remove the container
 verticapylab-uninstall: ## Remove the verticapylab container and associated images.
 	@source etc/VerticaPyLab.conf; \
 	docker stop "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
-	docker image rm "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"; \
-	docker image rm "python:$$PYTHON_VERSION"
+	docker image rm "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"
 
 # these set of commands handle the Spark Docker environment
 $(SPARK_ENV_FILE): etc/VerticaPyLab.conf

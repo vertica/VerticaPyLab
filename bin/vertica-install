@@ -158,13 +158,13 @@ if [[ -z $VERTICA_EULA ]] && docker exec -i "${VERTICA_ENV[@]}" "$VERTICA_CONTAI
 fi
 
 # download dblink
-VERTICA_VERSION=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'vertica -V | perl -nE '\''say $1 if m/^Vertica Analytic Database v(\d+\.\d+\.\d+)-\d*/;'\')
-DBLINK_URL=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "curl -Ls -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' https://api.github.com/repos/vertica/dblink/releases/latest | perl -nE 'say \$1 if m/\"browser_download_url\": \"(.*ubuntu-v$VERTICA_VERSION)\"/;'")
-if [[ -z $DBLINK_URL ]]; then
-  echo "DBLink not built for Vertica $VERTICA_VERSION" >&2
-  exit 1
-fi
-docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "curl -Ls '$DBLINK_URL' > /home/dbadmin/ldblink.so"
+# VERTICA_VERSION=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c 'vertica -V | perl -nE '\''say $1 if m/^Vertica Analytic Database v(\d+\.\d+\.\d+)-\d*/;'\')
+# DBLINK_URL=$(docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "curl -Ls -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' https://api.github.com/repos/vertica/dblink/releases/latest | perl -nE 'say \$1 if m/\"browser_download_url\": \"(.*ubuntu-v$VERTICA_VERSION)\"/;'")
+# if [[ -z $DBLINK_URL ]]; then
+#   echo "DBLink not built for Vertica $VERTICA_VERSION" >&2
+#   exit 1
+# fi
+# docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME bash -c "curl -Ls '$DBLINK_URL' > /home/dbadmin/ldblink.so"
 # install dblink
-docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME vsql -c "CREATE OR REPLACE LIBRARY DBLink AS '/home/dbadmin/ldblink.so' LANGUAGE 'C++'; CREATE OR REPLACE TRANSFORM FUNCTION dblink AS LANGUAGE 'C++' NAME 'DBLinkFactory' LIBRARY DBLink ;  GRANT EXECUTE ON TRANSFORM FUNCTION dblink() TO PUBLIC ;" >/dev/null
+# docker exec -i "${VERTICA_ENV[@]}" $VERTICA_CONTAINER_NAME vsql -c "CREATE OR REPLACE LIBRARY DBLink AS '/home/dbadmin/ldblink.so' LANGUAGE 'C++'; CREATE OR REPLACE TRANSFORM FUNCTION dblink AS LANGUAGE 'C++' NAME 'DBLinkFactory' LIBRARY DBLink ;  GRANT EXECUTE ON TRANSFORM FUNCTION dblink() TO PUBLIC ;" >/dev/null
 

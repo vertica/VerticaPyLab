@@ -12,11 +12,19 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
 
 1. Clone this repository.
 2. Open a terminal in the `VerticaPyLab` directory.
-3. Build and start verticadb and verticapylab
+3. Start all services(Vertica, Grafana, VerticaPyLab)
     ```
     make all
     ```
 4. Open the displayed link in a browser.
+5. Stop all services
+   ```
+   make stop
+   ```
+6. Clean up your environment and delete all images
+   ```
+   make uninstall
+   ```
 
 ## Vertica CE Container
 
@@ -80,34 +88,31 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
 
 ### Quickstart - VerticaPyLab
 
-1. Move the notebooks you want to import into the `VerticaPyLab/docker-verticapy/notebooks` directory.
-2. Move the data you want to import into the `VerticaPyLab/docker-verticapy/data` directory.
-3. (Optional) To use a different image name, set the `VERTICAPYLAB_IMG` environment variable:
-    ```
-    export VERTICAPYLAB_IMG=<your-custom-name>
-    ```
-
-4. Build and start JupyterLab in docker. This creates a container on port 8889 (default):
+1. Build and start JupyterLab in docker. This creates a container on port 8889 (default):
     ```
     make verticapylab-start
     ```
 
-5. Open the displayed link in a browser.
-6. To stop the container:
+2. Open the displayed link in a browser.
+3. To stop the container:
     ```
     make verticapylab-stop
     ```
 
-6. To uninstall the container:
+6. To uninstall verticapylab(delete docker image and dependencies):
     ```
     make verticapylab-uninstall
     ```
+
+### Shared Volumes
+
+verticapylab mounts <b>project</b> directory into the container. That allows you to import your files(notebooks, data, etc...) and also save your work on your local machine after the container is deleted.
 
 ## Spark
 
 A Docker environment can be installed and ran to facilitate the included Jupyter examples that use the Spark-Connector alongside Vertica.
 
-1. Follow the steps above to set up VerticaPyLab and VerticaPyLab. Running `make all` will start both.
+1. Follow the steps above to set up Vertica and VerticaPyLab. Running `make all` will start both.
 2. From there you can run `make spark-start` to start the Spark environment.
 
 This will create a Docker group with three containers for Spark, a Spark-Worker, and HDFS.
@@ -123,38 +128,6 @@ The examples contain:
     * Direct Vertica (SQL Execution)
 
 Each example is annotated and walks you through step-by-step through various Spark jobs. Simply execute each cell by hitting `Shift-Enter`. 
-
-### Shared Volumes
-
-verticapylab allows you to import your files(notebooks, data, etc...) and also save your work on your local machine. For that, create a new directory named <b>workspace</b> in the root directory of the project (VerticaPyLab/workspace). If you do not do it, verticapylab will do it for you during the first installation. Put all the files you would like to use in verticapylab inside workspace before you start verticapylab. That directory will be mounted into verticapylab so when it starts, you will see a workspace directory there too.
-If when working on verticapylab there are some files you would like to keep after the container deletion, just put them inside workspace(on verticapylab) and you will find them in your local workspace directory.
-
-### Additional Configuration
-
-1. Create a configuration file:
-
-    ```
-    make config
-    ```
-
-2. Edit settings in the configuration file:
-
-    ```
-    vi config
-    ```
-    
-### Setting PATH
-
-If you want to run commands in `bin/` directly, add it to your PATH:
-
-```
-eval $(make env)
-```
-Or, to put it in your bash_profile for future logins:
-
-```
-make env >> ~/.bash_profile
-``` 
 
 ## Grafana
 

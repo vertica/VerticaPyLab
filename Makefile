@@ -142,12 +142,12 @@ verticapylab-push: etc/VerticaPyLab.conf
 	docker context create mycontext; \
 	docker buildx create mycontext --name mybuilder --use; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" $$PWD/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION --build-arg GF_PORT=$$GF_PORT -t "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" $$PWD/docker-verticapy/ --push
 
 verticapylab-push-latest: etc/VerticaPyLab.conf
 	@# This should use the cache from the last buildx and just push the new tag.
 	source etc/VerticaPyLab.conf; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION -t "vertica/$$VERTICAPYLAB_IMG:latest" $$PWD/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION --build-arg GF_PORT=$$GF_PORT -t "vertica/$$VERTICAPYLAB_IMG:latest" $$PWD/docker-verticapy/ --push
 
 .PHONY: verticapylab-install
 verticapylab-install: etc/VerticaPyLab.conf ## Download the image to use

@@ -1,5 +1,11 @@
 # VerticaPyLab
 
+
+
+https://github.com/vertica/VerticaPyLab/assets/46414488/add25035-1a45-4c0a-a4a0-8172b09229b9
+
+
+
 This git repo includes scripts that let you create and run a single-node Vertica database 
 on a local machine. It uses the Community Edition (CE) license (limited to  of 1TB of data).
 

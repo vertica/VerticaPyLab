@@ -17,6 +17,6 @@ networks:
   default:
     name: demo
     driver: bridge
-
+    external: true
 
    

@@ -4,7 +4,11 @@
 
 
 
-https://github.com/vertica/VerticaPyLab/assets/46414488/cab03af1-ba0e-4495-b5c1-1da2c1a7a3a9
+
+https://github.com/vertica/VerticaPyLab/assets/46414488/8bc3e2e2-6718-402d-9195-92a2b8f15efa
+
+
+
 
 
 

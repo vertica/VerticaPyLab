@@ -2,7 +2,11 @@
 
 
 
-https://github.com/vertica/VerticaPyLab/assets/46414488/add25035-1a45-4c0a-a4a0-8172b09229b9
+
+
+https://github.com/vertica/VerticaPyLab/assets/46414488/cab03af1-ba0e-4495-b5c1-1da2c1a7a3a9
+
+
 
 
 

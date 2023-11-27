@@ -31,6 +31,7 @@
 QUERY?=select version();
 SHELL:=/bin/bash
 SPARK_ENV_FILE:=docker-spark/docker/.env
+GF_ENV_FILE:=docker-grafana/.env
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
@@ -190,11 +191,11 @@ spark-uninstall: spark-stop
 	docker image rm mdouchement/hdfs  
 
 # A set of command to handle grafana
-docker-grafana/.env: ## Set environment variables to run grafana with docker-compose
+$(GF_ENV_FILE): ## Set environment variables to run grafana with docker-compose
 	@bin/grafana
 
 .PHONY: grafana-install
-grafana-install: docker-grafana/.env ## Create grafana container
+grafana-install: $(GF_ENV_FILE) ## Create grafana container
 	cd docker-grafana && docker-compose up -d
 
 .PHONY: grafana-start
@@ -208,7 +209,22 @@ grafana-stop: ## Stop grafana
 grafana-uninstall: grafana-stop## Remove the grafana container and its associated images
 	@source etc/VerticaPyLab.conf; \
 	cd docker-grafana && docker-compose rm -f; \
-	docker image rm grafana/grafana-oss:$$GF_VERSION
+	docker image rm grafana/grafana-enterprise:$$GF_VERSION
+
+# A set of commands to handle Prometheus
+.PHONY: prom-start
+prom-start: etc/VerticaPyLab.conf ## Start prometheus container
+	cd docker-prometheus && docker-compose up -d
+
+.PHONY: prom-stop
+prom-stop: ## Stop prometheus
+	cd docker-prometheus && docker-compose stop
+
+.PHONY: prom-uninstall
+prom-uninstall: prom-stop ## Remove the prometheus container and its associated images
+	@source etc/VerticaPyLab.conf; \
+	cd docker-prometheus && docker-compose rm -f; \
+	docker image rm prom/prometheus:$$PROM_VERSION
 
 # aliases for convenience
 start: all

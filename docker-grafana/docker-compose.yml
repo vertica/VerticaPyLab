@@ -1,10 +1,11 @@
 services:
   # My grafana service
   grafana:
-    image: grafana/grafana-oss:${GF_VERSION:-9.4.3}
+    image: grafana/grafana-enterprise:${GF_VERSION:-9.5.1}
     environment:
-      - GF_INSTALL_PLUGINS=vertica-grafana-datasource ${GF_VERTICA_PLUGIN_VERSION:-2.0.2}
+      - GF_INSTALL_PLUGINS=vertica-grafana-datasource ${GF_VERTICA_PLUGIN_VERSION:-2.1.0}
       - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     container_name: grafana
     ports:

@@ -52,3 +52,7 @@ datasources:
 #   version: 1
 #   # <bool> allow users to edit datasources from the UI.
    editable: true
+ - name: Prometheus-vertica-ce
+   url: http://prometheus:9090
+   type: prometheus
+   editable: true

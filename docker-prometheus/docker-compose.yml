@@ -1,0 +1,16 @@
+version: '3'
+services:
+  prometheus:
+    image: prom/prometheus:${PROM_VERSION:-v2.48.0}
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "prometheus-data:/prometheus"
+    ports:
+      - 9090:9090
+volumes:
+  prometheus-data:
+networks:
+  default:
+    name: demo
+    driver: bridge
+    external: true

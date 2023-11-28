@@ -33,17 +33,23 @@ DOCKER_NETWORK=demo
 #
 # Grafana
 #
-GF_VERSION=9.4.3 
+GF_VERSION=9.5.1
 GF_VERTICA_PLUGIN_VERSION=2.1.0
 # Do not change this variable unless you want to run grafana on a diffrent port
 # either as standalone or together with VerticaPyLab(in this case you need to run
-# `make verticapylab-build` to crete a custom image)
+# `make verticapylab-build` to create a custom image)
 GF_PORT=3000
 
 #
 # Spark
 #
 SPARK_VERSION=3.3.2
+
+#
+# Prometheus
+#
+PROM_VERSION=v2.48.0
+PROM_VOLUME=prometheus-data
 
 #
 # Other

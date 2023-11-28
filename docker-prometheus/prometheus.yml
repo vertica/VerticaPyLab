@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 10s
+scrape_configs:
+ - job_name: prometheus
+   static_configs:
+    - targets:
+       - prometheus:9090
+ - job_name: 'vertica'
+   scheme: https
+   basic_auth:
+    username: 'dbadmin'
+    password: ''
+   tls_config:
+      insecure_skip_verify: true
+   metrics_path: '/v1/metrics'
+   scrape_interval: 5s
+   static_configs:
+    - targets: ['verticadb:8443']

@@ -16,3 +16,15 @@ scrape_configs:
    scrape_interval: 5s
    static_configs:
     - targets: ['verticadb:8443']
+# Add more jobs to fetch your remote nodes
+# - job_name: 'myvertica'
+#   scheme: https
+#   basic_auth:
+#    username: 'yourusername'
+#    password: 'yourpasswd'
+#   tls_config:
+#      insecure_skip_verify: true
+#   metrics_path: '/v1/metrics'
+#   scrape_interval: 5s
+#   static_configs:
+#    - targets: ['node1:8443', 'node1:8443', 'nodeN:8443']

@@ -145,10 +145,42 @@ Each example is annotated and walks you through step-by-step through various Spa
 
 ## Grafana
 
-Grafana is an open-source observability platform for visualizing metrics, logs, and traces collected from your applications. When Verticalab is installed, a grafana container is created and connected to the single node database.  Two extensions are available on the jupyterlab launcher to make use of it:
+Grafana is an open-source observability platform for visualizing metrics, logs, and traces collected from your applications. When VerticaPyLab is installed, a grafana container is created and connected to the single node database.  Two extensions are available on the jupyterlab launcher to make use of it:
 
 - Grafana: Opens a new tab containing a Grafana Explorer for running sql queries.
 - Performance: Opens a new tab containing a performance dashboard to visualize CPU usage, Memory usage, SQL statements, etc..
+
+You can also install Grafana standalone without also installing Vertica and VerticaPyLab:
+
+- Start Grafana container:
+  `make  grafana-start` and open `http://localhost:3000`
+- Stop Grafana: 
+  `make grafana-stop`
+- Remove the grafana container and its associated images:
+  `make grafana-uninstall`
+
+## Prometheus
+
+Prometheus a monitoring and alerting system that is very popular with cloud native deployments. It collects time series events for different machines, called targets.
+In version 23.3.0, Vertica introduced in-database metrics. Vertica is already very rich in metrics with the various system and DC tables that it offers, but now you can get them cheaply with Prometheus in-database metrics.
+
+We provide a few commands that can help you set up Prometheus to fetch metrics from your remote cluster nodes or from the CE vertica container installed with VerticaPyLab:
+- Configure Prometheus. if you do not have your own db, Prometheus is configured to use the single node CE database:
+    
+  Edit prometheus.yml and add your own section to tell Prometheus how to access your nodes.
+- Start Prometheus container:
+
+  `make prom-start` and open `http://localhost:9090`
+  
+- Stop Prometheus container:
+
+  `make prom-stop`
+- Delete the prometheus container and its associated images:
+
+  `make prom-uninstall`
+
+Once installed, Prometheus can be used as a DataSource by [Grafana](#grafana)
+
 
 ## Contributing
 For a short guide on contribution standards, see [CONTRIBUTING.md](CONTRIBUTING.md)

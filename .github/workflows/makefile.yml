@@ -41,3 +41,7 @@ jobs:
       run: make grafana-uninstall
     - name: uninstall verticapylab
       run: make verticapylab-uninstall
+    - name: Create and run a prometheus container
+      run: make prom-start
+    - name: uninstall grafana
+      run: make prom-uninstall

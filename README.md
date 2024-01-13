@@ -50,6 +50,24 @@ In order to use VerticaPyLab for development of VerticaPy, the following changes
 5. Lastly start-up the container using ``make verticapylab-start``.
 6. Note that you also need to start Vertica separately by running ``make vertica-start``.
 
+Once VerticaPyLab is up and running. You can copy/clone the latest VerticaPy repo into the ``VerticaPyLab/project/data`` directory.
+
+And then it can be installed using the below command from within the Jupyter Notebook or Terminal while you are inside the VerticaPy directory:
+
+```
+pip install .
+```
+
+If you want to make changes and test them, then simple unisntall VerticaPy using:
+
+```
+pip uninstall -y verticapy
+```
+
+Then re-install it.
+
+Note: For Jupyter Notebook you will need to refresh the kernel after the new installation.
+
 ## Vertica CE Container
 
 1. To create and start a new Vertica database:

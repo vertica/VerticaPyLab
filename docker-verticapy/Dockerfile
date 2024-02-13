@@ -14,7 +14,7 @@ WORKDIR /project
 COPY  requirements.txt requirements.txt
 
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y --fix-missing\
       software-properties-common \
       gpg \
       libgdal-dev \

@@ -1,0 +1,18 @@
+- title: Connect
+  description: Create a connection
+  source: /voila/render/ui/conn.ipynb
+  type: url
+  catalog: VerticaPy UI
+  icon: /project/data/icons/verticapy.svg
+  args:
+      createNewWindow: true
+  
+
+- title: Query Profiler
+  description: Query Profiler User Interface
+  source: /voila/render/ui/qprof_main.ipynb
+  type: url
+  catalog: VerticaPy UI
+  icon: /project/data/icons/query.svg
+  args:
+      createNewWindow: true

@@ -32,6 +32,7 @@ QUERY?=select version();
 SHELL:=/bin/bash
 SPARK_ENV_FILE:=docker-spark/docker/.env
 GF_ENV_FILE:=docker-grafana/.env
+export VERSION=v0.2.0
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
@@ -123,11 +124,6 @@ verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 # testing it locally before pushing it to dockerhub
 .PHONY: verticapylab-build
 verticapylab-build: etc/VerticaPyLab.conf
-	@source etc/VerticaPyLab.conf; \
-	if [[ $$VERTICAPYLAB_IMG_VERSION == latest ]] ; then \
-	  echo "Set a version number for VERTICAPYLAB_IMG_VERSION in etc/VerticaPyLab.conf"; \
-	  exit 1; \
-	fi; \
 	bin/verticapylab-build
 
 # this builds images for multiple platforms and pushes them to docker hub
@@ -163,6 +159,9 @@ verticapylab-stop: ## Shut down the jupyterlab server and remove the container
 .PHONY: verticapylab-uninstall
 verticapylab-uninstall: ## Remove the verticapylab container and associated images.
 	@source etc/VerticaPyLab.conf; \
+	if [[ $${TEST_MODE^^} == "YES" ]] ; then \
+		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
+	fi; \
 	docker stop "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
 	docker image rm "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"
 

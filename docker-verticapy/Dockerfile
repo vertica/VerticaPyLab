@@ -43,6 +43,10 @@ RUN    pip install --upgrade pip \
     && pip install -r requirements.txt \
     && pip install PySpark==${SPARK_VERSION} \
     && pip install PrettyTable \
+    && chmod 755 /usr/bin/admintools \
+    && chmod 755 /usr/bin/vsql \
+    && chmod 755 /usr/bin/run-vsql \
+    && chmod 755 /usr/bin/run-admintools \
     && rm requirements.txt \
     # Install nodejs
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \

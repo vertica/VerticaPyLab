@@ -19,6 +19,7 @@ RUN apt-get update \
       gpg \
       libgdal-dev \
       g++ \
+      git \
       ssh \
       graphviz \
       openjdk-11-jdk \

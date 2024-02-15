@@ -55,6 +55,11 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
+if [[ ${TEST_MODE^^} == "YES" ]]
+then
+  VERTICAPYLAB_IMG_VERSION=$VERSION
+fi
+
 VERTICAPYLAB_RUNARGS+=( -v $WORKSPACE:/project )
 VERTICAPYLAB_RUNARGS+=( -v $WORKSPACE_ENABLEMENT:/project/demos/enablement:ro )
 
@@ -117,6 +122,27 @@ Host *
 Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
     User dbadmin
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
+
+if [[ ${TEST_MODE^^} == "YES" ]]
+then
+  trap ' tput setaf 1; echo "VerticaPy installation failed"; tput sgr0; ' EXIT
+
+  echo "Uninstalling old VerticaPy"
+  docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" pip uninstall --yes verticapy 2> /dev/null 
+  echo "Installing latest VerticaPy"
+  if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" pip install -q git+https://github.com/vertica/VerticaPy 2> /dev/null; then
+    echo "Installation done!"
+  else
+    docker stop "$VERTICAPYLAB_CONTAINER_NAME"
+    exit 1
+  fi
+
+  trap EXIT
+
+  tput setaf 2
+  echo "VerticaPy installed successfully"
+  tput sgr0
+fi
 
 echo "Starting..."
 # sleep some time to wait for jupyterlab logs

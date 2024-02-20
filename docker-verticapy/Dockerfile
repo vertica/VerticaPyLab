@@ -40,7 +40,9 @@ ENV SPARK_HOME=/opt/spark
 ENV SPARK_VERSION=${SPARK_VERSION}
 
 # Install python dependencies
-RUN    pip install --upgrade pip \
+RUN    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get -y install nodejs \
+    && pip install --upgrade pip \
     && pip install -r requirements.txt \
     && pip install /project/vertica_tools \
     && pip install PySpark==${SPARK_VERSION} \
@@ -50,10 +52,7 @@ RUN    pip install --upgrade pip \
     && chmod 755 /usr/bin/vsql \
     && chmod 755 /usr/bin/run-vsql \
     && chmod 755 /usr/bin/run-admintools \
-    && rm requirements.txt \
-    # Install nodejs
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get -y install nodejs
+    && rm requirements.txt
 
 
 EXPOSE 8888

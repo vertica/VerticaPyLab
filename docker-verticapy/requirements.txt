@@ -7,5 +7,4 @@ voila==0.5.4
 graphviz==0.20.1
 plotly==5.14.1
 verticapy
-jupyter_app_launcher
 pickleshare

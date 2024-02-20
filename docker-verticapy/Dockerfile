@@ -13,6 +13,7 @@ WORKDIR /project
 
 COPY  requirements.txt requirements.txt
 COPY ./bin /usr/bin/
+COPY ./extensions-v2/ /project/
 
 RUN apt-get update \
     && apt-get install -y --fix-missing\
@@ -41,8 +42,10 @@ ENV SPARK_VERSION=${SPARK_VERSION}
 # Install python dependencies
 RUN    pip install --upgrade pip \
     && pip install -r requirements.txt \
+    && pip install /project/vertica_tools \
     && pip install PySpark==${SPARK_VERSION} \
     && pip install PrettyTable \
+    && rm -r /project/vertica_tools \
     && chmod 755 /usr/bin/admintools \
     && chmod 755 /usr/bin/vsql \
     && chmod 755 /usr/bin/run-vsql \

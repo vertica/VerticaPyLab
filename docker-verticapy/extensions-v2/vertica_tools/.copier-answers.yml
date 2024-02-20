@@ -1,0 +1,19 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.2.5
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: rnguetsopken@opentext.com
+author_name: Roy Paulin Nguetsop
+data_format: string
+file_extension: ''
+has_binder: false
+has_settings: false
+kind: frontend
+labextension_name: vertica_launcher
+mimetype: ''
+mimetype_name: ''
+project_short_description: Acustom launcher for vertica extensions.
+python_name: vertica_launcher
+repository: ''
+test: true
+viewer_name: ''
+

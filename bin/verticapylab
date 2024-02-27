@@ -55,8 +55,7 @@ while getopts "p:c:i:h" opt; do
     esac
 done
 
-if [[ ${TEST_MODE^^} == "YES" ]]
-then
+if [[ ${TEST_MODE^^} == "YES" ]]; then
   VERTICAPYLAB_IMG_VERSION=$VERSION
 fi
 
@@ -123,8 +122,7 @@ Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
     User dbadmin
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
-if [[ ${TEST_MODE^^} == "YES" ]]
-then
+if [[ ${TEST_MODE^^} == "YES" ]]; then
   trap ' tput setaf 1; echo "VerticaPy installation failed"; tput sgr0; ' EXIT
 
   echo "Uninstalling old VerticaPy"

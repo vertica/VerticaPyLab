@@ -111,7 +111,7 @@ vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 	@source etc/VerticaPyLab.conf; \
 	if (($$(docker ps --no-trunc -q -f NAME="$$VERTICAPYLAB_CONTAINER_NAME" | wc -l)==0)); then \
-	    if [[ -z $$(docker image ls -q "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" 2>&1) ]]; then \
+	    if [[ -z $$(docker image ls -q "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" 2>&1) ]]; then \
 	      $(MAKE) verticapylab-install || exit 1; \
 	    fi; \
 	    docker container rm "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
@@ -139,17 +139,17 @@ verticapylab-push: etc/VerticaPyLab.conf
 	docker context create mycontext; \
 	docker buildx create mycontext --name mybuilder --use; \
 	docker buildx inspect --bootstrap; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION --build-arg GF_PORT=$$GF_PORT -t "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" $$PWD/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION --build-arg GF_PORT=$$GF_PORT -t "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" $$PWD/docker-verticapy/ --push
 
 verticapylab-push-latest: etc/VerticaPyLab.conf
 	@# This should use the cache from the last buildx and just push the new tag.
 	source etc/VerticaPyLab.conf; \
-	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION --build-arg GF_PORT=$$GF_PORT -t "vertica/$$VERTICAPYLAB_IMG:latest" $$PWD/docker-verticapy/ --push
+	docker buildx build --platform=linux/arm64,linux/amd64 --build-arg PYTHON_VERSION=$$PYTHON_VERSION --build-arg GF_PORT=$$GF_PORT -t "opentext/$$VERTICAPYLAB_IMG:latest" $$PWD/docker-verticapy/ --push
 
 .PHONY: verticapylab-install
 verticapylab-install: etc/VerticaPyLab.conf ## Download the image to use
 	@source etc/VerticaPyLab.conf; \
-	docker pull "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION";
+	docker pull "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION";
 
 .PHONY: verticapylab-stop
 verticapylab-stop: ## Shut down the jupyterlab server and remove the container
@@ -163,7 +163,7 @@ verticapylab-uninstall: ## Remove the verticapylab container and associated imag
 		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
 	fi; \
 	docker stop "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
-	docker image rm "vertica/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"
+	docker image rm "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"
 
 # these set of commands handle the Spark Docker environment
 $(SPARK_ENV_FILE): etc/VerticaPyLab.conf

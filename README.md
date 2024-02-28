@@ -57,7 +57,7 @@ And then it can be installed using the below command from within the Jupyter Not
 pip install .
 ```
 
-If you want to make changes and test them, then simple unisntall VerticaPy using:
+If you want to make changes and test them, then simple uninstall VerticaPy using:
 
 ```
 pip uninstall -y verticapy

@@ -44,11 +44,10 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
 In order to use VerticaPyLab for development of VerticaPy, the following changes can be made to create a VerticaPyLab image that does not have VerticaPy installed:
 
 1. ``cd`` into VerticaPyLab/docker-verticapy. Edit the ``requirements.txt`` file and remove "verticapy" from the list.
-2. If you also want the installation to be light and remove unnecessary extensions, open the Dockerfile in the same directory and comment out from line 53 to 63 [This is optional]
-3. Then ``cd`` into VerticaPyLab/etc and edit ``VerticaPyLab.conf.default``. The ``VERTICAPYLAB_IMG_VERSION=latest`` can be changed to any other tag except for "latest". For example: ``VERTICAPYLAB_IMG_VERSION="no_verticapy"``.
-4. Then build the image by running ``make verticapylab-build`` in the terminal.
-5. Lastly start-up the container using ``make verticapylab-start``.
-6. Note that you also need to start Vertica separately by running ``make vertica-start``.
+2. Then ``cd`` into VerticaPyLab/etc and edit ``VerticaPyLab.conf.default``. The ``VERTICAPYLAB_IMG_VERSION=latest`` can be changed to any other tag except for "latest". For example: ``VERTICAPYLAB_IMG_VERSION="no_verticapy"``.
+3. Then build the image by running ``make verticapylab-build`` in the terminal.
+4. Lastly start-up the container using ``make verticapylab-start``.
+5. Note that you also need to start Vertica separately by running ``make vertica-start``.
 
 Once VerticaPyLab is up and running. You can copy/clone the latest VerticaPy repo into the ``VerticaPyLab/project/data`` directory.
 
@@ -66,7 +65,7 @@ pip uninstall -y verticapy
 
 Then re-install it.
 
-Note: For Jupyter Notebook you will need to refresh the kernel after the new installation.
+Note: For your changes to take effect, you must refresh the kernel after the new installation.
 
 ## Vertica CE Container
 

@@ -32,7 +32,7 @@ QUERY?=select version();
 SHELL:=/bin/bash
 SPARK_ENV_FILE:=docker-spark/docker/.env
 GF_ENV_FILE:=docker-grafana/.env
-export VERSION=v0.2.0
+export VERSION=v0.2.3
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
@@ -111,15 +111,15 @@ vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 	@source etc/VerticaPyLab.conf; \
 	if [[ $${TEST_MODE^^} == "YES" ]] ; then \
-		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
+	    VERTICAPYLAB_IMG_VERSION=$(VERSION); \
 	fi; \
 	if (($$(docker ps --no-trunc -q -f NAME="$$VERTICAPYLAB_CONTAINER_NAME" | wc -l)==0)); then \
 	    if [[ -z $$(docker image ls -q "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" 2>&1) ]]; then \
 		  if [[ $${TEST_MODE^^} == "YES" ]] ; then \
 		    echo "Building image opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"; \
-			TEST_MODE=yes $(MAKE) verticapylab-build; \
+		    TEST_MODE=yes $(MAKE) verticapylab-build; \
 		  else \
-			$(MAKE) verticapylab-install || exit 1; \
+		    $(MAKE) verticapylab-install || exit 1; \
 		  fi; \
 	    fi; \
 	    docker container rm "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \

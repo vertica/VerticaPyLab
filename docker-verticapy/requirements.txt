@@ -8,3 +8,5 @@ graphviz==0.20.1
 plotly==5.14.1
 verticapy
 pickleshare
+pyarrow
+ipyfilechooser

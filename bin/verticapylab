@@ -155,7 +155,7 @@ if  [[ $VERTICAPYLAB_BIND_ADDRESS == 0.0.0.0 ]]; then
 else
   url_host="$VERTICAPYLAB_BIND_ADDRESS"
 fi
-URL=$(docker logs -n 5 "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
+URL=$(docker logs "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | head -n 1 | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open
 if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat

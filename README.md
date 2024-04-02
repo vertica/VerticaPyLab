@@ -67,9 +67,11 @@ Then re-install it.
 
 Note: For your changes to take effect, you must refresh the kernel after the new installation.
 
-## Using No-code user interface for QueryProfiler [Beta version]
+## Testing the latest features [Beta version]
 
-This allows the user to build the image locally and try out the no-code interface. This includes
+This allows the user to build the image locally and try out the latest features that verticapy and verticapylab have. 
+
+Currently this includes
 
 - Connection Page
 - QueryProfiler Interface

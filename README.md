@@ -67,6 +67,30 @@ Then re-install it.
 
 Note: For your changes to take effect, you must refresh the kernel after the new installation.
 
+## Testing the latest features [Beta version]
+
+This allows the user to build the image locally and try out the latest features that verticapy and verticapylab have. 
+
+Currently this includes
+
+- Connection Page
+- QueryProfiler Interface
+
+To get started build the image locally using:
+
+```
+TEST_MODE=YES make verticapylab-start
+```
+
+After that you can use the Connect tile to connect to your Vertica server.
+
+But if you need to test something locally, you can install and start up a local image of Vertica CE using:
+
+```
+make veritca-start
+```
+
+
 ## Vertica CE Container
 
 1. To create and start a new Vertica database:

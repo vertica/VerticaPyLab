@@ -39,6 +39,8 @@ Install WSL 2.
 3. Click the gear icon on the top right and navigate to the <b>General</b> tab.
 4. Verify that the <b>Use WSL 2 based engine</b> option is checked. If not, check it and click <b>Apply & Restart.</b>
 
+> **_NOTE:_** VerticaPyLab only works with Docker version 18.09 and higher. 
+
 ## Import VerticaPyLab
 
 1. Start Ubuntu from the Start menu.

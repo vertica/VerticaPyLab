@@ -31,7 +31,7 @@ function usage {
     exit 1
 }
 
-while getopts "p:c:i:h" opt; do
+while getopts "p:c:v:i:h" opt; do
     case ${opt} in
         h)
             usage
@@ -54,6 +54,21 @@ while getopts "p:c:i:h" opt; do
             ;;
     esac
 done
+
+# Get the basic URL and remap the hostname and port
+if  [[ $VERTICAPYLAB_BIND_ADDRESS == 0.0.0.0 ]]; then
+  url_host=$(hostname)
+else
+  url_host="$VERTICAPYLAB_BIND_ADDRESS"
+fi
+
+if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" true 2>/dev/null; then
+  echo "$VERTICAPYLAB_CONTAINER_NAME is already running"
+  URL=$(docker logs "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | head -n 1 | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
+  echo "Copy and paste this URL in browser:"
+  echo "    $URL"
+  exit 0
+fi
 
 if [[ ${TEST_MODE^^} == "YES" ]]; then
   VERTICAPYLAB_IMG_VERSION=$VERSION
@@ -149,12 +164,6 @@ while ! docker logs -n 5 "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and
   sleep 1
 done
 
-# Get the basic URL and remap the hostname and port
-if  [[ $VERTICAPYLAB_BIND_ADDRESS == 0.0.0.0 ]]; then
-  url_host=$(hostname)
-else
-  url_host="$VERTICAPYLAB_BIND_ADDRESS"
-fi
 URL=$(docker logs "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | head -n 1 | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
 # This checks the kernel name to set the correct command to open the link in browser,
 # because Linux systems will use xdg-open while MacOs will use open

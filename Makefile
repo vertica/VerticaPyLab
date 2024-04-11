@@ -123,10 +123,8 @@ verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 		  fi; \
 	    fi; \
 	    docker container rm "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
-	    bin/verticapylab; \
-	else \
-	  echo "$$VERTICAPYLAB_CONTAINER_NAME is already running"; \
-	fi
+	fi; \
+	bin/verticapylab;
 
 # this builds the image from the python base image for the purposes of
 # testing it locally before pushing it to dockerhub

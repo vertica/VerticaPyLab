@@ -62,15 +62,42 @@ else
   url_host="$VERTICAPYLAB_BIND_ADDRESS"
 fi
 
+function openURL() {
+  container=$1
+  host=$2
+  URL=$(docker logs "$container" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | head -n 1 | sed "s/[0-9.]*:8888/$host:$VERTICAPYLAB_PORT/")
+  # This checks the kernel name to set the correct command to open the link in browser,
+  # because Linux systems will use xdg-open while MacOs will use open
+  if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat
+    OPEN_CMD=open
+  elif [[ $(uname -r) =~ WSL ]]; then
+    OPEN_CMD="$BIN/open"
+  else
+    OPEN_CMD=xdg-open
+  fi
+  # Open the correct url in browser. We know that the correct url is the second one.
+  # So even if in some cases a 3rd one is created this will not be affected
+  echo
+  echo "Waiting for url to open in browser..."
+  $OPEN_CMD "$URL" 2> /dev/null
+  if [[ $? -eq 0 ]]; then
+    echo
+    echo "If the link does not open or does not work, copy and paste this URL in browser:"
+  else
+    echo
+    echo "Copy and paste this URL in browser:"
+  fi
+  echo "    $URL"
+}
+
+# If the container already exists, open the url in the browser
 if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" true 2>/dev/null; then
   echo "$VERTICAPYLAB_CONTAINER_NAME is already running"
-  URL=$(docker logs "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | head -n 1 | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
-  echo "Copy and paste this URL in browser:"
-  echo "    $URL"
+  openURL $VERTICAPYLAB_CONTAINER_NAME $url_host
   exit 0
 fi
 
-if [[ ${TEST_MODE^^} == "YES" ]]; then
+if [[ $(tr '[:lower:]' '[:upper:]'<<< ${TEST_MODE}) == "YES" ]] ; then
   VERTICAPYLAB_IMG_VERSION=$VERSION
 fi
 
@@ -137,7 +164,7 @@ Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
     User dbadmin
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
-if [[ ${TEST_MODE^^} == "YES" ]]; then
+if [[ $(tr '[:lower:]' '[:upper:]'<<< ${TEST_MODE}) == "YESo" ]] ; then
   trap ' tput setaf 1; echo "VerticaPy installation failed"; tput sgr0; ' EXIT
 
   echo "Uninstalling old VerticaPy"
@@ -164,26 +191,4 @@ while ! docker logs -n 5 "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep 'Or copy and
   sleep 1
 done
 
-URL=$(docker logs "$VERTICAPYLAB_CONTAINER_NAME" 2>&1 | grep -Eo 'http[s]?://[0-9.]+:8888/.*' | head -n 1 | sed "s/[0-9.]*:8888/$url_host:$VERTICAPYLAB_PORT/")
-# This checks the kernel name to set the correct command to open the link in browser,
-# because Linux systems will use xdg-open while MacOs will use open
-if [[ $OSTYPE == darwin* ]]; then # OSX uses different args for stat
-  OPEN_CMD=open
-elif [[ $(uname -r) =~ WSL ]]; then
-  OPEN_CMD="$BIN/open"
-else
-  OPEN_CMD=xdg-open
-fi
-# Open the correct url in browser. We know that the correct url is the second one.
-# So even if in some cases a 3rd one is created this will not be affected
-echo
-echo "Waiting for url to open in browser..."
-$OPEN_CMD "$URL" 2> /dev/null
-if [[ $? -eq 0 ]]; then
-  echo
-  echo "If the link does not open or does not work, copy and paste this URL in browser:"
-else
-  echo
-  echo "Copy and paste this URL in browser:"
-fi
-echo "    $URL"
+openURL $VERTICAPYLAB_CONTAINER_NAME $url_host

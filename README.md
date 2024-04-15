@@ -157,6 +157,7 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
     ```
     make verticapylab-start
     ```
+    Note: If the container already exists, this command will simply display the link to access verticapylab
 
 2. Open the displayed link in a browser.
 3. To stop the container:

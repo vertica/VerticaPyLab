@@ -110,12 +110,12 @@ vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 .PHONY: verticapylab-start
 verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 	@source etc/VerticaPyLab.conf; \
-	if [[ $${TEST_MODE^^} == "YES" ]] ; then \
-	    VERTICAPYLAB_IMG_VERSION=$(VERSION); \
+	if [[ $$(tr '[:lower:]' '[:upper:]'<<< $${TEST_MODE}) == "YES" ]] ; then \
+		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
 	fi; \
 	if (($$(docker ps --no-trunc -q -f NAME="$$VERTICAPYLAB_CONTAINER_NAME" | wc -l)==0)); then \
 	    if [[ -z $$(docker image ls -q "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" 2>&1) ]]; then \
-		  if [[ $${TEST_MODE^^} == "YES" ]] ; then \
+		  if [[ $$(tr '[:lower:]' '[:upper:]'<<< $${TEST_MODE}) == "YES" ]] ; then \
 		    echo "Building image opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"; \
 		    TEST_MODE=yes $(MAKE) verticapylab-build; \
 		  else \
@@ -123,10 +123,8 @@ verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 		  fi; \
 	    fi; \
 	    docker container rm "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
-	    bin/verticapylab; \
-	else \
-	  echo "$$VERTICAPYLAB_CONTAINER_NAME is already running"; \
-	fi
+	fi; \
+	bin/verticapylab;
 
 # this builds the image from the python base image for the purposes of
 # testing it locally before pushing it to dockerhub
@@ -167,7 +165,7 @@ verticapylab-stop: ## Shut down the jupyterlab server and remove the container
 .PHONY: verticapylab-uninstall
 verticapylab-uninstall: ## Remove the verticapylab container and associated images.
 	@source etc/VerticaPyLab.conf; \
-	if [[ $${TEST_MODE^^} == "YES" ]] ; then \
+	if [[ $$(tr '[:lower:]' '[:upper:]'<<< $${TEST_MODE}) == "YES" ]] ; then \
 		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
 	fi; \
 	docker stop "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \

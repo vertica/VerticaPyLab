@@ -8,18 +8,14 @@ import { LabIcon } from '@jupyterlab/ui-components';
 import { each } from '@lumino/algorithm';
 
 import * as React from 'react';
-import verticaIconSvg from '../style/verticapy.svg';
-
-export const verticaIcon = new LabIcon({
-    name: 'vertica:vertica',
-    svgstr: verticaIconSvg
-  });
+import { verticapyIcon, verticaIcon } from './icon';
 
 /**
  * The known categories of launcher items and their default ordering.
  */
-const VERTICA_CATEGORY = 'VerticaPy UI';
-// const VERTICAPY_LESSONS = 'VerticaPy Lessons';
+export const VERTICAPY_UI = 'VerticaPy UI';
+export const VERTICAPY_LESSONS = 'VerticaPy Lessons';
+export const VERTICA = 'Vertica'
 
 
 export class Launcher extends JupyterlabLauncher {
@@ -75,7 +71,9 @@ export class Launcher extends JupyterlabLauncher {
         const categories: React.ReactElement<any>[] = [];
 
         const knownCategories = [
-        VERTICA_CATEGORY,
+        VERTICAPY_UI,
+        VERTICAPY_LESSONS,
+        VERTICA,
         this._translator.__('Notebook'),
         this._translator.__('Console'),
         this._translator.__('Other')
@@ -86,7 +84,13 @@ export class Launcher extends JupyterlabLauncher {
         each(knownCategories, (category, index) => {
         React.Children.forEach(launcherCategories, cat => {
             if (cat.key === category) {
-            if (cat.key === VERTICA_CATEGORY) {
+            if (cat.key === VERTICAPY_UI) {
+                cat = this.replaceCategoryIcon(cat, verticapyIcon);
+            }
+            if (cat.key === VERTICAPY_LESSONS) {
+                cat = this.replaceCategoryIcon(cat, verticapyIcon);
+            }
+            if (cat.key === VERTICA) {
                 cat = this.replaceCategoryIcon(cat, verticaIcon);
             }
             categories.push(cat);

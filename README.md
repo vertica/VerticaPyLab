@@ -24,6 +24,8 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
 
 ## Quickstart
 
+Note: Docker is a prerequisite. Docker version 18.09 and higher.
+
 1. Clone this repository.
 2. Open a terminal in the `VerticaPyLab` directory.
 3. Start all services(Vertica, Grafana, VerticaPyLab)

@@ -27,20 +27,31 @@ vsql or admintools, etc. and uses the lastest VerticaPy version.
 Note: Docker is a prerequisite. Docker version 18.09 and higher.
 
 1. Clone this repository.
-2. Open a terminal in the `VerticaPyLab` directory.
-3. Start all services(Vertica, Grafana, VerticaPyLab)
+   ```
+   git clone https://github.com/vertica/VerticaPyLab.git
+   ```
+3. Open a terminal in the `VerticaPyLab` directory.
+4. Start all services(Vertica, Grafana, VerticaPyLab)
     ```
     make all
     ```
-4. Open the displayed link in a browser.
-5. Stop all services
+5. Open the displayed link in a browser.
+6. Stop all services
    ```
    make stop
    ```
-6. Clean up your environment and delete all images
+7. Clean up your environment and delete all images
    ```
    make uninstall
    ```
+
+If you want to connect from a remote then you need to change the binding address before the ``make all`` command. 
+Edit the file: etc/VerticaPyLab.conf.default
+
+Change the variable to the following value:
+
+VERTICAPYLAB_BIND_ADDRESS=0.0.0.0
+
 ## VerticaPy Development
 
 In order to use VerticaPyLab for development of VerticaPy, the following changes can be made to create a VerticaPyLab image that does not have VerticaPy installed:

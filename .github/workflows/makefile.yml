@@ -24,7 +24,7 @@ jobs:
     - name: Create a VerticaPyLab container in test mode
       run: TEST_MODE=yes make verticapylab-build
     - name: Check VerticaPy container for test mode
-      run: docker image ls opentext/verticapy-jupyterlab:v0.2.0 | grep -q opentext/verticapy-jupyterlab
+      run: docker image ls opentext/verticapy-jupyterlab:v0.2.1 | grep -q opentext/verticapy-jupyterlab
     - name: Run the VerticaPyLab container
       run: make verticapylab-start
     - name: Create and run  a grafana container

@@ -55,7 +55,6 @@ env: ## set up an environment by running "eval $(make env)"
 
 all: ## quickstart: install and run all containers
 	$(MAKE) vertica-start
-	$(MAKE) grafana-start
 	$(MAKE) verticapylab-start
 
 # create new conf file or update timestamp if exists
@@ -234,9 +233,9 @@ prom-uninstall: prom-stop ## Remove the prometheus container and its associated 
 # aliases for convenience
 start: all
 
-stop: verticapylab-stop grafana-stop vertica-stop
+stop: verticapylab-stop vertica-stop
 
-uninstall: verticapylab-uninstall grafana-uninstall vertica-uninstall
+uninstall: verticapylab-uninstall vertica-uninstall
 
 .PHONY: reguster
 register: etc/VerticaPyLab.conf ## Register vertica to increase data limit to 1TB

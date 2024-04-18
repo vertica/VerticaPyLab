@@ -32,7 +32,7 @@ QUERY?=select version();
 SHELL:=/bin/bash
 SPARK_ENV_FILE:=docker-spark/docker/.env
 GF_ENV_FILE:=docker-grafana/.env
-export VERSION=v0.2.0
+export VERSION=v0.2.1
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
@@ -55,7 +55,6 @@ env: ## set up an environment by running "eval $(make env)"
 
 all: ## quickstart: install and run all containers
 	$(MAKE) vertica-start
-	$(MAKE) grafana-start
 	$(MAKE) verticapylab-start
 
 # create new conf file or update timestamp if exists
@@ -234,9 +233,9 @@ prom-uninstall: prom-stop ## Remove the prometheus container and its associated 
 # aliases for convenience
 start: all
 
-stop: verticapylab-stop grafana-stop vertica-stop
+stop: verticapylab-stop vertica-stop
 
-uninstall: verticapylab-uninstall grafana-uninstall vertica-uninstall
+uninstall: verticapylab-uninstall vertica-uninstall
 
 .PHONY: reguster
 register: etc/VerticaPyLab.conf ## Register vertica to increase data limit to 1TB

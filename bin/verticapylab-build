@@ -16,11 +16,11 @@ fi
 # Load the configuration
 source $CONFIG_FILE || abort $? "Cannot load config file $CONFIG_FILE"
 
-if [[ ${TEST_MODE^^} == "YES" ]]; then
+if [[ $(tr '[:lower:]' '[:upper:]'<<< ${TEST_MODE}) == "YES" ]] ; then
   VERTICAPYLAB_IMG_VERSION=$VERSION
 fi
 
-if [[ $VERTICAPYLAB_IMG_VERSION == latest ]] ; then
+if [[ $VERTICAPYLAB_IMG_VERSION == v0.2.0 ]] ; then
 	  echo "Set a version number for VERTICAPYLAB_IMG_VERSION in etc/VerticaPyLab.conf";
 	  exit 1
 fi

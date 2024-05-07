@@ -32,7 +32,7 @@ QUERY?=select version();
 SHELL:=/bin/bash
 SPARK_ENV_FILE:=docker-spark/docker/.env
 GF_ENV_FILE:=docker-grafana/.env
-export VERSION=v0.2.0
+export VERSION=v0.2.1
 
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' "$(firstword $(MAKEFILE_LIST))"
@@ -55,7 +55,6 @@ env: ## set up an environment by running "eval $(make env)"
 
 all: ## quickstart: install and run all containers
 	$(MAKE) vertica-start
-	$(MAKE) grafana-start
 	$(MAKE) verticapylab-start
 
 # create new conf file or update timestamp if exists
@@ -110,12 +109,12 @@ vsql: ## Run a basic sanity test (optional -DQUERY="select 'whatever')
 .PHONY: verticapylab-start
 verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 	@source etc/VerticaPyLab.conf; \
-	if [[ $${TEST_MODE^^} == "YES" ]] ; then \
-	    VERTICAPYLAB_IMG_VERSION=$(VERSION); \
+	if [[ $$(tr '[:lower:]' '[:upper:]'<<< $${TEST_MODE}) == "YES" ]] ; then \
+		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
 	fi; \
 	if (($$(docker ps --no-trunc -q -f NAME="$$VERTICAPYLAB_CONTAINER_NAME" | wc -l)==0)); then \
 	    if [[ -z $$(docker image ls -q "opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION" 2>&1) ]]; then \
-		  if [[ $${TEST_MODE^^} == "YES" ]] ; then \
+		  if [[ $$(tr '[:lower:]' '[:upper:]'<<< $${TEST_MODE}) == "YES" ]] ; then \
 		    echo "Building image opentext/$$VERTICAPYLAB_IMG:$$VERTICAPYLAB_IMG_VERSION"; \
 		    TEST_MODE=yes $(MAKE) verticapylab-build; \
 		  else \
@@ -123,10 +122,8 @@ verticapylab-start: etc/VerticaPyLab.conf ## Start a jupyterlab
 		  fi; \
 	    fi; \
 	    docker container rm "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
-	    bin/verticapylab; \
-	else \
-	  echo "$$VERTICAPYLAB_CONTAINER_NAME is already running"; \
-	fi
+	fi; \
+	bin/verticapylab;
 
 # this builds the image from the python base image for the purposes of
 # testing it locally before pushing it to dockerhub
@@ -167,7 +164,7 @@ verticapylab-stop: ## Shut down the jupyterlab server and remove the container
 .PHONY: verticapylab-uninstall
 verticapylab-uninstall: ## Remove the verticapylab container and associated images.
 	@source etc/VerticaPyLab.conf; \
-	if [[ $${TEST_MODE^^} == "YES" ]] ; then \
+	if [[ $$(tr '[:lower:]' '[:upper:]'<<< $${TEST_MODE}) == "YES" ]] ; then \
 		VERTICAPYLAB_IMG_VERSION=$(VERSION); \
 	fi; \
 	docker stop "$$VERTICAPYLAB_CONTAINER_NAME" >/dev/null 2>&1; \
@@ -236,9 +233,9 @@ prom-uninstall: prom-stop ## Remove the prometheus container and its associated 
 # aliases for convenience
 start: all
 
-stop: verticapylab-stop grafana-stop vertica-stop
+stop: verticapylab-stop vertica-stop
 
-uninstall: verticapylab-uninstall grafana-uninstall vertica-uninstall
+uninstall: verticapylab-uninstall vertica-uninstall
 
 .PHONY: reguster
 register: etc/VerticaPyLab.conf ## Register vertica to increase data limit to 1TB

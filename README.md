@@ -30,13 +30,14 @@ Note: Docker is a prerequisite. Docker version 18.09 and higher.
    ```
    git clone https://github.com/vertica/VerticaPyLab.git
    ```
-3. Open a terminal in the `VerticaPyLab` directory.
-4. Start all services(Vertica, Grafana, VerticaPyLab)
+2. Open a terminal in the `VerticaPyLab` directory.
+3. Start all services(Vertica, Grafana, VerticaPyLab)
     ```
     make all
     ```
-5. Open the displayed link in a browser.
+4. Open the displayed link in a browser.
 6. Stop all services
+
    ```
    make stop
    ```
@@ -51,6 +52,8 @@ Edit the file: etc/VerticaPyLab.conf.default
 Change the variable to the following value:
 
 VERTICAPYLAB_BIND_ADDRESS=0.0.0.0
+
+Once Vertica is running, you can also explore the database with [Grafana](#grafana). Go to [Grafana](#grafana) section to see how to start it.
 
 ## VerticaPy Development
 
@@ -170,6 +173,7 @@ A Vertica database. To get a simple single-node Vertica CE database, see the [Ve
     ```
     make verticapylab-start
     ```
+    Note: If the container already exists, this command will simply display the link to access verticapylab
 
 2. Open the displayed link in a browser.
 3. To stop the container:
@@ -209,12 +213,12 @@ Each example is annotated and walks you through step-by-step through various Spa
 
 ## Grafana
 
-Grafana is an open-source observability platform for visualizing metrics, logs, and traces collected from your applications. When VerticaPyLab is installed, a grafana container is created and connected to the single node database.  Two extensions are available on the jupyterlab launcher to make use of it:
+Grafana is an open-source observability platform for visualizing metrics, logs, and traces collected from your applications. VerticaPyLab has two extensions on the jupyterlab launcher to access Grafana once it is installed:
 
 - Grafana: Opens a new tab containing a Grafana Explorer for running sql queries.
 - Performance: Opens a new tab containing a performance dashboard to visualize CPU usage, Memory usage, SQL statements, etc..
 
-You can also install Grafana standalone without also installing Vertica and VerticaPyLab:
+Here are the commands to install, stop and uninstall Grafana: 
 
 - Start Grafana container:
   `make  grafana-start` and open `http://localhost:3000`
@@ -222,6 +226,8 @@ You can also install Grafana standalone without also installing Vertica and Vert
   `make grafana-stop`
 - Remove the grafana container and its associated images:
   `make grafana-uninstall`
+
+Grafana is pre-configured to connect to the Vertica container(if running) but you can also use it to connect to your own data sources but you must configure it yourself.
 
 ## Prometheus
 

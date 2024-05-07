@@ -20,11 +20,11 @@ jobs:
     - name: Make sure errors happen when building "latest"
       run: bash -ec "! make verticapylab-build"
     - name: Create a VerticaPyLab container
-      run: sed -i s/#VERTICAPYLAB_IMG_VERSION=latest/VERTICAPYLAB_IMG_VERSION=v0.0/ etc/VerticaPyLab.conf && make verticapylab-build
+      run: sed -i s/#VERTICAPYLAB_IMG_VERSION=v0.2.0/VERTICAPYLAB_IMG_VERSION=v0.0/ etc/VerticaPyLab.conf && make verticapylab-build
     - name: Create a VerticaPyLab container in test mode
       run: TEST_MODE=yes make verticapylab-build
     - name: Check VerticaPy container for test mode
-      run: docker image ls opentext/verticapy-jupyterlab:v0.2.0 | grep -q opentext/verticapy-jupyterlab
+      run: docker image ls opentext/verticapy-jupyterlab:v0.2.1 | grep -q opentext/verticapy-jupyterlab
     - name: Run the VerticaPyLab container
       run: make verticapylab-start
     - name: Create and run  a grafana container

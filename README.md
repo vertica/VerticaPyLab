@@ -36,7 +36,7 @@ Note: Docker is a prerequisite. Docker version 18.09 and higher.
     make all
     ```
 4. Open the displayed link in a browser.
-6. Stop all services
+6. Stop main services
 
    ```
    make stop

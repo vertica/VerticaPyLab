@@ -31,7 +31,7 @@ Note: Docker is a prerequisite. Docker version 18.09 and higher.
    git clone https://github.com/vertica/VerticaPyLab.git
    ```
 2. Open a terminal in the `VerticaPyLab` directory.
-3. Start main  services(Vertica, Grafana, VerticaPyLab)
+3. Start main services(Vertica, VerticaPyLab)
     ```
     make all
     ```

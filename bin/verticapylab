@@ -165,15 +165,15 @@ Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
 
-trap 'if [ -n "$TERM" ] && tput setaf 1 &>/dev/null; then tput setaf 1; fi; echo "VerticaPy update failed"; if [ -n "$TERM" ] && tput sgr0 &>/dev/null; then tput sgr0; fi; exit 1' EXIT
-
-
 # Try to ping Google's DNS server
 ping -c 1 8.8.8.8 &> /dev/null
 
 # Check if the ping was successful. Then update VerticaPy.
 if [ $? -eq 0 ]; then
   echo "Internet connection is active."
+  
+  trap 'if [ -n "$TERM" ] && tput setaf 1 &>/dev/null; then tput setaf 1; fi; echo "VerticaPy update failed"; if [ -n "$TERM" ] && tput sgr0 &>/dev/null; then tput sgr0; fi; exit 1' EXIT
+
   echo "Installing Git"
   if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'apt-get update -yqq; apt-get install -yqq git 1> /dev/null' 2> /dev/null; then
     echo "Git installed!"
@@ -199,6 +199,8 @@ if [ $? -eq 0 ]; then
   tput setaf 2
   echo "VerticaPy updated successfully"
   tput sgr0
+else
+  echo "No internet connection. Skipping VerticaPy update."
 fi
 
 echo "Starting..."

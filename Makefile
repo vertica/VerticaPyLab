@@ -178,56 +178,56 @@ $(SPARK_ENV_FILE): etc/VerticaPyLab.conf
 # spark-start will build the images and start them
 .PHONY: spark-install
 spark-install: $(SPARK_ENV_FILE)
-	cd docker-spark/docker && docker-compose up -d
+	cd docker-spark/docker && docker compose up -d
 
 .PHONY: spark-start
 spark-start: spark-install
 
 .PHONY: spark-stop
 spark-stop:
-	cd docker-spark/docker && docker-compose stop
+	cd docker-spark/docker && docker compose stop
 
 .PHONY: spark-uninstall
 spark-uninstall: spark-stop
-	cd docker-spark/docker && docker-compose rm -f && \
+	cd docker-spark/docker && docker compose rm -f && \
 	docker image rm docker-spark && \
 	docker image rm docker-spark-worker && \
 	docker image rm mdouchement/hdfs  
 
 # A set of command to handle grafana
-$(GF_ENV_FILE): ## Set environment variables to run grafana with docker-compose
+$(GF_ENV_FILE): ## Set environment variables to run grafana with docker compose
 	@bin/grafana
 
 .PHONY: grafana-install
 grafana-install: $(GF_ENV_FILE) ## Create grafana container
-	cd docker-grafana && docker-compose up -d
+	cd docker-grafana && docker compose up -d
 
 .PHONY: grafana-start
 grafana-start: grafana-install ## Start grafana container
 
 .PHONY: grafana-stop
 grafana-stop: ## Stop grafana
-	cd docker-grafana && docker-compose stop
+	cd docker-grafana && docker compose stop
 
 .PHONY: grafana-uninstall
 grafana-uninstall: grafana-stop## Remove the grafana container and its associated images
 	@source etc/VerticaPyLab.conf; \
-	cd docker-grafana && docker-compose rm -f; \
+	cd docker-grafana && docker compose rm -f; \
 	docker image rm grafana/grafana-enterprise:$$GF_VERSION
 
 # A set of commands to handle Prometheus
 .PHONY: prom-start
 prom-start: etc/VerticaPyLab.conf ## Start prometheus container
-	cd docker-prometheus && docker-compose up -d
+	cd docker-prometheus && docker compose up -d
 
 .PHONY: prom-stop
 prom-stop: ## Stop prometheus
-	cd docker-prometheus && docker-compose stop
+	cd docker-prometheus && docker compose stop
 
 .PHONY: prom-uninstall
 prom-uninstall: prom-stop ## Remove the prometheus container and its associated images
 	@source etc/VerticaPyLab.conf; \
-	cd docker-prometheus && docker-compose rm -f; \
+	cd docker-prometheus && docker compose rm -f; \
 	docker image rm prom/prometheus:$$PROM_VERSION
 
 # aliases for convenience

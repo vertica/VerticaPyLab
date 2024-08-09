@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright 2023 Open Text
 
-# this script set env vars for grafana in docker-compose
+# this script set env vars for grafana in docker compose
 
 # Find the config file
 VERTICAPYLAB_PREFIX=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -21,4 +21,4 @@ GF_ENV_FILE=$VERTICAPYLAB_PREFIX/docker-grafana/.env
 echo "GF_VERSION=$GF_VERSION" > $GF_ENV_FILE
 echo "GF_VERTICA_PLUGIN_VERSION=$GF_VERTICA_PLUGIN_VERSION" >> $GF_ENV_FILE
 echo "GF_PORT=$GF_PORT" >> $GF_ENV_FILE
-echo "Grafana docker-compose environment variables successfully set!"
+echo "Grafana docker compose environment variables successfully set!"

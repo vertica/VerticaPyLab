@@ -165,7 +165,8 @@ Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
 
-trap 'tput setaf 1; echo "VerticaPy update failed"; tput sgr0; exit 1' EXIT
+trap 'if [ -n "$TERM" ] && tput setaf 1 &>/dev/null; then tput setaf 1; fi; echo "VerticaPy update failed"; if [ -n "$TERM" ] && tput sgr0 &>/dev/null; then tput sgr0; fi; exit 1' EXIT
+
 
 # Try to ping Google's DNS server
 ping -c 1 8.8.8.8 &> /dev/null

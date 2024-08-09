@@ -165,31 +165,40 @@ Host $VERTICA_HOST_NAME $SSH_CONFIG_EXTRA_HOSTNAME
 " | docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'umask 077; mkdir -p $HOME/.ssh; cat >> $HOME/.ssh/config'
 
 
-trap ' tput setaf 1; echo "VerticaPy installation failed"; tput sgr0; ' EXIT
+trap 'tput setaf 1; echo "VerticaPy update failed"; tput sgr0; exit 1' EXIT
 
-echo "Installing Git"
-if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'apt-get update -yqq; apt-get install -yqq git 1> /dev/null' 2> /dev/null; then
-  echo "Git installed!"
-else
-  docker stop "$VERTICAPYLAB_CONTAINER_NAME"
-  exit 1
+# Try to ping Google's DNS server
+ping -c 1 8.8.8.8 &> /dev/null
+
+# Check if the ping was successful. Then update VerticaPy.
+if [ $? -eq 0 ]; then
+  echo "Internet connection is active."
+  echo "Installing Git"
+  if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" bash -c 'apt-get update -yqq; apt-get install -yqq git 1> /dev/null' 2> /dev/null; then
+    echo "Git installed!"
+  else
+    docker stop "$VERTICAPYLAB_CONTAINER_NAME"
+    exit 1
+  fi
+
+  echo "Uninstalling old VerticaPy"
+  docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" pip uninstall --yes verticapy 2> /dev/null 
+
+  echo "Installing latest VerticaPy"
+  if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" pip install -q git+https://github.com/vertica/VerticaPy 2> /dev/null; then
+    echo "Installation done!"
+  else
+    docker stop "$VERTICAPYLAB_CONTAINER_NAME"
+    exit 1
+  fi
+
+  # Disable the trap as the installation was successful
+  trap - EXIT
+
+  tput setaf 2
+  echo "VerticaPy updated successfully"
+  tput sgr0
 fi
-echo "Uninstalling old VerticaPy"
-docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" pip uninstall --yes verticapy 2> /dev/null 
-echo "Installing latest VerticaPy"
-if docker exec -i "$VERTICAPYLAB_CONTAINER_NAME" pip install -q git+https://github.com/vertica/VerticaPy 2> /dev/null; then
-  echo "Installation done!"
-else
-  docker stop "$VERTICAPYLAB_CONTAINER_NAME"
-  exit 1
-fi
-
-trap EXIT
-
-tput setaf 2
-echo "VerticaPy installed successfully"
-tput sgr0
-
 
 echo "Starting..."
 # sleep some time to wait for jupyterlab logs

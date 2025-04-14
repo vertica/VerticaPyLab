@@ -21,7 +21,7 @@ VERTICA_CONTAINER_NAME=verticadb
 VERTICA_HOST_NAME=$VERTICA_CONTAINER_NAME
 VERTICA_DB_NAME=$VERTICA_CONTAINER_NAME
 DB_NAME=demo
-VERTICA_DOCKER_IMAGE=opentext/vertica-k8s:23.4.0-0-minimal # see https://hub.docker.com/r/vertica/vertica-k8s
+VERTICA_DOCKER_IMAGE=opentext/vertica-k8s:24.1.0-0-minimal # see https://hub.docker.com/r/vertica/vertica-k8s
 VSQL_USER=dbadmin
 #VERTICA_RUNARGS+=( ) # add more args to the docker run command
 
